@@ -1,4 +1,4 @@
-import React, {forwardRef, useState} from 'react';
+import React, {forwardRef} from 'react';
 import {Dimensions, TouchableOpacity} from 'react-native';
 import {
   Box,
@@ -57,21 +57,11 @@ type Props = {
 const DetailModal = forwardRef<Modalize, Props>((props, ref) => {
   const menu = useAppSelector(state => state.menu.selectedMenu);
   const dispatch = useAppDispatch();
-  const [isOnTop, setIsOnTop] = useState<boolean>(false);
 
   const deviceHeight = Dimensions.get('window').height;
 
   const handleOnClose = () => {
     dispatch(clearSelectedMenu());
-    setIsOnTop(false);
-  };
-
-  const handlePositionChange = (position: 'top' | 'initial') => {
-    if (position === 'top') {
-      setIsOnTop(true);
-    } else {
-      setIsOnTop(false);
-    }
   };
 
   const headerComponent = () => (
@@ -83,9 +73,7 @@ const DetailModal = forwardRef<Modalize, Props>((props, ref) => {
       my={4}
       space={2}>
       <TouchableOpacity onPress={() => props.closeModal()}>
-        {isOnTop && (
-          <Icon as={<Ionicons name="arrow-back-outline" />} size={7} />
-        )}
+        <Icon as={<Ionicons name="arrow-back-outline" />} size={7} />
       </TouchableOpacity>
 
       <HStack reversed alignItems="center" space={4}>
@@ -107,8 +95,7 @@ const DetailModal = forwardRef<Modalize, Props>((props, ref) => {
         ref={ref}
         onClose={handleOnClose}
         HeaderComponent={headerComponent}
-        snapPoint={(deviceHeight / 100) * 75}
-        onPositionChange={handlePositionChange}>
+        snapPoint={(deviceHeight / 100) * 75}>
         {menu ? (
           <ScrollView bg="white" flex={1}>
             <VStack space={2}>
