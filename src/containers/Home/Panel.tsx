@@ -3,7 +3,7 @@ import {HStack, Icon, Input, Text, VStack} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {SearchLoader} from './Loader';
 import {Category} from './Category';
-import {MenuCategoryType} from 'models/menu/type';
+import {MenuCategoryType} from 'models/menuType';
 import {TouchableOpacity} from 'react-native';
 
 type Props = {
@@ -21,9 +21,10 @@ export const Panel: React.FC<Props> = ({loading, categories}) => {
       space={2}
       py={2}
       bg="white"
-      borderBottomWidth={2}
+      borderTopWidth={1}
+      borderBottomWidth={1}
       borderColor="gray.100">
-      <HStack mx={4} space={1}>
+      {/* <HStack mx={4} space={1}>
         <Input
           flex={1}
           variant="filled"
@@ -58,7 +59,7 @@ export const Panel: React.FC<Props> = ({loading, categories}) => {
             </Text>
           </HStack>
         </TouchableOpacity>
-      </HStack>
+      </HStack> */}
       <Category data={categories} />
     </VStack>
   );

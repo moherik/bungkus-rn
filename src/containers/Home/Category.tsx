@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Badge, Text} from 'native-base';
 import {FlatList, ListRenderItem, TouchableOpacity} from 'react-native';
 
-import {MenuCategoryType} from 'models/menu/type';
+import {MenuCategoryType} from 'models/menuType';
 
 type Props = {
   data: MenuCategoryType[];

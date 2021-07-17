@@ -1,6 +1,6 @@
-import {MenuCategoryType} from 'models/menu/type';
+import {MerchantCategoryType} from 'models/merchantType';
 
-const categories: MenuCategoryType[] = [
+const categories: MerchantCategoryType[] = [
   {
     id: 1,
     name: 'Aneka Nasi',

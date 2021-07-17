@@ -7,14 +7,13 @@ const MAX_GRADE = 5;
 type StarProps = {
   stars: number;
   iconColor?: string;
-  isSmall?: boolean;
+  iconSize: number;
+  isSingleStar?: boolean;
 };
 
-const getStars = ({stars, iconColor, isSmall}: StarProps): Array<Object> => {
+const getStars = ({stars, iconColor, iconSize}: StarProps): Array<Object> => {
   const quantityEmptyStars = MAX_GRADE - Math.ceil(stars);
   const starsFromGrade = [];
-
-  const iconSize = isSmall ? 4 : 5;
 
   const FullStar = (
     <Icon as={<Ionicons name="star" />} size={iconSize} color={iconColor} />
@@ -62,8 +61,19 @@ const getStars = ({stars, iconColor, isSmall}: StarProps): Array<Object> => {
   return starsFromGrade;
 };
 
-const renderStars = ({stars, iconColor, isSmall}: StarProps): Object => {
-  const starsFromGrade = getStars({stars, iconColor, isSmall});
+const renderStars = ({
+  stars,
+  iconColor,
+  iconSize,
+  isSingleStar,
+}: StarProps): Object => {
+  const starsFromGrade = getStars({stars, iconColor, iconSize});
+
+  if (isSingleStar) {
+    return (
+      <Icon as={<Ionicons name="star" />} size={iconSize} color={iconColor} />
+    );
+  }
 
   return (
     <HStack space={1}>
@@ -77,8 +87,11 @@ const renderStars = ({stars, iconColor, isSmall}: StarProps): Object => {
 type RatingProps = {
   shouldShowReviewsText?: boolean;
   textColor?: string;
+  textSize?: string | number;
   iconColor?: string;
+  iconSize?: number;
   isSmall?: boolean;
+  isSingleStar?: boolean;
   reviews?: number;
   stars: number;
 };
@@ -86,21 +99,23 @@ type RatingProps = {
 const Rating = ({
   shouldShowReviewsText = false,
   iconColor,
+  iconSize,
   textColor,
+  textSize,
+  isSingleStar = false,
   isSmall = false,
   reviews,
   stars,
 }: RatingProps) => {
+  const _iconSize = iconSize ? iconSize : isSmall ? 4 : 5;
+  const _textSize = textSize ? textSize : isSmall ? 'xs' : 'sm';
+
   return (
-    <HStack alignItems="center" space={2}>
-      {renderStars({stars, iconColor, isSmall})}
+    <HStack flexGrow={1} alignItems="center" space={isSingleStar ? 1 : 2}>
+      {renderStars({stars, iconColor, iconSize: _iconSize, isSingleStar})}
       {shouldShowReviewsText && !!reviews && (
-        <Text
-          isTruncated
-          flex={1}
-          fontSize={!isSmall ? 'md' : 'sm'}
-          color={textColor}>
-          ({reviews})
+        <Text isTruncated flex={1} fontSize={_textSize} color={textColor}>
+          {isSingleStar ? `${stars} (${reviews})` : `${reviews}`}
         </Text>
       )}
     </HStack>

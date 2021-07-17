@@ -1,15 +1,15 @@
 import React from 'react';
 import {Box, Heading, HStack, Radio, Text, VStack} from 'native-base';
 import {Separator} from 'components';
-import {VariantType} from 'models/menu/type';
+import {MenuVariantType} from 'models/menuType';
 import {currencyFormat} from 'utils';
 
-export const Variant = ({variants}: {variants: VariantType[]}) =>
+export const Variant = ({variants}: {variants: MenuVariantType[]}) =>
   variants.length > 0 ? (
     <VStack>
       <Separator height={2} bg="gray.100" my={2} />
       {variants.map(variant => (
-        <VStack px={4} space={2}>
+        <VStack px={4} space={2} key={variant.id}>
           <Box>
             <Heading size="sm" my={2}>
               {variant.name}
@@ -17,7 +17,10 @@ export const Variant = ({variants}: {variants: VariantType[]}) =>
             <Radio.Group name={`group${variant.id}`}>
               <VStack space={3} width={'100%'} mx={2}>
                 {variant.item.map(item => (
-                  <Radio value={item.id.toString()} accessibilityLabel="Varian">
+                  <Radio
+                    value={item.id.toString()}
+                    accessibilityLabel="Varian"
+                    key={item.id}>
                     <HStack alignItems="center">
                       <Text fontSize="sm" flex={1} ml={3}>
                         {item.name}

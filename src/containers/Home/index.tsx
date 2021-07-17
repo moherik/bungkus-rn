@@ -3,36 +3,28 @@ import {ScrollView, StyleSheet} from 'react-native';
 import {Modalize} from 'react-native-modalize';
 
 import {Separator} from 'components';
-import {MenuCategoryType, RecommendationMenuType} from 'models/menu/type';
-import {
-  recommendations as mockRecomm,
-  menus as mockMenu,
-  categories as mockCategories,
-} from 'mocks';
+import {MenuCategoryType} from 'models/menuType';
+import {merchants as mockMerchants, categories as mockCategories} from 'mocks';
 
 import {useAppDispatch, useAppSelector} from 'hooks';
-import {fetchMenus, selectMenu} from 'stores/menus';
+import {fetchMerchants, selectMerchant} from 'stores/merchant';
+import {MenuModal} from 'containers/Shared/MenuModal';
 
-import {Recommendations} from './Recommendations';
-import {Menu} from './Menu';
+import {MerchantList} from './MerchantList';
 import {Panel} from './Panel';
-import DetailModal from './Modal';
+import {Recommendations} from './Recommendations';
 
 const Home = () => {
-  const [recommendations, setRecommendations] = useState<
-    RecommendationMenuType[]
-  >([]);
   const [categories, setCategories] = useState<MenuCategoryType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const modalRef = useRef<Modalize>(null);
 
-  const menus = useAppSelector(state => state.menu.menus);
+  const merchants = useAppSelector(state => state.merchant.merchants);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const fetchData = () => {
-      dispatch(fetchMenus(mockMenu));
-      setRecommendations(mockRecomm);
+      dispatch(fetchMerchants(mockMerchants));
       setCategories(mockCategories);
     };
 
@@ -44,7 +36,7 @@ const Home = () => {
   }, [dispatch]);
 
   const showModal = (id: number | string) => {
-    dispatch(selectMenu(Number(id)));
+    dispatch(selectMerchant(Number(id)));
     modalRef.current?.open();
   };
 
@@ -59,18 +51,18 @@ const Home = () => {
         showModal={showModal}
         label="Rekomendasi di Sekitarmu"
         loading={loading}
-        data={recommendations}
+        data={merchants}
       />
       <Separator height={4} />
       <Panel loading={loading} categories={categories} />
       <Separator height={4} />
-      <Menu
+      <MerchantList
         showModal={showModal}
         loading={loading}
         label="Temukan Menu Favoritmu"
-        data={menus}
+        data={merchants}
       />
-      <DetailModal ref={modalRef} closeModal={closeModal} />
+      <MenuModal ref={modalRef} closeModal={closeModal} />
     </ScrollView>
   );
 };

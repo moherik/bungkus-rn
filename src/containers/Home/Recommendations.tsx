@@ -7,15 +7,13 @@ import {
   Icon,
   Image,
   ZStack,
-  Badge,
   Heading,
   VStack,
   HStack,
 } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {RecommendationMenuType} from 'models/menu/type';
-import {currencyFormat} from 'utils';
+import {MerchantType} from 'models/merchantType';
 import {Rating} from 'components';
 
 import {HorizontalSectionLoader} from './Loader';
@@ -24,7 +22,7 @@ const ITEM_WIDTH = 200;
 const ITEM_HEIGHT = 200;
 
 type Props = {
-  data: RecommendationMenuType[];
+  data: MerchantType[];
   label?: string;
   loading: boolean;
   itemWidth?: number;
@@ -40,10 +38,7 @@ export const Recommendations: React.FC<Props> = ({
   itemHeight,
   showModal,
 }) => {
-  const renderItem: ListRenderItem<RecommendationMenuType> = ({
-    item,
-    index,
-  }) => {
+  const renderItem: ListRenderItem<MerchantType> = ({item, index}) => {
     const width = itemWidth || ITEM_WIDTH;
     const height = itemHeight || ITEM_HEIGHT;
 
@@ -57,33 +52,26 @@ export const Recommendations: React.FC<Props> = ({
           borderRadius="xl"
           overflow="hidden">
           <Image
-            source={{uri: item.image}}
+            source={{uri: item.profileImage}}
             alt={item.name}
             width={width}
             height={height}
           />
 
           <VStack
-            justifyContent="space-between"
+            justifyContent="flex-end"
             bg="#18191a61"
             width={width}
             height={height}>
-            <Box alignItems="flex-end" m={2}>
-              <Badge bg="red.600" px={2} py={1} borderRadius={100}>
-                <Text fontSize="xs" color="white" fontWeight="700">
-                  {currencyFormat(item.price)}
-                </Text>
-              </Badge>
-            </Box>
             <VStack px={3} pb={2}>
               <Heading isTruncated color="white" size="sm">
                 {item.name}
               </Heading>
               <Rating
                 isSmall
-                iconColor="yellow.300"
+                iconColor="yellow.500"
                 textColor="white"
-                stars={item.rating.star}
+                stars={item.rating.stars}
                 reviews={item.rating.review}
                 shouldShowReviewsText={true}
               />
