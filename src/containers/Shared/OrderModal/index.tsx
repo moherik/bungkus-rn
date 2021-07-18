@@ -19,16 +19,12 @@ import {Portal} from 'react-native-portalize';
 
 import {useAppDispatch, useAppSelector} from 'hooks';
 import {Separator} from 'components';
-import {CartItemType, ExtrasType} from 'models/merchantType';
+import {ExtrasType} from 'models/merchantType';
 import {currencyFormat} from 'utils';
 
+import {Footer} from './Footer';
 import {Loader} from './Loader';
-import {addToCart, resetSelectedMenu} from 'stores/merchant';
-
-type ExtraPriceType = {
-  item: number;
-  total: number;
-};
+import {resetSelectedMenu} from 'stores/merchant';
 
 type Props = {
   merchantId: number;
@@ -40,25 +36,21 @@ export const OrderModal = forwardRef<Modalize, Props>((props, ref) => {
   const cart = useAppSelector(state => state.merchant.selectedCartMenu);
   const dispatch = useAppDispatch();
 
-  const [note, setNote] = useState<string>(cart?.note || '');
-  const [extras, setExtras] = useState<ExtrasType[]>(cart?.extras || []);
-  const [order, setOrder] = useState<number>(cart?.qty || 1);
-  const [extraPrice, setExtraPrice] = useState<ExtraPriceType | null>(null);
+  const [note, setNote] = useState<string>();
+  const [extras, setExtras] = useState<ExtrasType[]>();
   const radioGroupRef = useRef<any>([]);
 
   useEffect(() => {
-    const totalExtraPrice = extras.reduce(
-      (acc, value) => Number(value.price) + acc,
-      0,
-    );
+    setNote(cart?.note || '');
+    setExtras(cart?.extras || []);
 
-    setExtraPrice({item: extras.length, total: totalExtraPrice});
-
-    return () => {};
-  }, [extras]);
+    return () => {
+      setNote('');
+      setExtras([]);
+    };
+  }, [cart]);
 
   const handleOnClose = () => {
-    setExtras([]);
     dispatch(resetSelectedMenu());
   };
 
@@ -67,29 +59,18 @@ export const OrderModal = forwardRef<Modalize, Props>((props, ref) => {
   const handleOptionChange = (value: string) => {
     const strArr = value.split('-');
     const groupId = strArr[0];
+    const itemId = strArr[1];
     const price = strArr[2];
 
-    const newExtras = extras.filter(item => item.id !== groupId);
-    if (Number(price) !== 0) {
-      setExtras([
-        ...newExtras,
-        {
-          id: groupId,
-          price: price,
-        },
-      ]);
-    } else {
-      setExtras(newExtras);
-    }
-  };
-
-  const handleAddOrder = () => setOrder(order + 1);
-
-  const handleMinOrder = () => order !== 1 && setOrder(order - 1);
-
-  const handleAddToCart = (item: CartItemType) => {
-    dispatch(addToCart(item));
-    props.closeModal();
+    const newExtras = extras?.filter(item => item.groupId !== groupId)!!;
+    setExtras([
+      ...newExtras,
+      {
+        groupId,
+        itemId,
+        price,
+      },
+    ]);
   };
 
   return (
@@ -98,111 +79,17 @@ export const OrderModal = forwardRef<Modalize, Props>((props, ref) => {
         ref={ref}
         onClose={handleOnClose}
         modalStyle={styles.modal}
-        FooterComponent={() => {
-          if (menu) {
-            const priceAfterDiscount = menu.discount
-              ? (menu.price / 100) * menu.discount
-              : null;
-
-            let totalPrice = priceAfterDiscount
-              ? menu.price * order - priceAfterDiscount
-              : menu.price * order;
-
-            if (extraPrice != null) {
-              totalPrice = totalPrice + extraPrice.total;
-            }
-
-            return (
-              <VStack shadow={4} py={2} bg="white">
-                {priceAfterDiscount && (
-                  <HStack
-                    justifyContent="space-between"
-                    alignItems="center"
-                    px={4}>
-                    <Text fontSize="sm" color="gray.500">
-                      Diskon
-                    </Text>
-                    <Heading size="xs" color="red.600">
-                      {currencyFormat(priceAfterDiscount, '-Rp. ')}
-                    </Heading>
-                  </HStack>
-                )}
-                {extraPrice && extraPrice.item !== 0 && (
-                  <HStack
-                    justifyContent="space-between"
-                    alignItems="center"
-                    px={4}>
-                    <Text fontSize="sm" color="gray.500">
-                      Extra (x{extraPrice.item})
-                    </Text>
-                    <Heading size="xs">
-                      {currencyFormat(extraPrice.total)}
-                    </Heading>
-                  </HStack>
-                )}
-                <HStack
-                  justifyContent="space-between"
-                  alignItems="center"
-                  px={4}>
-                  <Text fontSize="sm" color="gray.500">
-                    Total Harga {order > 1 && `(x${order})`}
-                  </Text>
-                  <Heading size="md">{currencyFormat(totalPrice)}</Heading>
-                </HStack>
-                <Separator height={1} my={2} bg="gray.100" />
-                <HStack
-                  justifyContent="space-between"
-                  alignItems="center"
-                  px={4}>
-                  <HStack flex={1} space={2} alignItems="center">
-                    <TouchableOpacity onPress={handleMinOrder}>
-                      <Center
-                        px={1}
-                        py={2}
-                        borderWidth={1}
-                        borderColor="gray.300"
-                        borderRadius="lg">
-                        <Icon as={<Ionicons name="remove" />} size={6} />
-                      </Center>
-                    </TouchableOpacity>
-                    <Heading size="md" px={2}>
-                      {order}
-                    </Heading>
-                    <TouchableOpacity onPress={handleAddOrder}>
-                      <Center
-                        px={1}
-                        py={2}
-                        borderWidth={1}
-                        borderColor="gray.300"
-                        borderRadius="lg">
-                        <Icon as={<Ionicons name="add" />} size={6} />
-                      </Center>
-                    </TouchableOpacity>
-                  </HStack>
-                  <TouchableOpacity
-                    onPress={() =>
-                      handleAddToCart({
-                        merchantId: props.merchantId,
-                        menuId: Number(menu.id),
-                        menuName: menu.name,
-                        qty: order,
-                        price: totalPrice,
-                        discount: menu.discount || 0,
-                        note: note || '',
-                        extras,
-                      })
-                    }>
-                    <Center bg="red.600" px={4} py={3} borderRadius="lg">
-                      <Text color="white" fontWeight={700}>
-                        {cart ? 'Perbaruhi Keranjang' : 'Tambah Ke Keranjang'}
-                      </Text>
-                    </Center>
-                  </TouchableOpacity>
-                </HStack>
-              </VStack>
-            );
-          }
-        }}>
+        FooterComponent={
+          menu && (
+            <Footer
+              discount={menu.discount}
+              price={menu.price}
+              extras={extras}
+              note={note}
+              closeModal={props.closeModal}
+            />
+          )
+        }>
         {menu ? (
           <ScrollView>
             <VStack space={1}>
@@ -224,19 +111,24 @@ export const OrderModal = forwardRef<Modalize, Props>((props, ref) => {
               <VStack space={1} mx={4} my={4}>
                 <Heading size="lg">{menu.name}</Heading>
                 {menu.description && (
-                  <Text color="gray.500">{menu.description}</Text>
+                  <Text color="gray.500" fontSize="sm" lineHeight={5}>
+                    {menu.description}
+                  </Text>
                 )}
               </VStack>
               <Separator height={3} bg="gray.100" />
               {menu.variants && (
                 <VStack space={2} m={4}>
-                  {menu.variants?.map(variant => (
+                  {menu.variants?.map((variant, index) => (
                     <VStack space={2} key={variant.id}>
                       <Heading size="sm">{variant.name}</Heading>
                       <Radio.Group
                         ref={(el: any) =>
                           (radioGroupRef.current[variant.id] = el)
                         }
+                        defaultValue={`${cart?.extras[index].groupId}-${
+                          cart?.extras[index].itemId
+                        }-${(cart?.extras[index].price || 0).toString()}`}
                         name={variant.id.toString()}
                         onChange={handleOptionChange}>
                         {variant.item.map(item => (
@@ -256,7 +148,9 @@ export const OrderModal = forwardRef<Modalize, Props>((props, ref) => {
                               pl={2}>
                               <Text fontSize="sm">{item.name}</Text>
                               <Text fontSize="sm">
-                                {item.price ? currencyFormat(item.price) : ''}
+                                {item.price
+                                  ? `+ ${currencyFormat(item.price)}`
+                                  : ''}
                               </Text>
                             </HStack>
                           </Radio>

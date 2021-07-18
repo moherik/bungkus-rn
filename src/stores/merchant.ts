@@ -61,14 +61,23 @@ const merchantSlice = createSlice({
       };
       state.menus = [];
     },
+
     resetSelectedMenu: state => {
       state.selectedMenu = undefined;
+      state.selectedCartMenu = undefined;
     },
 
     addToCart: (state, action: PayloadAction<CartItemType>) => {
       const payload = action.payload;
       state.carts.push(payload);
-      countTotalCart(state);
+
+      const price = state.totalCart?.price!!;
+      const qty = state.totalCart?.qty!!;
+
+      state.totalCart = {
+        price: price + payload.price,
+        qty: qty + payload.qty,
+      };
     },
   },
 });

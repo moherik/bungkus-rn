@@ -14,7 +14,7 @@ export type ExtraPriceType = {
 };
 
 type Props = {
-  extras: ExtrasType[];
+  extras?: ExtrasType[];
   price: number;
   note?: string;
   discount?: number;
@@ -27,28 +27,33 @@ export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
     state => state.merchant.selectedMerchant?.id,
   );
   const menu = useAppSelector(state => state.merchant.selectedMenu);
-  const [order, setOrder] = useState<number>(1);
+  const cart = useAppSelector(state => state.merchant.selectedCartMenu);
+  const [qty, setQty] = useState<number>(1);
   const [extraPrice, setExtraPrice] = useState<ExtraPriceType | null>(null);
 
   useEffect(() => {
-    const totalExtraPrice = extras.reduce(
+    const totalExtraPrice = extras?.reduce(
       (acc, value) => Number(value.price) + acc,
       0,
     );
 
-    setExtraPrice({item: extras.length, total: totalExtraPrice});
+    setQty(cart?.qty || 1);
+    setExtraPrice({item: extras?.length || 0, total: totalExtraPrice || 0});
 
-    return () => {};
-  }, [extras]);
+    return () => {
+      setQty(1);
+      setExtraPrice({item: 0, total: 0});
+    };
+  }, [extras, cart]);
 
-  const handleAddOrder = () => setOrder(order + 1);
+  const handleAddQty = () => setQty(qty + 1);
 
-  const handleMinOrder = () => order !== 1 && setOrder(order - 1);
+  const handleMinQty = () => qty !== 1 && setQty(qty - 1);
 
   const priceAfterDiscount = discount ? (price / 100) * discount : null;
   let totalPrice = priceAfterDiscount
-    ? price * order - priceAfterDiscount
-    : price * order;
+    ? price * qty - priceAfterDiscount
+    : price * qty;
 
   if (extraPrice != null) {
     totalPrice = totalPrice + extraPrice.total;
@@ -60,11 +65,11 @@ export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
         merchantId: merchantId!!,
         menuId: Number(menu?.id!!),
         menuName: menu?.name!!,
-        qty: order,
+        qty,
         price: totalPrice,
         discount: discount || 0,
         note: note || '',
-        extras,
+        extras: extras || [],
       }),
     );
 
@@ -83,7 +88,7 @@ export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
           </Heading>
         </HStack>
       )}
-      {extraPrice && extraPrice.item !== 0 && (
+      {extraPrice && extraPrice.total > 0 && (
         <HStack justifyContent="space-between" alignItems="center" px={4}>
           <Text fontSize="sm" color="gray.500">
             Extra (x{extraPrice.item})
@@ -93,14 +98,14 @@ export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
       )}
       <HStack justifyContent="space-between" alignItems="center" px={4}>
         <Text fontSize="sm" color="gray.500">
-          Total Harga {order > 1 && `(x${order})`}
+          Total Harga {qty > 1 && `(x${qty})`}
         </Text>
         <Heading size="md">{currencyFormat(totalPrice)}</Heading>
       </HStack>
       <Separator height={1} my={2} bg="gray.100" />
       <HStack justifyContent="space-between" alignItems="center" px={4}>
         <HStack flex={1} space={2} alignItems="center">
-          <TouchableOpacity onPress={handleMinOrder}>
+          <TouchableOpacity onPress={handleMinQty}>
             <Center
               px={1}
               py={2}
@@ -111,9 +116,9 @@ export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
             </Center>
           </TouchableOpacity>
           <Heading size="md" px={2}>
-            {order}
+            {qty}
           </Heading>
-          <TouchableOpacity onPress={handleAddOrder}>
+          <TouchableOpacity onPress={handleAddQty}>
             <Center
               px={1}
               py={2}
@@ -127,7 +132,7 @@ export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
         <TouchableOpacity onPress={handleAddToCart}>
           <Center bg="red.600" px={4} py={3} borderRadius="lg">
             <Text color="white" fontWeight={700}>
-              Tambah Ke Keranjang
+              {!cart ? 'Tambah Ke Keranjang' : 'Perbaruhi Keranjang'}
             </Text>
           </Center>
         </TouchableOpacity>
