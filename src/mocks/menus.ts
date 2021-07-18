@@ -39,16 +39,27 @@ const krabbyMakanan: MenuItemType[] = [
     name: 'Krabby Patty Deluxe',
     description: 'Hoooplaaaa',
     price: 20000,
+    discount: 20,
     image:
       'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=602&q=80',
     variants: [
       {
         id: 1,
         menuId: 3,
-        name: 'Ekstra',
+        name: 'Sauce',
         item: [
-          {id: 1, name: 'Ekstra Mayonaise'},
-          {id: 2, name: 'Ekstra Sauce'},
+          {id: 1, name: 'Mayonaise', price: 2000},
+          {id: 2, name: 'Tomato'},
+          {id: 3, name: 'Tartar Sauce', price: 5000},
+        ],
+      },
+      {
+        id: 2,
+        menuId: 3,
+        name: 'Size',
+        item: [
+          {id: 1, name: 'XXL', price: 10000},
+          {id: 2, name: 'L', price: 5000},
         ],
       },
     ],
@@ -71,6 +82,7 @@ const krabbyMakanan: MenuItemType[] = [
     id: 6,
     name: 'Krabby Special',
     price: 105000,
+    discount: 10,
     image:
       'https://images.unsplash.com/photo-1610440042657-612c34d95e9f?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
   },

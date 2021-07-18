@@ -20,6 +20,7 @@ import {reset, selectMenu} from 'stores/merchant';
 import {Loader} from './Loader';
 import {MenuList} from './MenuList';
 import {OrderModal} from '../OrderModal';
+import {currencyFormat} from 'utils';
 
 const IMAGE_HEIGHT = 240;
 
@@ -29,21 +30,26 @@ type Props = {
 
 export const MenuModal = forwardRef<Modalize, Props>((props, ref) => {
   const [favorite, setFavorite] = useState<boolean>(false);
+  const orderModalRef = useRef<Modalize>(null);
+
   const merchant = useAppSelector(state => state.merchant.selectedMerchant);
   const menus = useAppSelector(state => state.merchant.menus);
+  const totalCart = useAppSelector(state => state.merchant.totalCart);
   const dispatch = useAppDispatch();
 
-  const orderModalRef = useRef<Modalize>(null);
   const deviceHeight = Dimensions.get('window').height;
 
   const handleOnCloseModal = () => {
     dispatch(reset());
-    setFavorite(false);
   };
 
   const handleShowOrderModal = (id: number | string) => {
     dispatch(selectMenu(Number(id)));
     orderModalRef.current?.open();
+  };
+
+  const handleCloseOrderModal = () => {
+    orderModalRef.current?.close();
   };
 
   const handleFavorite = () => {
@@ -95,7 +101,22 @@ export const MenuModal = forwardRef<Modalize, Props>((props, ref) => {
         ref={ref}
         onClose={handleOnCloseModal}
         HeaderComponent={headerComponent}
-        snapPoint={(deviceHeight / 100) * 75}>
+        snapPoint={(deviceHeight / 100) * 75}
+        FooterComponent={
+          totalCart &&
+          totalCart.qty > 0 && (
+            <TouchableOpacity onPress={() => {}}>
+              <HStack bg="red.600" p={4} justifyContent="space-between">
+                <Heading size="md" color="white">
+                  Pesan Sekarang
+                </Heading>
+                <Heading size="md" color="white">
+                  {`(x${totalCart.qty}) ${currencyFormat(totalCart.price)}`}
+                </Heading>
+              </HStack>
+            </TouchableOpacity>
+          )
+        }>
         {merchant ? (
           <ScrollView bg="white" flex={1}>
             <VStack space={2}>
@@ -123,6 +144,7 @@ export const MenuModal = forwardRef<Modalize, Props>((props, ref) => {
                     isSmall
                     textSize="sm"
                   />
+                  <Separator height={2} />
                   <Heading size="xs">Jam Buka</Heading>
                   {merchant.open.map((open, index) => (
                     <HStack
@@ -142,7 +164,11 @@ export const MenuModal = forwardRef<Modalize, Props>((props, ref) => {
               <Separator height={4} bg="gray.100" my={4} />
               <MenuList groups={menus} showOrderModal={handleShowOrderModal} />
             </VStack>
-            <OrderModal ref={orderModalRef} />
+            <OrderModal
+              merchantId={merchant.id}
+              ref={orderModalRef}
+              closeModal={handleCloseOrderModal}
+            />
           </ScrollView>
         ) : (
           <Loader />

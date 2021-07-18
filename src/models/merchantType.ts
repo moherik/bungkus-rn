@@ -24,3 +24,19 @@ export type MerchantType = {
   profileImage: string;
   bannerImage?: string;
 };
+
+export type CartItemType = {
+  merchantId: number;
+  menuId: number;
+  menuName: string;
+  qty: number;
+  price: number;
+  discount: number;
+  note: string;
+  extras: ExtrasType[];
+};
+
+export type ExtrasType = {
+  id: number | string;
+  price: number | string;
+};
