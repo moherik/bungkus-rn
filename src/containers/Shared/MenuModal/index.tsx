@@ -1,4 +1,4 @@
-import React, {forwardRef, useRef, useState} from 'react';
+import React, {forwardRef, useState} from 'react';
 import {Dimensions, TouchableOpacity} from 'react-native';
 import {
   Heading,
@@ -15,11 +15,10 @@ import {Portal} from 'react-native-portalize';
 
 import {Rating, Separator} from 'components';
 import {useAppDispatch, useAppSelector} from 'hooks';
-import {reset, selectMenu} from 'stores/merchant';
+import {reset} from 'stores/merchant';
 
 import {Loader} from './Loader';
 import {MenuList} from './MenuList';
-import {OrderModal} from '../OrderModal';
 import {currencyFormat} from 'utils';
 
 const IMAGE_HEIGHT = 240;
@@ -30,26 +29,23 @@ type Props = {
 
 export const MenuModal = forwardRef<Modalize, Props>((props, ref) => {
   const [favorite, setFavorite] = useState<boolean>(false);
-  const orderModalRef = useRef<Modalize>(null);
 
   const merchant = useAppSelector(state => state.merchant.selectedMerchant);
   const menus = useAppSelector(state => state.merchant.menus);
-  const totalCart = useAppSelector(state => state.merchant.totalCart);
+  const carts = useAppSelector(state => state.merchant.carts);
   const dispatch = useAppDispatch();
 
   const deviceHeight = Dimensions.get('window').height;
 
+  const getCarts = carts.filter(cart => cart.merchantId === merchant?.id);
+
+  const qty = getCarts.reduce((acc, cart) => acc + Number(cart.qty), 0);
+  const price = getCarts.reduce((acc, cart) => acc + Number(cart.price), 0);
+
+  console.log(qty);
+
   const handleOnCloseModal = () => {
     dispatch(reset());
-  };
-
-  const handleShowOrderModal = (id: number | string) => {
-    dispatch(selectMenu(Number(id)));
-    orderModalRef.current?.open();
-  };
-
-  const handleCloseOrderModal = () => {
-    orderModalRef.current?.close();
   };
 
   const handleFavorite = () => {
@@ -101,24 +97,22 @@ export const MenuModal = forwardRef<Modalize, Props>((props, ref) => {
         ref={ref}
         onClose={handleOnCloseModal}
         HeaderComponent={headerComponent}
-        snapPoint={(deviceHeight / 100) * 75}
-        FooterComponent={
-          totalCart &&
-          totalCart.qty > 0 && (
-            <TouchableOpacity onPress={() => {}}>
-              <HStack bg="red.600" p={4} justifyContent="space-between">
-                <Heading size="md" color="white">
-                  Pesan Sekarang
-                </Heading>
-                <Heading size="md" color="white">
-                  {`(x${totalCart.qty}) ${currencyFormat(totalCart.price)}`}
-                </Heading>
-              </HStack>
-            </TouchableOpacity>
-          )
-        }>
+        snapPoint={(deviceHeight / 100) * 75}>
         {merchant ? (
-          <ScrollView bg="white" flex={1}>
+          <>
+            {qty > 0 && (
+              <TouchableOpacity onPress={() => {}}>
+                <HStack bg="red.600" p={4} justifyContent="space-between">
+                  <Heading size="md" color="white">
+                    Pesan Sekarang
+                  </Heading>
+                  <Heading size="md" color="white">
+                    {`(x${qty}) ${currencyFormat(price)}`}
+                  </Heading>
+                </HStack>
+              </TouchableOpacity>
+            )}
+
             <VStack space={2}>
               <Image
                 source={{uri: merchant.profileImage}}
@@ -162,14 +156,9 @@ export const MenuModal = forwardRef<Modalize, Props>((props, ref) => {
                 </VStack>
               </VStack>
               <Separator height={4} bg="gray.100" my={4} />
-              <MenuList groups={menus} showOrderModal={handleShowOrderModal} />
+              <MenuList groups={menus} merchantId={merchant.id} />
             </VStack>
-            <OrderModal
-              merchantId={merchant.id}
-              ref={orderModalRef}
-              closeModal={handleCloseOrderModal}
-            />
-          </ScrollView>
+          </>
         ) : (
           <Loader />
         )}

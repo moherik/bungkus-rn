@@ -2,19 +2,16 @@ import React, {useState} from 'react';
 import {MenuVariantType} from 'models/menuType';
 import {Checkbox, Heading, HStack, Radio, Text, VStack} from 'native-base';
 import {currencyFormat} from 'utils';
-import {ExtrasItemType, ExtrasType} from 'models/merchantType';
-import {useAppSelector} from 'hooks';
+import {CartItemType, ExtrasItemType, ExtrasType} from 'models/merchantType';
 
 type OptionProps = {
   extras?: ExtrasType[];
-  setExtras: React.Dispatch<React.SetStateAction<ExtrasType[] | undefined>>;
+  setExtras: React.Dispatch<React.SetStateAction<ExtrasType[]>>;
   variant: MenuVariantType;
-  index: number;
+  cart?: CartItemType;
 };
 
-const SingleOption = ({extras, setExtras, variant, index}: OptionProps) => {
-  const cart = useAppSelector(state => state.merchant.selectedCartMenu);
-
+const SingleOption = ({extras, setExtras, variant, cart}: OptionProps) => {
   const handleOptionChange = (value: string) => {
     const strArr = value.split('-');
     const groupId = strArr[0];
@@ -38,12 +35,12 @@ const SingleOption = ({extras, setExtras, variant, index}: OptionProps) => {
 
   let defaultValue = '';
   const select = cart?.extras.filter(
-    extra => extra.groupId === index.toString(),
+    extra => extra.groupId === variant.id.toString(),
   )[0];
   if (select) {
     const itemId = select.items[0].itemId;
     const price = select.items[0].price || 0;
-    defaultValue = `${index}-${itemId}-${price}`;
+    defaultValue = `${variant.id}-${itemId}-${price}`;
   }
 
   return (
@@ -71,8 +68,7 @@ const SingleOption = ({extras, setExtras, variant, index}: OptionProps) => {
   );
 };
 
-const MultipleOption = ({extras, setExtras, variant, index}: OptionProps) => {
-  const cart = useAppSelector(state => state.merchant.selectedCartMenu);
+const MultipleOption = ({cart, extras, setExtras, variant}: OptionProps) => {
   const [lastGroupId, setLastGroupId] = useState<string>();
 
   const handleChange = (values: string[]) => {
@@ -112,12 +108,12 @@ const MultipleOption = ({extras, setExtras, variant, index}: OptionProps) => {
   let defaultValues: string[] = [];
   if (cart) {
     const select = cart?.extras.filter(
-      extra => extra.groupId === index.toString(),
+      extra => extra.groupId === variant.id.toString(),
     )[0];
     if (select) {
       const items = select.items;
       defaultValues = items?.map(item => {
-        return `${index}-${item.itemId}-${item.price || 0}`;
+        return `${variant.id}-${item.itemId}-${item.price || 0}`;
       });
     }
   }
@@ -152,11 +148,12 @@ const MultipleOption = ({extras, setExtras, variant, index}: OptionProps) => {
 
 type Props = {
   variants: MenuVariantType[];
+  cart?: CartItemType;
   extras?: ExtrasType[];
-  setExtras: React.Dispatch<React.SetStateAction<ExtrasType[] | undefined>>;
+  setExtras: React.Dispatch<React.SetStateAction<ExtrasType[]>>;
 };
 
-export const Variant = ({extras, variants, setExtras}: Props) => {
+export const Variant = ({cart, extras, variants, setExtras}: Props) => {
   return (
     <VStack space={2} m={4}>
       {variants?.map((variant, index) => (
@@ -180,18 +177,18 @@ export const Variant = ({extras, variants, setExtras}: Props) => {
           </HStack>
           {variant.isSingle ? (
             <SingleOption
+              cart={cart}
               extras={extras}
               setExtras={setExtras}
               variant={variant}
-              index={variant.id}
               key={index}
             />
           ) : (
             <MultipleOption
+              cart={cart}
               extras={extras}
               setExtras={setExtras}
               variant={variant}
-              index={variant.id}
               key={index}
             />
           )}

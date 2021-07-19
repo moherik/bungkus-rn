@@ -1,4 +1,4 @@
-import React, {forwardRef, useEffect, useState} from 'react';
+import React, {forwardRef, useState} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {
   Center,
@@ -16,63 +16,42 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Modalize} from 'react-native-modalize';
 import {Portal} from 'react-native-portalize';
 
-import {useAppDispatch, useAppSelector} from 'hooks';
 import {Separator} from 'components';
-import {ExtrasType} from 'models/merchantType';
-import {resetSelectedMenu} from 'stores/merchant';
+import {CartItemType, ExtrasType} from 'models/merchantType';
+import {MenuItemType} from 'models/menuType';
 
 import {Footer} from './Footer';
-import {Loader} from './Loader';
 import {Variant} from './Variant';
 
 type Props = {
   merchantId: number;
+  menu: MenuItemType;
+  cart?: CartItemType;
   closeModal: () => void;
 };
 
-export const OrderModal = forwardRef<Modalize, Props>((props, ref) => {
-  const menu = useAppSelector(state => state.merchant.selectedMenu);
-  const cart = useAppSelector(state => state.merchant.selectedCartMenu);
-  const dispatch = useAppDispatch();
+export const OrderModal = forwardRef<Modalize, Props>(
+  ({merchantId, menu, cart, closeModal}, ref) => {
+    const [note, setNote] = useState<string>(cart?.note || '');
+    const [extras, setExtras] = useState<ExtrasType[]>(cart?.extras || []);
 
-  const [note, setNote] = useState<string>();
-  const [extras, setExtras] = useState<ExtrasType[]>();
+    const handleNoteChange = (value: string) => setNote(value);
 
-  useEffect(() => {
-    setNote(cart?.note || '');
-    setExtras(cart?.extras || []);
-
-    return () => {
-      setNote('');
-      setExtras([]);
-    };
-  }, [cart]);
-
-  const handleOnClose = () => {
-    setExtras([]);
-    dispatch(resetSelectedMenu());
-  };
-
-  const handleNoteChange = (value: string) => setNote(value);
-
-  return (
-    <Portal>
-      <Modalize
-        ref={ref}
-        onClose={handleOnClose}
-        modalStyle={styles.modal}
-        FooterComponent={
-          menu && (
+    return (
+      <Portal>
+        <Modalize
+          ref={ref}
+          modalStyle={styles.modal}
+          FooterComponent={
             <Footer
-              discount={menu.discount}
-              price={menu.price}
+              merchantId={merchantId}
+              cart={cart!!}
+              menu={menu}
               extras={extras}
               note={note}
-              closeModal={props.closeModal}
+              closeModal={closeModal}
             />
-          )
-        }>
-        {menu ? (
+          }>
           <ScrollView>
             <VStack space={1}>
               <ZStack height={250} width={'100%'}>
@@ -83,7 +62,7 @@ export const OrderModal = forwardRef<Modalize, Props>((props, ref) => {
                   height={250}
                 />
                 <HStack justifyContent="flex-end" width={'100%'} p={4}>
-                  <TouchableOpacity onPress={props.closeModal}>
+                  <TouchableOpacity onPress={closeModal}>
                     <Center borderRadius={100} bg="white" p={2}>
                       <Icon as={<Ionicons name="close" />} size={6} />
                     </Center>
@@ -101,6 +80,7 @@ export const OrderModal = forwardRef<Modalize, Props>((props, ref) => {
               <Separator height={3} bg="gray.100" />
               {menu.variants && (
                 <Variant
+                  cart={cart}
                   variants={menu.variants}
                   extras={extras}
                   setExtras={setExtras}
@@ -118,14 +98,15 @@ export const OrderModal = forwardRef<Modalize, Props>((props, ref) => {
               />
             </VStack>
           </ScrollView>
-        ) : (
-          <Loader />
-        )}
-      </Modalize>
-    </Portal>
-  );
-});
+        </Modalize>
+      </Portal>
+    );
+  },
+);
 
 const styles = StyleSheet.create({
-  modal: {borderTopLeftRadius: 0, borderTopRightRadius: 0},
+  modal: {
+    borderTopLeftRadius: 0,
+    borderTopRightRadius: 0,
+  },
 });

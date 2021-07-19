@@ -4,9 +4,10 @@ import {Box, Center, Heading, HStack, Icon, Text, VStack} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {currencyFormat} from 'utils';
 import {Separator} from 'components';
-import {useAppDispatch, useAppSelector} from 'hooks';
+import {useAppDispatch} from 'hooks';
 import {addToCart, deleteCart, updateCart} from 'stores/merchant';
 import {CartItemType, ExtrasType} from 'models/merchantType';
+import {MenuItemType} from 'models/menuType';
 
 export type ExtraPriceType = {
   item: number;
@@ -14,22 +15,33 @@ export type ExtraPriceType = {
 };
 
 type Props = {
+  merchantId: number;
+  cart: CartItemType;
+  menu: MenuItemType;
   extras?: ExtrasType[];
-  price: number;
   note?: string;
-  discount?: number;
   closeModal: () => void;
 };
 
-export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
+export const Footer = ({
+  merchantId,
+  cart,
+  menu,
+  extras,
+  note,
+  closeModal,
+}: Props) => {
   const dispatch = useAppDispatch();
-  const merchantId = useAppSelector(
-    state => state.merchant.selectedMerchant?.id,
-  );
-  const menu = useAppSelector(state => state.merchant.selectedMenu);
-  const cart = useAppSelector(state => state.merchant.selectedCartMenu);
-  const [qty, setQty] = useState<number>(1);
-  const [extraPrice, setExtraPrice] = useState<ExtraPriceType | null>(null);
+  const [qty, setQty] = useState<number>(cart?.qty || 1);
+  const [totalPrice, setTotalPrice] = useState<{
+    price: number;
+    discount: number;
+    extras: number;
+  }>({
+    price: 0,
+    discount: 0,
+    extras: 0,
+  });
 
   useEffect(() => {
     let totalItem = 0;
@@ -43,36 +55,41 @@ export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
       0,
     );
 
-    setQty(cart?.qty || 1);
-    setExtraPrice({item: totalItem || 0, total: totalExtraPrice || 0});
+    const discountPrice = menu.discount
+      ? (menu.price / 100) * menu.discount
+      : null;
+
+    const price = discountPrice
+      ? menu.price * qty - discountPrice
+      : menu.price * qty;
+
+    setTotalPrice({
+      price: price + (totalExtraPrice || 0),
+      discount: discountPrice || 0,
+      extras: totalExtraPrice || 0,
+    });
 
     return () => {
-      setQty(1);
-      setExtraPrice({item: 0, total: 0});
+      setTotalPrice({
+        price: 0,
+        discount: 0,
+        extras: 0,
+      });
     };
-  }, [extras, cart]);
+  }, [extras, cart, menu.discount, menu.price, qty]);
 
   const handleAddQty = () => setQty(qty + 1);
 
   const handleMinQty = () => qty !== 1 && setQty(qty - 1);
 
-  const priceAfterDiscount = discount ? (price / 100) * discount : null;
-  let totalPrice = priceAfterDiscount
-    ? price * qty - priceAfterDiscount
-    : price * qty;
-
-  if (extraPrice != null) {
-    totalPrice = totalPrice + extraPrice.total;
-  }
-
   const handleAddToCart = () => {
     const data: CartItemType = {
-      merchantId: merchantId!!,
-      menuId: Number(menu?.id!!),
-      menuName: menu?.name!!,
+      merchantId,
+      menuId: Number(menu.id),
+      menuName: menu.name,
       qty,
-      price: totalPrice,
-      discount: discount || 0,
+      price: totalPrice.price,
+      discount: menu.discount || 0,
       note: note || '',
       extras: extras || [],
     };
@@ -80,7 +97,7 @@ export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
     if (!cart) {
       dispatch(addToCart(data));
     } else {
-      dispatch(updateCart(data));
+      dispatch(updateCart({menuId: Number(menu.id), data}));
     }
 
     closeModal();
@@ -93,29 +110,29 @@ export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
 
   return (
     <VStack shadow={4} py={2} bg="white">
-      {priceAfterDiscount && (
+      {totalPrice.discount > 0 && (
         <HStack justifyContent="space-between" alignItems="center" px={4}>
           <Text fontSize="sm" color="gray.500">
-            Diskon
+            Diskon ({menu.discount}%)
           </Text>
           <Heading size="xs" color="red.600">
-            {currencyFormat(priceAfterDiscount, '-Rp. ')}
+            {currencyFormat(totalPrice.discount, '-Rp. ')}
           </Heading>
         </HStack>
       )}
-      {extraPrice && extraPrice.total > 0 && (
+      {/* {totalPrice.extras > 0 && (
         <HStack justifyContent="space-between" alignItems="center" px={4}>
           <Text fontSize="sm" color="gray.500">
-            Ekstra (x{extraPrice.item})
+            Ekstra
           </Text>
-          <Heading size="xs">{currencyFormat(extraPrice.total)}</Heading>
+          <Heading size="xs">{currencyFormat(totalPrice.extras)}</Heading>
         </HStack>
-      )}
+      )} */}
       <HStack justifyContent="space-between" alignItems="center" px={4}>
-        <Text fontSize="sm" color="gray.500">
+        <Text fontSize="sm" color="muted.500">
           Total Harga {qty > 1 && `(x${qty})`}
         </Text>
-        <Heading size="md">{currencyFormat(totalPrice)}</Heading>
+        <Heading size="md">{currencyFormat(totalPrice.price)}</Heading>
       </HStack>
       <Separator height={1} my={2} bg="gray.100" />
       <HStack justifyContent="space-between" alignItems="center" px={4}>
