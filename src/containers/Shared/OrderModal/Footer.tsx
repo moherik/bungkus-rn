@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
-import {Center, Heading, HStack, Icon, Text, VStack} from 'native-base';
+import {Box, Center, Heading, HStack, Icon, Text, VStack} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {currencyFormat} from 'utils';
 import {Separator} from 'components';
 import {useAppDispatch, useAppSelector} from 'hooks';
-import {addToCart} from 'stores/merchant';
-import {ExtrasType} from 'models/merchantType';
+import {addToCart, deleteCart, updateCart} from 'stores/merchant';
+import {CartItemType, ExtrasType} from 'models/merchantType';
 
 export type ExtraPriceType = {
   item: number;
@@ -32,13 +32,19 @@ export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
   const [extraPrice, setExtraPrice] = useState<ExtraPriceType | null>(null);
 
   useEffect(() => {
-    const totalExtraPrice = extras?.reduce(
-      (acc, value) => Number(value.price) + acc,
+    let totalItem = 0;
+    const selectedExtras = extras?.map(extra => {
+      totalItem = totalItem + extra.items.filter(item => item.price > 0).length;
+      return extra.items.reduce((acc, item) => acc + Number(item.price), 0);
+    });
+
+    const totalExtraPrice = selectedExtras?.reduce(
+      (acc, value) => acc + Number(value),
       0,
     );
 
     setQty(cart?.qty || 1);
-    setExtraPrice({item: extras?.length || 0, total: totalExtraPrice || 0});
+    setExtraPrice({item: totalItem || 0, total: totalExtraPrice || 0});
 
     return () => {
       setQty(1);
@@ -60,20 +66,29 @@ export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
   }
 
   const handleAddToCart = () => {
-    dispatch(
-      addToCart({
-        merchantId: merchantId!!,
-        menuId: Number(menu?.id!!),
-        menuName: menu?.name!!,
-        qty,
-        price: totalPrice,
-        discount: discount || 0,
-        note: note || '',
-        extras: extras || [],
-      }),
-    );
+    const data: CartItemType = {
+      merchantId: merchantId!!,
+      menuId: Number(menu?.id!!),
+      menuName: menu?.name!!,
+      qty,
+      price: totalPrice,
+      discount: discount || 0,
+      note: note || '',
+      extras: extras || [],
+    };
+
+    if (!cart) {
+      dispatch(addToCart(data));
+    } else {
+      dispatch(updateCart(data));
+    }
 
     closeModal();
+  };
+
+  const handleDeleteCart = (id: number) => {
+    closeModal();
+    dispatch(deleteCart(id));
   };
 
   return (
@@ -91,7 +106,7 @@ export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
       {extraPrice && extraPrice.total > 0 && (
         <HStack justifyContent="space-between" alignItems="center" px={4}>
           <Text fontSize="sm" color="gray.500">
-            Extra (x{extraPrice.item})
+            Ekstra (x{extraPrice.item})
           </Text>
           <Heading size="xs">{currencyFormat(extraPrice.total)}</Heading>
         </HStack>
@@ -104,7 +119,7 @@ export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
       </HStack>
       <Separator height={1} my={2} bg="gray.100" />
       <HStack justifyContent="space-between" alignItems="center" px={4}>
-        <HStack flex={1} space={2} alignItems="center">
+        <HStack flex={1} space={3} alignItems="center">
           <TouchableOpacity onPress={handleMinQty}>
             <Center
               px={1}
@@ -115,9 +130,7 @@ export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
               <Icon as={<Ionicons name="remove" />} size={6} />
             </Center>
           </TouchableOpacity>
-          <Heading size="md" px={2}>
-            {qty}
-          </Heading>
+          <Heading size="md">{qty}</Heading>
           <TouchableOpacity onPress={handleAddQty}>
             <Center
               px={1}
@@ -129,13 +142,23 @@ export const Footer = ({price, discount, extras, note, closeModal}: Props) => {
             </Center>
           </TouchableOpacity>
         </HStack>
-        <TouchableOpacity onPress={handleAddToCart}>
-          <Center bg="red.600" px={4} py={3} borderRadius="lg">
-            <Text color="white" fontWeight={700}>
-              {!cart ? 'Tambah Ke Keranjang' : 'Perbaruhi Keranjang'}
-            </Text>
-          </Center>
-        </TouchableOpacity>
+        <HStack reversed space={2} alignItems="center">
+          <TouchableOpacity onPress={handleAddToCart}>
+            <Center bg="red.600" px={4} py={3} borderRadius="lg">
+              <Text color="white" fontWeight={700}>
+                {!cart ? 'Tambah Ke Keranjang' : 'Perbaruhi Keranjang'}
+              </Text>
+            </Center>
+          </TouchableOpacity>
+          {cart && (
+            <TouchableOpacity
+              onPress={() => handleDeleteCart(Number(menu?.id!!))}>
+              <Box>
+                <Icon as={<Ionicons name="trash-outline" />} size={6} />
+              </Box>
+            </TouchableOpacity>
+          )}
+        </HStack>
       </HStack>
     </VStack>
   );

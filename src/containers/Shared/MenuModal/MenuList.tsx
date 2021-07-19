@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Box, Heading, HStack, Image, Text, VStack} from 'native-base';
-import {MenuGroupType, MenuItemType} from 'models/menuType';
 import {TouchableOpacity} from 'react-native';
+import {Box, Heading, HStack, Image, Text, VStack} from 'native-base';
+
+import {MenuGroupType, MenuItemType} from 'models/menuType';
 import {currencyFormat} from 'utils';
 import {useAppSelector} from 'hooks';
 
@@ -11,13 +12,13 @@ type MenuItemProps = {
 };
 
 const MenuItem: React.FC<MenuItemProps> = ({menu, showOrderModal}) => {
-  const [inCart, setInCart] = useState<boolean>(false);
-  const [cartQty, setCartQty] = useState<number>(0);
-
   const merchantId = useAppSelector(
     state => state.merchant.selectedMerchant?.id,
   );
   const carts = useAppSelector(state => state.merchant.carts);
+
+  const [inCart, setInCart] = useState<boolean>(false);
+  const [cartQty, setCartQty] = useState<number>(0);
 
   useEffect(() => {
     const cart = carts.filter(
@@ -38,14 +39,13 @@ const MenuItem: React.FC<MenuItemProps> = ({menu, showOrderModal}) => {
 
   return (
     <TouchableOpacity onPress={() => showOrderModal(menu.id)} key={menu.id}>
-      <HStack
-        pl={2}
-        pr={4}
-        space={3}
-        flex={1}
-        mb={3}
-        borderLeftWidth={5}
-        borderLeftColor={inCart ? 'red.600' : 'white'}>
+      <HStack pr={4} space={3} flex={1} mb={3}>
+        <Box
+          bg={inCart ? 'red.600' : 'white'}
+          pr={1}
+          borderTopRightRadius="lg"
+          borderBottomRightRadius="lg"
+        />
         <Image
           source={{uri: menu.image}}
           alt={menu.name}

@@ -1,4 +1,4 @@
-import React, {forwardRef, useEffect, useRef, useState} from 'react';
+import React, {forwardRef, useEffect, useState} from 'react';
 import {StyleSheet, TouchableOpacity} from 'react-native';
 import {
   Center,
@@ -6,7 +6,6 @@ import {
   HStack,
   Icon,
   Image,
-  Radio,
   ScrollView,
   Text,
   TextArea,
@@ -20,11 +19,11 @@ import {Portal} from 'react-native-portalize';
 import {useAppDispatch, useAppSelector} from 'hooks';
 import {Separator} from 'components';
 import {ExtrasType} from 'models/merchantType';
-import {currencyFormat} from 'utils';
+import {resetSelectedMenu} from 'stores/merchant';
 
 import {Footer} from './Footer';
 import {Loader} from './Loader';
-import {resetSelectedMenu} from 'stores/merchant';
+import {Variant} from './Variant';
 
 type Props = {
   merchantId: number;
@@ -38,7 +37,6 @@ export const OrderModal = forwardRef<Modalize, Props>((props, ref) => {
 
   const [note, setNote] = useState<string>();
   const [extras, setExtras] = useState<ExtrasType[]>();
-  const radioGroupRef = useRef<any>([]);
 
   useEffect(() => {
     setNote(cart?.note || '');
@@ -51,27 +49,11 @@ export const OrderModal = forwardRef<Modalize, Props>((props, ref) => {
   }, [cart]);
 
   const handleOnClose = () => {
+    setExtras([]);
     dispatch(resetSelectedMenu());
   };
 
   const handleNoteChange = (value: string) => setNote(value);
-
-  const handleOptionChange = (value: string) => {
-    const strArr = value.split('-');
-    const groupId = strArr[0];
-    const itemId = strArr[1];
-    const price = strArr[2];
-
-    const newExtras = extras?.filter(item => item.groupId !== groupId)!!;
-    setExtras([
-      ...newExtras,
-      {
-        groupId,
-        itemId,
-        price,
-      },
-    ]);
-  };
 
   return (
     <Portal>
@@ -118,47 +100,11 @@ export const OrderModal = forwardRef<Modalize, Props>((props, ref) => {
               </VStack>
               <Separator height={3} bg="gray.100" />
               {menu.variants && (
-                <VStack space={2} m={4}>
-                  {menu.variants?.map((variant, index) => (
-                    <VStack space={2} key={variant.id}>
-                      <Heading size="sm">{variant.name}</Heading>
-                      <Radio.Group
-                        ref={(el: any) =>
-                          (radioGroupRef.current[variant.id] = el)
-                        }
-                        defaultValue={`${cart?.extras[index].groupId}-${
-                          cart?.extras[index].itemId
-                        }-${(cart?.extras[index].price || 0).toString()}`}
-                        name={variant.id.toString()}
-                        onChange={handleOptionChange}>
-                        {variant.item.map(item => (
-                          <Radio
-                            key={item.id}
-                            value={`${variant.id}-${item.id.toString()}-${(
-                              item.price || 0
-                            ).toString()}`}
-                            colorScheme="red"
-                            my={1}
-                            accessibilityLabel={item.name}
-                            pl={1}>
-                            <HStack
-                              justifyContent="space-between"
-                              width={'100%'}
-                              pr={5}
-                              pl={2}>
-                              <Text fontSize="sm">{item.name}</Text>
-                              <Text fontSize="sm">
-                                {item.price
-                                  ? `+ ${currencyFormat(item.price)}`
-                                  : ''}
-                              </Text>
-                            </HStack>
-                          </Radio>
-                        ))}
-                      </Radio.Group>
-                    </VStack>
-                  ))}
-                </VStack>
+                <Variant
+                  variants={menu.variants}
+                  extras={extras}
+                  setExtras={setExtras}
+                />
               )}
               {menu.variants && <Separator height={3} bg="gray.100" />}
               <TextArea

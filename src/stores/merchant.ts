@@ -79,6 +79,23 @@ const merchantSlice = createSlice({
         qty: qty + payload.qty,
       };
     },
+
+    updateCart: (state, action: PayloadAction<CartItemType>) => {
+      const selectedMenuId = state.selectedCartMenu?.menuId;
+      const index = state.carts.findIndex(
+        cart => cart.menuId === selectedMenuId,
+      );
+      state.carts.splice(index, 1, action.payload);
+      countTotalCart(state);
+    },
+
+    deleteCart: (state, action: PayloadAction<number>) => {
+      const index = state.carts.findIndex(
+        cart => cart.menuId === action.payload,
+      );
+      state.carts.splice(index, 1);
+      countTotalCart(state);
+    },
   },
 });
 
@@ -113,6 +130,8 @@ export const {
   reset,
   resetSelectedMenu,
   addToCart,
+  updateCart,
+  deleteCart,
 } = actions;
 
 export default reducer;

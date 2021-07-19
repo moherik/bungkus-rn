@@ -38,6 +38,10 @@ export type CartItemType = {
 
 export type ExtrasType = {
   groupId: number | string;
+  items: ExtrasItemType[];
+};
+
+export type ExtrasItemType = {
   itemId: number | string;
   price: number | string;
 };

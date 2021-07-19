@@ -20,15 +20,17 @@ export type MenuItemType = {
   variants?: MenuVariantType[];
 };
 
-type MenuVariantItemType = {
-  id: number;
-  name: string;
-  price?: number;
-};
-
 export type MenuVariantType = {
   id: number;
   menuId: number;
   name: string;
+  isSingle: boolean;
+  isRequired?: boolean;
   item: MenuVariantItemType[];
+};
+
+type MenuVariantItemType = {
+  id: number;
+  name: string;
+  price?: number;
 };

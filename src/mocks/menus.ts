@@ -14,6 +14,8 @@ const mieAyam: MenuItemType[] = [
         id: 1,
         menuId: 1,
         name: 'Level Hot',
+        isSingle: true,
+        isRequired: true,
         item: [
           {id: 1, name: 'Mama Muda'},
           {id: 2, name: 'Mantan'},
@@ -24,6 +26,8 @@ const mieAyam: MenuItemType[] = [
         id: 2,
         menuId: 1,
         name: 'Topping',
+        isSingle: false,
+        isRequired: false,
         item: [
           {id: 1, name: 'Telor', price: 2000},
           {id: 2, name: 'Ceker', price: 4000},
@@ -47,6 +51,8 @@ const krabbyMakanan: MenuItemType[] = [
         id: 1,
         menuId: 3,
         name: 'Sauce',
+        isSingle: true,
+        isRequired: false,
         item: [
           {id: 1, name: 'Mayonaise', price: 2000},
           {id: 2, name: 'Tomato'},
@@ -56,10 +62,13 @@ const krabbyMakanan: MenuItemType[] = [
       {
         id: 2,
         menuId: 3,
-        name: 'Size',
+        name: 'Topping',
+        isSingle: false,
+        isRequired: true,
         item: [
-          {id: 1, name: 'XXL', price: 10000},
-          {id: 2, name: 'L', price: 5000},
+          {id: 1, name: 'Cheese', price: 10000},
+          {id: 2, name: 'Pickle', price: 5000},
+          {id: 3, name: 'French Fries', price: 5000},
         ],
       },
     ],
@@ -107,6 +116,8 @@ const krabbyMinuman: MenuItemType[] = [
         id: 1,
         menuId: 1,
         name: 'Ukuran',
+        isSingle: true,
+        isRequired: false,
         item: [
           {id: 1, name: 'Mini', price: 2000},
           {id: 2, name: 'Sedang', price: 10000},
