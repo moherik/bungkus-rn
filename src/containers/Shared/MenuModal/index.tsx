@@ -1,14 +1,6 @@
 import React, {forwardRef, useState} from 'react';
 import {Dimensions, TouchableOpacity} from 'react-native';
-import {
-  Heading,
-  HStack,
-  Icon,
-  Image,
-  ScrollView,
-  Text,
-  VStack,
-} from 'native-base';
+import {Heading, HStack, Icon, Image, Text, VStack} from 'native-base';
 import {Modalize} from 'react-native-modalize';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {Portal} from 'react-native-portalize';
@@ -17,9 +9,8 @@ import {Rating, Separator} from 'components';
 import {useAppDispatch, useAppSelector} from 'hooks';
 import {reset} from 'stores/merchant';
 
-import {Loader} from './Loader';
-import {MenuList} from './MenuList';
 import {currencyFormat} from 'utils';
+import {Loader} from 'containers/Detail/Loader';
 
 const IMAGE_HEIGHT = 240;
 
@@ -41,8 +32,6 @@ export const MenuModal = forwardRef<Modalize, Props>((props, ref) => {
 
   const qty = getCarts.reduce((acc, cart) => acc + Number(cart.qty), 0);
   const price = getCarts.reduce((acc, cart) => acc + Number(cart.price), 0);
-
-  console.log(qty);
 
   const handleOnCloseModal = () => {
     dispatch(reset());
@@ -112,7 +101,6 @@ export const MenuModal = forwardRef<Modalize, Props>((props, ref) => {
                 </HStack>
               </TouchableOpacity>
             )}
-
             <VStack space={2}>
               <Image
                 source={{uri: merchant.profileImage}}

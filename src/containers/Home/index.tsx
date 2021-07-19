@@ -9,12 +9,17 @@ import {merchants as mockMerchants, categories as mockCategories} from 'mocks';
 import {useAppDispatch, useAppSelector} from 'hooks';
 import {fetchMerchants, selectMerchant} from 'stores/merchant';
 import {MenuModal} from 'containers/Shared/MenuModal';
+import {HomeScreenNavigationProps} from 'navigation/types';
 
 import {MerchantList} from './MerchantList';
 import {Panel} from './Panel';
 import {Recommendations} from './Recommendations';
 
-const Home = () => {
+type Props = {
+  navigation: HomeScreenNavigationProps;
+};
+
+const Home: React.FC<Props> = ({navigation}) => {
   const [categories, setCategories] = useState<MenuCategoryType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const modalRef = useRef<Modalize>(null);
@@ -57,7 +62,7 @@ const Home = () => {
       <Panel loading={loading} categories={categories} />
       <Separator height={4} />
       <MerchantList
-        showModal={showModal}
+        navigation={navigation}
         loading={loading}
         label="Temukan Menu Favoritmu"
         data={merchants}

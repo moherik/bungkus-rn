@@ -12,32 +12,45 @@ import {
 } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {MenuItemLoader} from './Loader';
-
 import {MerchantType} from 'models/merchantType';
+import {HomeScreenNavigationProps} from 'navigation/types';
 import {Rating} from 'components';
+
+import {MenuItemLoader} from './Loader';
+import {selectMerchant} from 'stores/merchant';
+import {useAppDispatch} from 'hooks';
 
 type Props = {
   data: MerchantType[];
   label?: string;
   loading: boolean;
-  showModal: (id: number | string) => void;
+  navigation: HomeScreenNavigationProps;
 };
 
 export const MerchantList: React.FC<Props> = ({
   data,
   label,
   loading,
-  showModal,
+  navigation,
 }) => {
+  const dispatch = useAppDispatch();
+
   const deviceWidth = Dimensions.get('window').width;
   const imageWidth = (deviceWidth / 100) * 45;
   const imageHeight = imageWidth - 50;
 
+  const handleOpenMerchant = (id: number) => {
+    dispatch(selectMerchant(id));
+
+    navigation.navigate('Detail', {merchantId: id});
+  };
+
   const renderItem = (item: MerchantType) => {
     return (
       <Box flex={1} flexDirection="column" mx={2} mb={4}>
-        <TouchableOpacity key={item.id} onPress={() => showModal(item.id)}>
+        <TouchableOpacity
+          key={item.id}
+          onPress={() => handleOpenMerchant(item.id)}>
           <VStack space={2}>
             <Image
               borderRadius={6}

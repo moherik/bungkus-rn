@@ -10,11 +10,16 @@ import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 
 export type RootStackParamList = {
   Tab: undefined;
-  Detail: {menuId: number};
+  Detail: {merchantId: number};
   Cart: undefined;
 };
 
 export type DetailScreenProps = StackScreenProps<RootStackParamList, 'Detail'>;
+
+export type DetailcreenNavigationProps = CompositeNavigationProp<
+  StackNavigationProp<RootStackParamList, 'Detail'>,
+  BottomTabNavigationProp<MainTabParamList>
+>;
 
 export type MainTabParamList = {
   Root: NavigatorScreenParams<RootStackParamList>;

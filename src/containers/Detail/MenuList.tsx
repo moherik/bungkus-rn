@@ -5,9 +5,7 @@ import {Modalize} from 'react-native-modalize';
 
 import {MenuGroupType, MenuItemType} from 'models/menuType';
 import {CartItemType} from 'models/merchantType';
-
 import {currencyFormat} from 'utils';
-import {useAppSelector} from 'hooks';
 import {OrderModal} from '../OrderModal';
 
 type MenuItemProps = {
@@ -103,11 +101,10 @@ const MenuItem: React.FC<MenuItemProps> = ({menu, merchantId, cart}) => {
 type Props = {
   groups: MenuGroupType[];
   merchantId: number;
+  carts: CartItemType[];
 };
 
-export const MenuList = ({groups, merchantId}: Props) => {
-  const carts = useAppSelector(state => state.merchant.carts);
-
+export const MenuList = ({groups, merchantId, carts}: Props) => {
   return (
     <VStack space={4}>
       {groups.map(group => (
