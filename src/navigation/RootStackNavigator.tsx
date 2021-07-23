@@ -4,10 +4,11 @@ import {Icon, Text, Heading, HStack} from 'native-base';
 import {createStackNavigator} from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {AddToCartScreen, CartScreen, DetailScreen} from './screens';
-import {APPBAR_TITLE} from '../utils/constants';
-import BottomTabNavigator from './BottomTabNavigator';
+import {APPBAR_TITLE} from 'utils/constants';
+
+import {AddToCartScreen, DetailScreen, CartScreen} from './screens';
 import {RootStackParamList} from './types';
+import BottomTabNavigator from './BottomTabNavigator';
 
 const RootStack = createStackNavigator<RootStackParamList>();
 

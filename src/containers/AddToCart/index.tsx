@@ -25,7 +25,7 @@ import {Variant} from './Variant';
 type Props = {} & AddToCartScreenProps;
 
 const AddToCart: React.FC<Props> = ({navigation, route}) => {
-  const {merchantId, menu, cart} = route.params;
+  const {merchant, menu, cart} = route.params;
 
   const [note, setNote] = useState<string>(cart?.note || '');
   const [extras, setExtras] = useState<ExtrasType[]>(cart?.extras || []);
@@ -101,7 +101,7 @@ const AddToCart: React.FC<Props> = ({navigation, route}) => {
       <Footer
         navigation={navigation}
         route={route}
-        merchantId={merchantId}
+        merchantId={merchant.id}
         cart={cart}
         menu={menu}
         extras={extras}

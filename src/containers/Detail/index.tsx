@@ -35,18 +35,25 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
     setFavorite(!favorite);
   };
 
+  const handleCheckout = () => {
+    navigation.navigate('Cart', {merchant: merchant!!});
+  };
+
   return (
     <Box bg="white" flex={1}>
       <HStack
         bg="white"
         alignItems="center"
         justifyContent="space-between"
-        p={4}
+        px={4}
+        py={3}
         shadow={2}
         space={2}>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Icon as={<Ionicons name="arrow-back-outline" />} size={6} />
-        </TouchableOpacity>
+        <Icon
+          as={<Ionicons name="arrow-back-outline" />}
+          size={6}
+          onPress={() => navigation.goBack()}
+        />
         {!loading && (
           <HStack reversed alignItems="center" space={3}>
             <TouchableOpacity onPress={handleFavorite}>
@@ -78,7 +85,7 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
           renderItem={({item: menu}) => (
             <MenuItem
               menu={menu}
-              merchantId={merchant?.id!!}
+              merchant={merchant!!}
               carts={carts}
               navigation={navigation}
               route={route}
@@ -100,7 +107,7 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
         <Loader />
       )}
       {!loading && qty > 0 && (
-        <TouchableOpacity onPress={() => {}}>
+        <TouchableOpacity onPress={handleCheckout}>
           <HStack
             bg="red.600"
             p={4}

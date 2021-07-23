@@ -14,7 +14,7 @@ import {
 } from 'native-base';
 
 import {MenuItemType} from 'models/menuType';
-import {CartItemType} from 'models/merchantType';
+import {CartItemType, MerchantType} from 'models/merchantType';
 import {DetailScreenProps} from 'navigation/types';
 import {currencyFormat} from 'utils';
 import {useAppDispatch} from 'hooks';
@@ -22,14 +22,14 @@ import {deleteCart} from 'stores/merchant';
 
 type MenuItemProps = {
   menu: MenuItemType;
-  merchantId: number;
+  merchant: MerchantType;
   carts?: CartItemType[];
 } & DetailScreenProps;
 
 export const MenuItem: React.FC<MenuItemProps> = ({
   navigation,
   menu,
-  merchantId,
+  merchant,
   carts,
 }) => {
   const {isOpen, onOpen, onClose} = useDisclose();
@@ -39,7 +39,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 
   const getCarts =
     carts?.filter(
-      _cart => _cart.merchantId === merchantId && _cart.menuId === menu.id,
+      _cart => _cart.merchantId === merchant.id && _cart.menuId === menu.id,
     ) || [];
 
   const qty = getCarts.reduce((acc, cart) => acc + cart.qty, 0);
@@ -47,19 +47,19 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 
   const handleAddToCart = () => {
     if (getCarts.length <= 0) {
-      navigation.navigate('AddToCart', {menu, merchantId});
+      navigation.navigate('AddToCart', {menu, merchant});
     } else if (getCarts.length > 0) {
       if (menu.variants && menu.variants?.length > 0) {
         onOpen();
       } else {
-        navigation.navigate('AddToCart', {menu, merchantId, cart: getCarts[0]});
+        navigation.navigate('AddToCart', {menu, merchant, cart: getCarts[0]});
       }
     }
   };
 
   const handleAddNew = () => {
     onClose();
-    navigation.navigate('AddToCart', {menu, merchantId});
+    navigation.navigate('AddToCart', {menu, merchant});
   };
 
   const handleDeleteById = (id: number) => dispatch(deleteCart(id));
@@ -67,7 +67,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
   const handleEditById = (id: number) => {
     onClose();
     const cart = getCarts.filter(_cart => _cart.id === id)[0];
-    navigation.navigate('AddToCart', {menu, merchantId, cart});
+    navigation.navigate('AddToCart', {menu, merchant, cart});
   };
 
   return (

@@ -8,17 +8,19 @@ import {
 } from '@react-navigation/native';
 import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
 import {MenuItemType} from 'models/menuType';
-import {CartItemType} from 'models/merchantType';
+import {CartItemType, MerchantType} from 'models/merchantType';
 
 export type RootStackParamList = {
   Tab: undefined;
   Detail: {merchantId: number};
   AddToCart: {
-    merchantId: number;
+    merchant: MerchantType;
     menu: MenuItemType;
     cart?: CartItemType;
   };
-  Cart: undefined;
+  Cart: {
+    merchant: MerchantType;
+  };
 };
 
 export type DetailScreenProps = StackScreenProps<RootStackParamList, 'Detail'>;
@@ -27,6 +29,8 @@ export type AddToCartScreenProps = StackScreenProps<
   RootStackParamList,
   'AddToCart'
 >;
+
+export type CartScreenProps = StackScreenProps<RootStackParamList, 'Cart'>;
 
 export type DetailcreenNavigationProps = CompositeNavigationProp<
   StackNavigationProp<RootStackParamList, 'Detail'>,

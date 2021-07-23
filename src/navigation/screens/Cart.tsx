@@ -1,10 +1,9 @@
 import React from 'react';
-import {Box, Text} from 'native-base';
+import {CartContainer} from 'containers';
+import {CartScreenProps} from 'navigation/types';
 
-const CartScreen = () => (
-  <Box>
-    <Text>Cart</Text>
-  </Box>
+const CartScreen = ({navigation, route}: CartScreenProps) => (
+  <CartContainer navigation={navigation} route={route} />
 );
 
 export default CartScreen;
