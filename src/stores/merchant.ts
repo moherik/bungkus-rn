@@ -45,6 +45,10 @@ const merchantSlice = createSlice({
     },
 
     addToCart: (state, action: PayloadAction<CartItemType>) => {
+      const id = getLastId(state.carts);
+
+      action.payload.id = id + 1;
+
       state.carts.push(action.payload);
       state.selectedCarts.push(action.payload);
     },
@@ -52,13 +56,13 @@ const merchantSlice = createSlice({
     updateCart: (
       state,
       action: PayloadAction<{
-        menuId: number;
+        id: number;
         data: CartItemType;
       }>,
     ) => {
-      const {cartIndex, selectedIndex} = getIndex({
+      const {cartIndex, selectedIndex} = getIndexById({
         state,
-        menuId: action.payload.menuId,
+        id: action.payload.id,
       });
 
       state.carts.splice(cartIndex, 1, action.payload.data);
@@ -66,9 +70,9 @@ const merchantSlice = createSlice({
     },
 
     deleteCart: (state, action: PayloadAction<number>) => {
-      const {cartIndex, selectedIndex} = getIndex({
+      const {cartIndex, selectedIndex} = getIndexById({
         state,
-        menuId: action.payload,
+        id: action.payload,
       });
 
       state.carts.splice(cartIndex, 1);
@@ -77,19 +81,21 @@ const merchantSlice = createSlice({
   },
 });
 
-const getIndex = ({
+const getIndexById = ({
   state,
-  menuId,
+  id,
 }: {
   state: WritableDraft<MerchantState>;
-  menuId: number;
+  id: number;
 }) => {
-  const cartIndex = state.carts.findIndex(cart => cart.menuId === menuId);
-  const selectedIndex = state.selectedCarts.findIndex(
-    cart => cart.menuId === menuId,
-  );
+  const cartIndex = state.carts.findIndex(cart => cart.id === id);
+  const selectedIndex = state.selectedCarts.findIndex(cart => cart.id === id);
 
   return {cartIndex, selectedIndex};
+};
+
+const getLastId = (carts: WritableDraft<CartItemType>[]) => {
+  return carts.reduce((acc, cart) => Math.max(acc, cart.id), 0);
 };
 
 const {reducer, actions} = merchantSlice;

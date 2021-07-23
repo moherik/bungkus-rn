@@ -17,6 +17,7 @@ const SingleOption = ({extras, setExtras, variant, cart}: OptionProps) => {
     const groupId = strArr[0];
     const itemId = strArr[1];
     const price = strArr[2];
+    const itemName = strArr[3];
 
     const newExtras = extras?.filter(item => item.groupId !== groupId)!!;
     setExtras([
@@ -26,6 +27,7 @@ const SingleOption = ({extras, setExtras, variant, cart}: OptionProps) => {
         items: [
           {
             itemId,
+            itemName,
             price,
           },
         ],
@@ -40,7 +42,8 @@ const SingleOption = ({extras, setExtras, variant, cart}: OptionProps) => {
   if (select) {
     const itemId = select.items[0].itemId;
     const price = select.items[0].price || 0;
-    defaultValue = `${variant.id}-${itemId}-${price}`;
+    const itemName = select.items[0].itemName;
+    defaultValue = `${variant.id}-${itemId}-${price}-${itemName}`;
   }
 
   return (
@@ -57,7 +60,7 @@ const SingleOption = ({extras, setExtras, variant, cart}: OptionProps) => {
           mb={1}
           pr={5}>
           <Radio
-            value={`${variant.id}-${item.id}-${item.price || 0}`}
+            value={`${variant.id}-${item.id}-${item.price || 0}-${item.name}`}
             my={1}
             pl={1}
             accessibilityLabel={item.name}>
@@ -86,9 +89,11 @@ const MultipleOption = ({cart, extras, setExtras, variant}: OptionProps) => {
 
       const itemId = strArr[1];
       const price = strArr[2];
+      const itemName = strArr[3];
 
       return {
         itemId,
+        itemName,
         price,
       } as ExtrasItemType;
     });
@@ -119,7 +124,9 @@ const MultipleOption = ({cart, extras, setExtras, variant}: OptionProps) => {
     if (select) {
       const items = select.items;
       defaultValues = items?.map(item => {
-        return `${variant.id}-${item.itemId}-${item.price || 0}`;
+        return `${variant.id}-${item.itemId}-${item.price || 0}-${
+          item.itemName
+        }`;
       });
     }
   }
@@ -137,7 +144,7 @@ const MultipleOption = ({cart, extras, setExtras, variant}: OptionProps) => {
           mb={1}
           pr={5}>
           <Checkbox
-            value={`${variant.id}-${item.id}-${item.price || 0}`}
+            value={`${variant.id}-${item.id}-${item.price || 0}-${item.name}`}
             my={1}
             pl={'5px'}
             accessibilityLabel={item.name}>

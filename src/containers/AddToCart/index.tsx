@@ -71,7 +71,7 @@ const AddToCart: React.FC<Props> = ({navigation, route}) => {
               )}
             </HStack>
             {menu.description && (
-              <Text color="muted.500" fontSize="sm" lineHeight={5}>
+              <Text color="muted.500" fontSize="sm" lineHeight={5} mt={1}>
                 {menu.description}
               </Text>
             )}

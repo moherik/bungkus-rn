@@ -85,6 +85,7 @@ export const Footer = ({
 
   const handleAddToCart = () => {
     const data: CartItemType = {
+      id: 0,
       merchantId,
       menuId: Number(menu.id),
       menuName: menu.name,
@@ -98,7 +99,7 @@ export const Footer = ({
     if (!cart) {
       dispatch(addToCart(data));
     } else {
-      dispatch(updateCart({menuId: Number(menu.id), data}));
+      dispatch(updateCart({id: cart.id, data}));
     }
 
     navigation.goBack();

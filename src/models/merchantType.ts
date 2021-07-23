@@ -26,6 +26,7 @@ export type MerchantType = {
 };
 
 export type CartItemType = {
+  id: number;
   merchantId: number;
   menuId: number;
   menuName: string;
@@ -43,5 +44,6 @@ export type ExtrasType = {
 
 export type ExtrasItemType = {
   itemId: number | string;
+  itemName: string;
   price: number | string;
 };

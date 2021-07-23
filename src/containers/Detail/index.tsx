@@ -1,17 +1,15 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
-import {Box, Heading, HStack, Icon, Image, Text, VStack} from 'native-base';
+import {TouchableOpacity, SectionList} from 'react-native';
+import {Box, Heading, HStack, Icon} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {useAppSelector} from 'hooks';
-import {Rating, Separator} from 'components';
 import {currencyFormat} from 'utils';
 import {DetailScreenProps} from 'navigation/types';
 
 import {Loader} from './Loader';
-import {MenuList} from './MenuList';
-
-const IMAGE_HEIGHT = 240;
+import {MenuItem} from './MenuItem';
+import {Header} from './Header';
 
 type Props = {} & DetailScreenProps;
 
@@ -71,63 +69,33 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
           </HStack>
         )}
       </HStack>
-      {!loading && merchant ? (
-        <ScrollView style={styles.container}>
-          <VStack space={2}>
-            <Image
-              source={{uri: merchant.profileImage}}
-              alt={merchant.name}
-              width={'100%'}
-              height={IMAGE_HEIGHT}
-            />
-            <VStack flex={1} space={2} px={4} pt={2}>
-              <Heading size="lg">{merchant.name}</Heading>
-              <VStack space={1}>
-                <Text fontSize="sm" color="gray.600">
-                  {merchant.address}
-                </Text>
-                <HStack space={2}>
-                  <HStack space={1} alignItems="center">
-                    <Icon as={<Ionicons name="bicycle-outline" />} size={4} />
-                    <Text fontSize="sm">{merchant.distance} km</Text>
-                  </HStack>
-                  <Rating
-                    stars={merchant.rating.stars}
-                    reviews={merchant.rating.review}
-                    shouldShowReviewsText={true}
-                    iconColor="yellow.500"
-                    isSmall
-                    isSingleStar
-                    textSize="sm"
-                  />
-                </HStack>
-                <Separator height={2} />
-                <Heading size="xs">Jam Buka</Heading>
-                {merchant.open.map((open, index) => (
-                  <HStack
-                    width="200px"
-                    justifyContent="space-between"
-                    key={index}>
-                    <Text fontSize="sm" color="gray.600">
-                      {open.day}
-                    </Text>
-                    <Text fontSize="sm" color="gray.600">
-                      : {open.time}
-                    </Text>
-                  </HStack>
-                ))}
-              </VStack>
-            </VStack>
-            <Separator height={4} bg="gray.100" my={4} />
-            <MenuList
+      {!loading && menus ? (
+        <SectionList
+          sections={menus}
+          keyExtractor={(item, index) => item.id.toString() + index}
+          ListHeaderComponent={<Header merchant={merchant!!} />}
+          stickySectionHeadersEnabled={true}
+          renderItem={({item: menu}) => (
+            <MenuItem
+              menu={menu}
+              merchantId={merchant?.id!!}
+              carts={carts}
               navigation={navigation}
               route={route}
-              menus={menus}
-              merchantId={merchant.id}
-              carts={carts}
             />
-          </VStack>
-        </ScrollView>
+          )}
+          renderSectionHeader={({section: {title}}) => (
+            <Heading
+              size="sm"
+              px={4}
+              py={2}
+              bg="white"
+              borderBottomColor="gray.100"
+              borderBottomWidth={1}>
+              {title}
+            </Heading>
+          )}
+        />
       ) : (
         <Loader />
       )}
@@ -142,10 +110,10 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
               Pesan Sekarang
             </Heading>
             <HStack space={4}>
-              <Heading size="sm" color="white">
+              <Heading size="md" color="white">
                 X{qty}
               </Heading>
-              <Heading size="sm" color="white">
+              <Heading size="md" color="white">
                 {`${currencyFormat(price)}`}
               </Heading>
             </HStack>
@@ -155,12 +123,5 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
     </Box>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: 'white',
-    flex: 1,
-  },
-});
 
 export default Detail;
