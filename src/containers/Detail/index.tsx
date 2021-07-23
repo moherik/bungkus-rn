@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
-import {Heading, HStack, Icon, Image, Text, VStack} from 'native-base';
+import {Box, Heading, HStack, Icon, Image, Text, VStack} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {useAppSelector} from 'hooks';
@@ -15,7 +15,7 @@ const IMAGE_HEIGHT = 240;
 
 type Props = {} & DetailScreenProps;
 
-const Detail: React.FC<Props> = ({navigation}) => {
+const Detail: React.FC<Props> = ({navigation, route}) => {
   const [loading, setLoading] = useState<boolean>(true);
 
   const merchant = useAppSelector(state => state.merchant.selectedMerchant);
@@ -38,14 +38,12 @@ const Detail: React.FC<Props> = ({navigation}) => {
   };
 
   return (
-    <>
+    <Box bg="white" flex={1}>
       <HStack
         bg="white"
-        width={'100%'}
         alignItems="center"
         justifyContent="space-between"
-        px={4}
-        py={3}
+        p={4}
         shadow={2}
         space={2}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
@@ -73,7 +71,6 @@ const Detail: React.FC<Props> = ({navigation}) => {
           </HStack>
         )}
       </HStack>
-
       {!loading && merchant ? (
         <ScrollView style={styles.container}>
           <VStack space={2}>
@@ -89,18 +86,21 @@ const Detail: React.FC<Props> = ({navigation}) => {
                 <Text fontSize="sm" color="gray.600">
                   {merchant.address}
                 </Text>
-                <HStack space={1} alignItems="center">
-                  <Icon as={<Ionicons name="bicycle-outline" />} size={4} />
-                  <Text fontSize="sm">{merchant.distance} km</Text>
+                <HStack space={2}>
+                  <HStack space={1} alignItems="center">
+                    <Icon as={<Ionicons name="bicycle-outline" />} size={4} />
+                    <Text fontSize="sm">{merchant.distance} km</Text>
+                  </HStack>
+                  <Rating
+                    stars={merchant.rating.stars}
+                    reviews={merchant.rating.review}
+                    shouldShowReviewsText={true}
+                    iconColor="yellow.500"
+                    isSmall
+                    isSingleStar
+                    textSize="sm"
+                  />
                 </HStack>
-                <Rating
-                  stars={merchant.rating.stars}
-                  reviews={merchant.rating.review}
-                  shouldShowReviewsText={true}
-                  iconColor="yellow.500"
-                  isSmall
-                  textSize="sm"
-                />
                 <Separator height={2} />
                 <Heading size="xs">Jam Buka</Heading>
                 {merchant.open.map((open, index) => (
@@ -119,32 +119,47 @@ const Detail: React.FC<Props> = ({navigation}) => {
               </VStack>
             </VStack>
             <Separator height={4} bg="gray.100" my={4} />
-            <MenuList groups={menus} merchantId={merchant.id} carts={carts} />
+            <MenuList
+              navigation={navigation}
+              route={route}
+              menus={menus}
+              merchantId={merchant.id}
+              carts={carts}
+            />
           </VStack>
         </ScrollView>
       ) : (
         <Loader />
       )}
-
       {!loading && qty > 0 && (
         <TouchableOpacity onPress={() => {}}>
-          <HStack bg="red.600" p={4} justifyContent="space-between">
+          <HStack
+            bg="red.600"
+            p={4}
+            alignItems="center"
+            justifyContent="space-between">
             <Heading size="md" color="white">
               Pesan Sekarang
             </Heading>
-            <Heading size="md" color="white">
-              {`(x${qty}) ${currencyFormat(price)}`}
-            </Heading>
+            <HStack space={4}>
+              <Heading size="sm" color="white">
+                X{qty}
+              </Heading>
+              <Heading size="sm" color="white">
+                {`${currencyFormat(price)}`}
+              </Heading>
+            </HStack>
           </HStack>
         </TouchableOpacity>
       )}
-    </>
+    </Box>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     backgroundColor: 'white',
+    flex: 1,
   },
 });
 

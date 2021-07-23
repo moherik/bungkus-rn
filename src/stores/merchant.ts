@@ -1,4 +1,5 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
+import {WritableDraft} from 'immer/dist/internal';
 import {menus as groups} from 'mocks/menus';
 import {MenuGroupType} from 'models/menuType';
 import {CartItemType, MerchantType} from 'models/merchantType';
@@ -55,22 +56,41 @@ const merchantSlice = createSlice({
         data: CartItemType;
       }>,
     ) => {
-      const index = state.carts.findIndex(
-        cart => cart.menuId === action.payload.menuId,
-      );
-      state.carts.splice(index, 1, action.payload.data);
-      state.selectedCarts.splice(index, 1, action.payload.data);
+      const {cartIndex, selectedIndex} = getIndex({
+        state,
+        menuId: action.payload.menuId,
+      });
+
+      state.carts.splice(cartIndex, 1, action.payload.data);
+      state.selectedCarts.splice(selectedIndex, 1, action.payload.data);
     },
 
     deleteCart: (state, action: PayloadAction<number>) => {
-      const index = state.carts.findIndex(
-        cart => cart.menuId === action.payload,
-      );
-      state.carts.splice(index, 1);
-      state.selectedCarts.splice(index, 1);
+      const {cartIndex, selectedIndex} = getIndex({
+        state,
+        menuId: action.payload,
+      });
+
+      state.carts.splice(cartIndex, 1);
+      state.selectedCarts.splice(selectedIndex, 1);
     },
   },
 });
+
+const getIndex = ({
+  state,
+  menuId,
+}: {
+  state: WritableDraft<MerchantState>;
+  menuId: number;
+}) => {
+  const cartIndex = state.carts.findIndex(cart => cart.menuId === menuId);
+  const selectedIndex = state.selectedCarts.findIndex(
+    cart => cart.menuId === menuId,
+  );
+
+  return {cartIndex, selectedIndex};
+};
 
 const {reducer, actions} = merchantSlice;
 

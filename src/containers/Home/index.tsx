@@ -1,19 +1,18 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
-import {Modalize} from 'react-native-modalize';
 
 import {Separator} from 'components';
 import {MenuCategoryType} from 'models/menuType';
 import {merchants as mockMerchants, categories as mockCategories} from 'mocks';
 
 import {useAppDispatch, useAppSelector} from 'hooks';
-import {fetchMerchants, selectMerchant} from 'stores/merchant';
-import {MenuModal} from 'containers/Shared/MenuModal';
+import {fetchMerchants} from 'stores/merchant';
 import {HomeScreenNavigationProps} from 'navigation/types';
 
 import {MerchantList} from './MerchantList';
 import {Panel} from './Panel';
 import {Recommendations} from './Recommendations';
+import {Heading, HStack} from 'native-base';
 
 type Props = {
   navigation: HomeScreenNavigationProps;
@@ -22,7 +21,6 @@ type Props = {
 const Home: React.FC<Props> = ({navigation}) => {
   const [categories, setCategories] = useState<MenuCategoryType[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const modalRef = useRef<Modalize>(null);
 
   const merchants = useAppSelector(state => state.merchant.merchants);
   const dispatch = useAppDispatch();
@@ -40,35 +38,32 @@ const Home: React.FC<Props> = ({navigation}) => {
     return () => {};
   }, [dispatch]);
 
-  const showModal = (id: number | string) => {
-    dispatch(selectMerchant(Number(id)));
-    modalRef.current?.open();
-  };
-
-  const closeModal = () => modalRef.current?.close();
-
   return (
-    <ScrollView
-      stickyHeaderIndices={[2]}
-      showsVerticalScrollIndicator={false}
-      style={styles.container}>
-      <Recommendations
-        showModal={showModal}
-        label="Rekomendasi di Sekitarmu"
-        loading={loading}
-        data={merchants}
-      />
-      <Separator height={4} />
-      <Panel loading={loading} categories={categories} />
-      <Separator height={4} />
-      <MerchantList
-        navigation={navigation}
-        loading={loading}
-        label="Temukan Menu Favoritmu"
-        data={merchants}
-      />
-      <MenuModal ref={modalRef} closeModal={closeModal} />
-    </ScrollView>
+    <>
+      <HStack bg="white" px={4} py={3} shadow={2}>
+        <Heading size="lg">Bungkus</Heading>
+      </HStack>
+
+      <ScrollView
+        stickyHeaderIndices={[2]}
+        showsVerticalScrollIndicator={false}
+        style={styles.container}>
+        <Recommendations
+          label="Rekomendasi di Sekitarmu"
+          loading={loading}
+          data={merchants}
+        />
+        <Separator height={4} />
+        <Panel loading={loading} categories={categories} />
+        <Separator height={4} />
+        <MerchantList
+          navigation={navigation}
+          loading={loading}
+          label="Temukan Menu Favoritmu"
+          data={merchants}
+        />
+      </ScrollView>
+    </>
   );
 };
 

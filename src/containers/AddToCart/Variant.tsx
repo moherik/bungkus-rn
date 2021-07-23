@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {MenuVariantType} from 'models/menuType';
-import {Checkbox, Heading, HStack, Radio, Text, VStack} from 'native-base';
+import {Box, Checkbox, Heading, HStack, Radio, Text, VStack} from 'native-base';
 import {currencyFormat} from 'utils';
 import {CartItemType, ExtrasItemType, ExtrasType} from 'models/merchantType';
 
@@ -50,19 +50,25 @@ const SingleOption = ({extras, setExtras, variant, cart}: OptionProps) => {
       colorScheme="red"
       onChange={handleOptionChange}>
       {variant.item.map(item => (
-        <Radio
+        <Box
           key={item.id}
-          value={`${variant.id}-${item.id}-${item.price || 0}`}
-          my={1}
-          pl={1}
-          accessibilityLabel={item.name}>
-          <HStack justifyContent="space-between" width={'100%'} pr={5} pl={2}>
-            <Text fontSize="sm">{item.name}</Text>
-            <Text fontSize="sm">
-              {item.price ? `+ ${currencyFormat(item.price)}` : ''}
-            </Text>
-          </HStack>
-        </Radio>
+          borderBottomWidth={1}
+          borderBottomColor="muted.100"
+          mb={1}
+          pr={5}>
+          <Radio
+            value={`${variant.id}-${item.id}-${item.price || 0}`}
+            my={1}
+            pl={1}
+            accessibilityLabel={item.name}>
+            <HStack justifyContent="space-between" width={'100%'} pl={2}>
+              <Text fontSize="sm">{item.name}</Text>
+              <Text fontSize="sm">
+                {item.price ? `+ ${currencyFormat(item.price)}` : ''}
+              </Text>
+            </HStack>
+          </Radio>
+        </Box>
       ))}
     </Radio.Group>
   );
@@ -124,23 +130,25 @@ const MultipleOption = ({cart, extras, setExtras, variant}: OptionProps) => {
       colorScheme="red"
       onChange={handleChange}>
       {variant.item.map(item => (
-        <Checkbox
+        <Box
           key={item.id}
-          value={`${variant.id}-${item.id}-${item.price || 0}`}
-          my={1}
-          pl={'5px'}
-          accessibilityLabel={item.name}>
-          <HStack
-            justifyContent="space-between"
-            width={'100%'}
-            pr={5}
-            pl={'10px'}>
-            <Text fontSize="sm">{item.name}</Text>
-            <Text fontSize="sm">
-              {item.price ? `+ ${currencyFormat(item.price)}` : ''}
-            </Text>
-          </HStack>
-        </Checkbox>
+          borderBottomWidth={1}
+          borderBottomColor="muted.100"
+          mb={1}
+          pr={5}>
+          <Checkbox
+            value={`${variant.id}-${item.id}-${item.price || 0}`}
+            my={1}
+            pl={'5px'}
+            accessibilityLabel={item.name}>
+            <HStack justifyContent="space-between" width={'100%'} pl={'10px'}>
+              <Text fontSize="sm">{item.name}</Text>
+              <Text fontSize="sm">
+                {item.price ? `+ ${currencyFormat(item.price)}` : ''}
+              </Text>
+            </HStack>
+          </Checkbox>
+        </Box>
       ))}
     </Checkbox.Group>
   );

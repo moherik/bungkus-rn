@@ -27,7 +27,6 @@ type Props = {
   loading: boolean;
   itemWidth?: number;
   itemHeight?: number;
-  showModal: (id: number | string) => void;
 };
 
 export const Recommendations: React.FC<Props> = ({
@@ -36,14 +35,13 @@ export const Recommendations: React.FC<Props> = ({
   loading,
   itemWidth,
   itemHeight,
-  showModal,
 }) => {
   const renderItem: ListRenderItem<MerchantType> = ({item, index}) => {
     const width = itemWidth || ITEM_WIDTH;
     const height = itemHeight || ITEM_HEIGHT;
 
     return (
-      <TouchableOpacity onPress={() => showModal(item.id)}>
+      <TouchableOpacity onPress={() => {}}>
         <ZStack
           width={width}
           height={height}

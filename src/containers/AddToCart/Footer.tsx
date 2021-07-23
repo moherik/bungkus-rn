@@ -1,13 +1,15 @@
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
-import {Box, Center, Heading, HStack, Icon, Text, VStack} from 'native-base';
+import {Center, Heading, HStack, Icon, Text, VStack} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import {currencyFormat} from 'utils';
 import {Separator} from 'components';
 import {useAppDispatch} from 'hooks';
 import {addToCart, deleteCart, updateCart} from 'stores/merchant';
 import {CartItemType, ExtrasType} from 'models/merchantType';
 import {MenuItemType} from 'models/menuType';
+import {AddToCartScreenProps} from 'navigation/types';
 
 export type ExtraPriceType = {
   item: number;
@@ -16,20 +18,19 @@ export type ExtraPriceType = {
 
 type Props = {
   merchantId: number;
-  cart: CartItemType;
+  cart?: CartItemType;
   menu: MenuItemType;
   extras?: ExtrasType[];
   note?: string;
-  closeModal: () => void;
-};
+} & AddToCartScreenProps;
 
 export const Footer = ({
+  navigation,
   merchantId,
   cart,
   menu,
   extras,
   note,
-  closeModal,
 }: Props) => {
   const dispatch = useAppDispatch();
   const [qty, setQty] = useState<number>(cart?.qty || 1);
@@ -100,34 +101,17 @@ export const Footer = ({
       dispatch(updateCart({menuId: Number(menu.id), data}));
     }
 
-    closeModal();
+    navigation.goBack();
   };
 
   const handleDeleteCart = (id: number) => {
-    closeModal();
     dispatch(deleteCart(id));
+
+    navigation.goBack();
   };
 
   return (
     <VStack shadow={4} py={2} bg="white">
-      {totalPrice.discount > 0 && (
-        <HStack justifyContent="space-between" alignItems="center" px={4}>
-          <Text fontSize="sm" color="gray.500">
-            Diskon ({menu.discount}%)
-          </Text>
-          <Heading size="xs" color="red.600">
-            {currencyFormat(totalPrice.discount, '-Rp. ')}
-          </Heading>
-        </HStack>
-      )}
-      {/* {totalPrice.extras > 0 && (
-        <HStack justifyContent="space-between" alignItems="center" px={4}>
-          <Text fontSize="sm" color="gray.500">
-            Ekstra
-          </Text>
-          <Heading size="xs">{currencyFormat(totalPrice.extras)}</Heading>
-        </HStack>
-      )} */}
       <HStack justifyContent="space-between" alignItems="center" px={4}>
         <Text fontSize="sm" color="muted.500">
           Total Harga {qty > 1 && `(x${qty})`}
@@ -159,7 +143,7 @@ export const Footer = ({
             </Center>
           </TouchableOpacity>
         </HStack>
-        <HStack reversed space={2} alignItems="center">
+        <HStack reversed space={4} alignItems="center">
           <TouchableOpacity onPress={handleAddToCart}>
             <Center bg="red.600" px={4} py={3} borderRadius="lg">
               <Text color="white" fontWeight={700}>
@@ -170,9 +154,7 @@ export const Footer = ({
           {cart && (
             <TouchableOpacity
               onPress={() => handleDeleteCart(Number(menu?.id!!))}>
-              <Box>
-                <Icon as={<Ionicons name="trash-outline" />} size={6} />
-              </Box>
+              <Icon as={<Ionicons name="trash-outline" />} size={6} />
             </TouchableOpacity>
           )}
         </HStack>

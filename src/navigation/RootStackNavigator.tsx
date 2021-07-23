@@ -4,7 +4,7 @@ import {Icon, Text, Heading, HStack} from 'native-base';
 import {createStackNavigator} from '@react-navigation/stack';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {CartScreen, DetailScreen} from './screens';
+import {AddToCartScreen, CartScreen, DetailScreen} from './screens';
 import {APPBAR_TITLE} from '../utils/constants';
 import BottomTabNavigator from './BottomTabNavigator';
 import {RootStackParamList} from './types';
@@ -46,7 +46,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({label, icon}) => {
 
 const RootStackNavigator = () => {
   return (
-    <RootStack.Navigator initialRouteName="Tab">
+    <RootStack.Navigator initialRouteName="Tab" mode="modal" headerMode="none">
       <RootStack.Screen
         name="Tab"
         component={BottomTabNavigator}
@@ -58,11 +58,8 @@ const RootStackNavigator = () => {
           headerRight: () => _headerRight(navigation),
         })}
       />
-      <RootStack.Screen
-        name="Detail"
-        component={DetailScreen}
-        options={{headerShown: false}}
-      />
+      <RootStack.Screen name="Detail" component={DetailScreen} />
+      <RootStack.Screen name="AddToCart" component={AddToCartScreen} />
       <RootStack.Screen name="Cart" component={CartScreen} />
     </RootStack.Navigator>
   );

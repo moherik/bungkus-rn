@@ -15,10 +15,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {MerchantType} from 'models/merchantType';
 import {HomeScreenNavigationProps} from 'navigation/types';
 import {Rating} from 'components';
-
-import {MenuItemLoader} from './Loader';
 import {selectMerchant} from 'stores/merchant';
 import {useAppDispatch} from 'hooks';
+
+import {MenuItemLoader} from './Loader';
 
 type Props = {
   data: MerchantType[];

@@ -1,130 +1,125 @@
-import React, {useRef} from 'react';
+import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Box, Heading, HStack, Image, Text, VStack} from 'native-base';
-import {Modalize} from 'react-native-modalize';
 
 import {MenuGroupType, MenuItemType} from 'models/menuType';
 import {CartItemType} from 'models/merchantType';
 import {currencyFormat} from 'utils';
-import {OrderModal} from '../OrderModal';
+import {DetailScreenProps} from 'navigation/types';
 
 type MenuItemProps = {
   menu: MenuItemType;
   merchantId: number;
   cart?: CartItemType;
-};
+} & DetailScreenProps;
 
-const MenuItem: React.FC<MenuItemProps> = ({menu, merchantId, cart}) => {
-  const orderModalRef = useRef<Modalize>(null);
-
-  const handleShowOrderModal = () => {
-    orderModalRef.current?.open();
-  };
-
-  const handleCloseOrderModal = () => {
-    orderModalRef.current?.close();
-  };
-
+const MenuItem: React.FC<MenuItemProps> = ({
+  navigation,
+  menu,
+  merchantId,
+  cart,
+}) => {
   const discountPrice = menu.discount ? (menu.price / 100) * menu.discount : 0;
 
+  const handleAddToCart = () => {
+    navigation.navigate('AddToCart', {menu, merchantId, cart});
+  };
+
   return (
-    <>
-      <TouchableOpacity onPress={() => handleShowOrderModal()} key={menu.id}>
-        <HStack pr={4} space={3} flex={1} mb={3}>
-          <Box
-            bg={cart ? 'red.600' : 'white'}
-            pr={1}
-            borderTopRightRadius="lg"
-            borderBottomRightRadius="lg"
-          />
-          <Image
-            source={{uri: menu.image}}
-            alt={menu.name}
-            width={100}
-            height={100}
-            borderRadius="lg"
-          />
-          <VStack space={1} flex={1}>
+    <TouchableOpacity onPress={handleAddToCart} key={menu.id}>
+      <HStack pr={4} space={3} flex={1} mb={3}>
+        <Box
+          bg={cart ? 'red.600' : 'white'}
+          pr={1}
+          borderTopRightRadius="lg"
+          borderBottomRightRadius="lg"
+        />
+        <Image
+          source={{uri: menu.image}}
+          alt={menu.name}
+          width={100}
+          height={100}
+          borderRadius="lg"
+        />
+        <VStack space={1} flex={1}>
+          <HStack space={2}>
+            {cart && cart.qty > 0 && (
+              <Heading size="sm" color="red.600">
+                X{cart?.qty}
+              </Heading>
+            )}
+            <Heading size="sm">{menu.name}</Heading>
+          </HStack>
+          {menu.description && (
+            <Text fontSize="sm" color="muted.500" isTruncated>
+              {menu.description}
+            </Text>
+          )}
+          {menu.discount ? (
             <HStack space={2}>
-              {cart && cart.qty > 0 && (
-                <Heading size="sm" color="red.600">
-                  X{cart?.qty}
-                </Heading>
-              )}
-              <Heading size="sm">{menu.name}</Heading>
-            </HStack>
-            {menu.discount ? (
-              <HStack space={2}>
-                <Text fontSize="sm" color="red.600" fontWeight={700}>
-                  {currencyFormat(menu.price - discountPrice)}
-                </Text>
-                <Text fontSize="sm" textDecorationLine="line-through">
-                  {currencyFormat(menu.price)}
-                </Text>
-              </HStack>
-            ) : (
-              <Text fontSize="sm">{currencyFormat(menu.price)}</Text>
-            )}
-            {menu.description && (
-              <Text fontSize="sm" color="gray.500" isTruncated>
-                {menu.description}
+              <Text fontSize="sm" color="red.600" fontWeight={700}>
+                {currencyFormat(menu.price - discountPrice)}
               </Text>
-            )}
-            {menu.discount && (
-              <Box
-                mt={1}
-                alignSelf="flex-start"
-                borderWidth={1}
-                borderColor="red.600"
-                px={2}
-                py={1}
-                borderRadius="lg">
-                <Text fontSize="xs" color="red.600">
-                  Diskon {menu.discount}%
-                </Text>
-              </Box>
-            )}
-          </VStack>
-        </HStack>
-      </TouchableOpacity>
-      <OrderModal
-        ref={orderModalRef}
-        merchantId={merchantId}
-        menu={menu}
-        cart={cart}
-        closeModal={handleCloseOrderModal}
-      />
-    </>
+              <Text fontSize="sm" textDecorationLine="line-through">
+                {currencyFormat(menu.price)}
+              </Text>
+            </HStack>
+          ) : (
+            <Text fontSize="sm">{currencyFormat(menu.price)}</Text>
+          )}
+          {menu.discount && (
+            <Text
+              alignSelf="flex-start"
+              fontSize="xs"
+              color="red.600"
+              borderWidth={1}
+              borderColor="red.600"
+              px={1}
+              mt={1}>
+              Diskon {menu.discount}%
+            </Text>
+          )}
+        </VStack>
+      </HStack>
+    </TouchableOpacity>
   );
 };
 
 type Props = {
-  groups: MenuGroupType[];
+  menus: MenuGroupType[];
   merchantId: number;
   carts: CartItemType[];
-};
+} & DetailScreenProps;
 
-export const MenuList = ({groups, merchantId, carts}: Props) => {
+export const MenuList = ({
+  navigation,
+  route,
+  menus,
+  merchantId,
+  carts,
+}: Props) => {
   return (
     <VStack space={4}>
-      {groups.map(group => (
-        <VStack space={4} key={group.id}>
+      {menus.map(menu => (
+        <VStack space={4} key={menu.id}>
           <Heading size="sm" mx={4}>
-            {group.title}
+            {menu.title}
           </Heading>
           <VStack space={2}>
-            {group.data.map(menu => {
+            {menu.data.map(_menu => {
               const cart = carts.filter(
                 _cart =>
-                  _cart.merchantId === merchantId && _cart.menuId === menu.id,
+                  _cart.merchantId === merchantId && _cart.menuId === _menu.id,
               )[0];
 
               return (
                 <MenuItem
-                  menu={menu}
+                  navigation={navigation}
+                  route={route}
+                  menu={_menu}
                   cart={cart}
                   merchantId={merchantId}
-                  key={menu.id}
+                  key={_menu.id}
                 />
               );
             })}
