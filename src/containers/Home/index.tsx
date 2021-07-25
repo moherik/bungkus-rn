@@ -2,11 +2,11 @@ import React, {useEffect, useState} from 'react';
 import {ScrollView, StyleSheet} from 'react-native';
 
 import {Separator} from 'components';
-import {MenuCategoryType} from 'models/menuType';
+import {MenuCategory} from 'models/menu.model';
 import {merchants as mockMerchants, categories as mockCategories} from 'mocks';
 
 import {useAppDispatch, useAppSelector} from 'hooks';
-import {fetchMerchants} from 'stores/merchant';
+import {fetchMerchants} from 'stores/merchant.store';
 import {HomeScreenNavigationProps} from 'navigation/types';
 
 import {MerchantList} from './MerchantList';
@@ -19,7 +19,7 @@ type Props = {
 };
 
 const Home: React.FC<Props> = ({navigation}) => {
-  const [categories, setCategories] = useState<MenuCategoryType[]>([]);
+  const [categories, setCategories] = useState<MenuCategory[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 
   const merchants = useAppSelector(state => state.merchant.merchants);

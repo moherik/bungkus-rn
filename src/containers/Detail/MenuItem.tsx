@@ -10,20 +10,20 @@ import {
   useDisclose,
   VStack,
   Pressable,
-  Center,
 } from 'native-base';
 
-import {MenuItemType} from 'models/menuType';
-import {CartItemType, MerchantType} from 'models/merchantType';
+import {Button} from 'components';
+import {MenuItem as Model} from 'models/menu.model';
+import {CartItem, Merchant} from 'models/merchant.model';
 import {DetailScreenProps} from 'navigation/types';
 import {currencyFormat} from 'utils';
 import {useAppDispatch} from 'hooks';
-import {deleteCart} from 'stores/merchant';
+import {deleteCart} from 'stores/merchant.store';
 
 type MenuItemProps = {
-  menu: MenuItemType;
-  merchant: MerchantType;
-  carts?: CartItemType[];
+  menu: Model;
+  merchant: Merchant;
+  carts?: CartItem[];
 } & DetailScreenProps;
 
 export const MenuItem: React.FC<MenuItemProps> = ({
@@ -187,15 +187,9 @@ export const MenuItem: React.FC<MenuItemProps> = ({
               </HStack>
             )}
 
-            <Box mt={2} mb={2}>
-              <TouchableOpacity onPress={handleAddNew}>
-                <Center bg="red.600" p={4} borderRadius="lg">
-                  <Text color="white" fontWeight={700}>
-                    Tambah Satu Lagi
-                  </Text>
-                </Center>
-              </TouchableOpacity>
-            </Box>
+            <Button p={4} my={4} borderRadius="md" onPress={handleAddNew}>
+              Tambah Satu Lagi
+            </Button>
           </VStack>
         </Actionsheet.Content>
       </Actionsheet>

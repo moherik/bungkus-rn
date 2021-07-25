@@ -1,6 +1,6 @@
-import {MenuGroupType, MenuItemType} from 'models/menuType';
+import {MenuGroup, MenuItem} from 'models/menu.model';
 
-const mieAyam: MenuItemType[] = [
+const mieAyam: MenuItem[] = [
   {
     id: 1,
     name: 'Mie Ayam Kering',
@@ -37,7 +37,7 @@ const mieAyam: MenuItemType[] = [
   },
 ];
 
-const krabbyMakanan: MenuItemType[] = [
+const krabbyMakanan: MenuItem[] = [
   {
     id: 3,
     name: 'Krabby Patty Deluxe',
@@ -104,7 +104,7 @@ const krabbyMakanan: MenuItemType[] = [
   },
 ];
 
-const krabbyMinuman: MenuItemType[] = [
+const krabbyMinuman: MenuItem[] = [
   {
     id: 8,
     name: 'StarBug',
@@ -142,13 +142,13 @@ const krabbyMinuman: MenuItemType[] = [
   },
 ];
 
-export const rawMenu: MenuItemType[] = [
+export const rawMenu: MenuItem[] = [
   ...mieAyam,
   ...krabbyMakanan,
   ...krabbyMinuman,
 ];
 
-export const menus: MenuGroupType[] = [
+export const menus: MenuGroup[] = [
   {
     id: 1,
     merchantId: 1,

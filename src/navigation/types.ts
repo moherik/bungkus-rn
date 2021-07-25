@@ -7,19 +7,19 @@ import {
   NavigatorScreenParams,
 } from '@react-navigation/native';
 import {StackNavigationProp, StackScreenProps} from '@react-navigation/stack';
-import {MenuItemType} from 'models/menuType';
-import {CartItemType, MerchantType} from 'models/merchantType';
+import {MenuItem} from 'models/menu.model';
+import {CartItem, Merchant} from 'models/merchant.model';
 
 export type RootStackParamList = {
   Tab: undefined;
   Detail: {merchantId: number};
   AddToCart: {
-    merchant: MerchantType;
-    menu: MenuItemType;
-    cart?: CartItemType;
+    merchant: Merchant;
+    menu: MenuItem;
+    cart?: CartItem;
   };
   Cart: {
-    merchant: MerchantType;
+    merchant: Merchant;
   };
 };
 
@@ -55,3 +55,8 @@ export type ProfileScreenProps = BottomTabScreenProps<
   MainTabParamList,
   'Profile'
 >;
+
+export type AuthStackParamList = {
+  Login: undefined;
+  Code: undefined;
+};

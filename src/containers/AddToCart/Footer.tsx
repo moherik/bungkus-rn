@@ -4,11 +4,11 @@ import {Center, Heading, HStack, Icon, Text, VStack} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {currencyFormat} from 'utils';
-import {Separator} from 'components';
+import {Separator, Button} from 'components';
 import {useAppDispatch} from 'hooks';
-import {addToCart, deleteCart, updateCart} from 'stores/merchant';
-import {CartItemType, ExtrasType} from 'models/merchantType';
-import {MenuItemType} from 'models/menuType';
+import {addToCart, deleteCart, updateCart} from 'stores/merchant.store';
+import {CartItem, Extras} from 'models/merchant.model';
+import {MenuItem} from 'models/menu.model';
 import {AddToCartScreenProps} from 'navigation/types';
 
 export type ExtraPriceType = {
@@ -18,9 +18,9 @@ export type ExtraPriceType = {
 
 type Props = {
   merchantId: number;
-  cart?: CartItemType;
-  menu: MenuItemType;
-  extras?: ExtrasType[];
+  cart?: CartItem;
+  menu: MenuItem;
+  extras?: Extras[];
   note?: string;
 } & AddToCartScreenProps;
 
@@ -84,7 +84,7 @@ export const Footer = ({
   const handleMinQty = () => qty !== 1 && setQty(qty - 1);
 
   const handleAddToCart = () => {
-    const data: CartItemType = {
+    const data: CartItem = {
       id: 0,
       merchantId,
       menuId: Number(menu.id),
@@ -145,13 +145,14 @@ export const Footer = ({
           </TouchableOpacity>
         </HStack>
         <HStack reversed space={4} alignItems="center">
-          <TouchableOpacity onPress={handleAddToCart}>
-            <Center bg="red.600" px={4} py={3} borderRadius="lg">
-              <Text color="white" fontWeight={700}>
-                {!cart ? 'Tambah Ke Keranjang' : 'Perbaruhi Keranjang'}
-              </Text>
-            </Center>
-          </TouchableOpacity>
+          <Button
+            px={4}
+            py={3}
+            borderRadius="lg"
+            onPress={handleAddToCart}
+            textTransform="none">
+            {!cart ? 'Tambah ke Keranjang' : 'Perbaruhi Keranjang'}
+          </Button>
           {cart && (
             <TouchableOpacity
               onPress={() => handleDeleteCart(Number(menu?.id!!))}>

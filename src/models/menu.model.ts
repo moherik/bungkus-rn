@@ -1,35 +1,35 @@
-export type MenuCategoryType = {
+export type MenuCategory = {
   id: number | string;
   name: string;
 };
 
-export type MenuGroupType = {
+export type MenuGroup = {
   id: number;
   merchantId: number;
   title: string;
-  data: MenuItemType[];
+  data: MenuItem[];
 };
 
-export type MenuItemType = {
+export type MenuItem = {
   id: number | string;
   name: string;
   description?: string;
   price: number;
   discount?: number;
   image: string;
-  variants?: MenuVariantType[];
+  variants?: MenuVariant[];
 };
 
-export type MenuVariantType = {
+export type MenuVariant = {
   id: number;
   menuId: number;
   name: string;
   isSingle: boolean;
   isRequired?: boolean;
-  item: MenuVariantItemType[];
+  item: MenuVariantItem[];
 };
 
-type MenuVariantItemType = {
+type MenuVariantItem = {
   id: number;
   name: string;
   price?: number;

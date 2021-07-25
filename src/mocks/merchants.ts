@@ -1,6 +1,6 @@
-import {MerchantType} from 'models/merchantType';
+import {Merchant} from 'models/merchant.model';
 
-const merchants: MerchantType[] = [
+const merchants: Merchant[] = [
   {
     id: 1,
     name: 'Mie Ayam Spesial',

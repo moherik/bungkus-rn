@@ -1,7 +1,6 @@
 import React, {useState} from 'react';
 import {
   Box,
-  Center,
   Heading,
   HStack,
   Icon,
@@ -14,11 +13,14 @@ import {
 } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
+import {Button} from 'components';
+import {StyleSheet} from 'react-native';
+import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
+
 import {CartScreenProps} from 'navigation/types';
 import {currencyFormat} from 'utils';
 import {useAppDispatch, useAppSelector} from 'hooks';
-import {deleteCart} from 'stores/merchant';
-import {TouchableOpacity} from 'react-native';
+import {deleteCart} from 'stores/merchant.store';
 
 type SeparatorProps = {
   label: string;
@@ -32,7 +34,7 @@ const Separator: React.FC<SeparatorProps> = ({label, icon, rightComponent}) => (
     justifyContent="space-between"
     p={4}
     bg="muted.100">
-    <HStack space={2} alignItems="center">
+    <HStack space={4} alignItems="center">
       {icon && <Icon as={<Ionicons name={icon} />} size={6} />}
       <Heading size="sm">{label}</Heading>
     </HStack>
@@ -49,7 +51,7 @@ const CartContainer: React.FC<Props> = ({navigation, route}) => {
   const dispatch = useAppDispatch();
 
   const [orderType, setOrderType] = useState<'pickup' | 'delivery'>('pickup');
-  const [orderTime, setOrderTime] = useState<string>('');
+  const [orderTime, setOrderTime] = useState<string>('asap');
   const [orderNote, setOrderNote] = useState<string>('');
 
   const handleAddNew = () => navigation.goBack();
@@ -61,7 +63,7 @@ const CartContainer: React.FC<Props> = ({navigation, route}) => {
       <HStack bg="white" alignItems="center" px={4} py={3} shadow={2} space={4}>
         <Icon
           as={<Ionicons name="close-outline" />}
-          size={8}
+          size={6}
           onPress={() => navigation.goBack()}
         />
         <Heading size="md">{merchant.name}</Heading>
@@ -69,35 +71,20 @@ const CartContainer: React.FC<Props> = ({navigation, route}) => {
 
       <ScrollView bg="white">
         <VStack>
-          <Separator label="Metode Pemesanan" icon="bicycle-outline" />
-          <Radio.Group
-            px={4}
-            py={2}
-            name="orderType"
-            value={orderType}
-            onChange={(value: any) => {
-              setOrderType(value);
-            }}>
-            <Radio value="pickup" my={1} accessibilityLabel="pickup">
-              Ambil Sendiri
-            </Radio>
-            <Radio
-              value="delivery"
-              isDisabled
-              my={1}
-              accessibilityLabel="delivery">
-              <HStack ml={2} space={4} alignItems="center">
-                <Text>Pesan Antar</Text>
-                <Text fontSize="sm" color="muted.500">
-                  Belum tersedia untuk saat ini
-                </Text>
-              </HStack>
-            </Radio>
-          </Radio.Group>
+          <MapView
+            style={styles.map}
+            provider={PROVIDER_GOOGLE}
+            initialRegion={{
+              latitude: 37.78825,
+              longitude: -122.4324,
+              latitudeDelta: 0.0922,
+              longitudeDelta: 0.0421,
+            }}
+          />
 
           <Separator
             label="Daftar Pesanan"
-            icon="cart-outline"
+            icon="restaurant-outline"
             rightComponent={
               <Pressable onPress={handleAddNew}>
                 <Text fontSize="sm" fontWeight={700} color="blue.600">
@@ -125,7 +112,7 @@ const CartContainer: React.FC<Props> = ({navigation, route}) => {
                   px={4}
                   borderBottomWidth={index !== carts.length - 1 ? 1 : 0}
                   borderBottomColor="gray.100">
-                  <HStack space={5}>
+                  <HStack space={6}>
                     <Heading size="sm">{cart.qty}x</Heading>
                     <VStack>
                       <Heading size="sm">{cart.menuName}</Heading>
@@ -151,21 +138,58 @@ const CartContainer: React.FC<Props> = ({navigation, route}) => {
             })}
           </Box>
 
-          <Separator label="Waktu Pengambilan" icon="time-outline" />
+          <Separator label="Cara Pemesanan" icon="bicycle-outline" />
           <Radio.Group
+            ml={5}
             px={4}
             py={2}
+            colorScheme="red"
+            name="orderType"
+            value={orderType}
+            onChange={(value: any) => {
+              setOrderType(value);
+            }}>
+            <Radio value="pickup" my={1} accessibilityLabel="pickup">
+              <Text ml={5} fontSize="sm" width={'100%'}>
+                Ambil Sendiri
+              </Text>
+            </Radio>
+            <Radio value="dinein" my={1} accessibilityLabel="asap">
+              <Text ml={5} fontSize="sm" width={'100%'}>
+                Makan Ditempat
+              </Text>
+            </Radio>
+            <Radio
+              value="delivery"
+              isDisabled
+              my={1}
+              accessibilityLabel="delivery">
+              <Text ml={5} fontSize="sm" color="muted.300" width={'100%'}>
+                Pesan Antar
+              </Text>
+            </Radio>
+          </Radio.Group>
+
+          <Separator label="Waktu Pengambilan" icon="time-outline" />
+          <Radio.Group
+            ml={5}
+            px={4}
+            py={2}
+            colorScheme="red"
             name="orderTime"
-            defaultValue="asap"
             value={orderTime}
             onChange={(value: any) => {
               setOrderTime(value);
             }}>
             <Radio value="asap" my={1} accessibilityLabel="asap">
-              Secepatnya
+              <Text ml={5} fontSize="sm" width={'100%'}>
+                Ambil Sekarang
+              </Text>
             </Radio>
             <Radio value="schedule" my={1} accessibilityLabel="schedule">
-              Jadwalkan
+              <Text ml={5} fontSize="sm" width={'100%'}>
+                Pilih Waktu
+              </Text>
             </Radio>
           </Radio.Group>
 
@@ -196,18 +220,19 @@ const CartContainer: React.FC<Props> = ({navigation, route}) => {
           <Text fontSize="md">Total</Text>
           <Heading size="md">{currencyFormat(price)}</Heading>
         </HStack>
-        <Box py={2} px={4}>
-          <TouchableOpacity onPress={() => {}}>
-            <Center bg="red.600" p={4} borderRadius="lg">
-              <Text color="white" fontWeight={700} textTransform="uppercase">
-                Pesan Sekarang
-              </Text>
-            </Center>
-          </TouchableOpacity>
-        </Box>
+
+        <Button p={4} m={4} borderRadius="md" onPress={() => {}}>
+          Pesan Sekarang
+        </Button>
       </VStack>
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  map: {
+    height: 200,
+  },
+});
 
 export default CartContainer;

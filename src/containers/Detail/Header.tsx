@@ -3,11 +3,11 @@ import {VStack, Heading, HStack, Image, Text, Icon} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {Rating, Separator} from 'components';
-import {MerchantType} from 'models/merchantType';
+import {Merchant} from 'models/merchant.model';
 
 const IMAGE_HEIGHT = 240;
 
-type Props = {merchant: MerchantType};
+type Props = {merchant: Merchant};
 
 export const Header = ({merchant}: Props) => {
   return (

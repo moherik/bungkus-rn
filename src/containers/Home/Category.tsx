@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import {Badge, Text} from 'native-base';
 import {FlatList, ListRenderItem, TouchableOpacity} from 'react-native';
 
-import {MenuCategoryType} from 'models/menuType';
+import {MenuCategory} from 'models/menu.model';
 
 type Props = {
-  data: MenuCategoryType[];
+  data: MenuCategory[];
 };
 
 export const Category: React.FC<Props> = ({data}) => {
@@ -13,7 +13,7 @@ export const Category: React.FC<Props> = ({data}) => {
 
   const handleOnClick = (id: number | string) => setSelectedId(+id);
 
-  const renderItem: ListRenderItem<MenuCategoryType> = ({item, index}) => {
+  const renderItem: ListRenderItem<MenuCategory> = ({item, index}) => {
     return (
       <TouchableOpacity onPress={() => handleOnClick(item.id)}>
         <Badge

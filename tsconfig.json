@@ -14,10 +14,12 @@
     "paths": {
       "*": ["src/*"],
       "tests": ["tests/*"],
+      "@assets/*": ["src/assets/*"],
       "@components/*": ["src/components/*"],
       "@containers/*": ["src/containers/*"],
       "@mocks/*": ["src/mocks/*"],
       "@models/*": ["src/models/*"],
+      "@services/*": ["src/services/*"],
       "@utils/*": ["src/utils/*"]
     }
   },

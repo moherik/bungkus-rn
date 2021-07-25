@@ -15,7 +15,7 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {Separator} from 'components';
-import {ExtrasType} from 'models/merchantType';
+import {Extras} from 'models/merchant.model';
 import {AddToCartScreenProps} from 'navigation/types';
 import {currencyFormat} from 'utils';
 
@@ -28,7 +28,7 @@ const AddToCart: React.FC<Props> = ({navigation, route}) => {
   const {merchant, menu, cart} = route.params;
 
   const [note, setNote] = useState<string>(cart?.note || '');
-  const [extras, setExtras] = useState<ExtrasType[]>(cart?.extras || []);
+  const [extras, setExtras] = useState<Extras[]>(cart?.extras || []);
 
   const handleNoteChange = (value: string) => setNote(value);
 

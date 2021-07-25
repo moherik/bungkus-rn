@@ -13,7 +13,7 @@ import {
 } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {MerchantType} from 'models/merchantType';
+import {Merchant} from 'models/merchant.model';
 import {Rating} from 'components';
 
 import {HorizontalSectionLoader} from './Loader';
@@ -22,7 +22,7 @@ const ITEM_WIDTH = 200;
 const ITEM_HEIGHT = 200;
 
 type Props = {
-  data: MerchantType[];
+  data: Merchant[];
   label?: string;
   loading: boolean;
   itemWidth?: number;
@@ -36,7 +36,7 @@ export const Recommendations: React.FC<Props> = ({
   itemWidth,
   itemHeight,
 }) => {
-  const renderItem: ListRenderItem<MerchantType> = ({item, index}) => {
+  const renderItem: ListRenderItem<Merchant> = ({item, index}) => {
     const width = itemWidth || ITEM_WIDTH;
     const height = itemHeight || ITEM_HEIGHT;
 

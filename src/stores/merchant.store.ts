@@ -1,15 +1,15 @@
 import {createSlice, PayloadAction} from '@reduxjs/toolkit';
 import {WritableDraft} from 'immer/dist/internal';
 import {menus as groups} from 'mocks/menus';
-import {MenuGroupType} from 'models/menuType';
-import {CartItemType, MerchantType} from 'models/merchantType';
+import {MenuGroup} from 'models/menu.model';
+import {CartItem, Merchant} from 'models/merchant.model';
 
 interface MerchantState {
-  merchants: MerchantType[];
-  selectedMerchant?: MerchantType;
-  menus: MenuGroupType[];
-  carts: CartItemType[];
-  selectedCarts: CartItemType[];
+  merchants: Merchant[];
+  selectedMerchant?: Merchant;
+  menus: MenuGroup[];
+  carts: CartItem[];
+  selectedCarts: CartItem[];
 }
 
 const initialState = {
@@ -24,7 +24,7 @@ const merchantSlice = createSlice({
   name: 'merchant',
   initialState,
   reducers: {
-    fetchMerchants: (state, action: PayloadAction<MerchantType[]>) => {
+    fetchMerchants: (state, action: PayloadAction<Merchant[]>) => {
       state.merchants = action.payload;
     },
 
@@ -44,7 +44,7 @@ const merchantSlice = createSlice({
       state.menus = [];
     },
 
-    addToCart: (state, action: PayloadAction<CartItemType>) => {
+    addToCart: (state, action: PayloadAction<CartItem>) => {
       const id = getLastId(state.carts);
 
       action.payload.id = id + 1;
@@ -57,7 +57,7 @@ const merchantSlice = createSlice({
       state,
       action: PayloadAction<{
         id: number;
-        data: CartItemType;
+        data: CartItem;
       }>,
     ) => {
       const {cartIndex, selectedIndex} = getIndexById({
@@ -94,7 +94,7 @@ const getIndexById = ({
   return {cartIndex, selectedIndex};
 };
 
-const getLastId = (carts: WritableDraft<CartItemType>[]) => {
+const getLastId = (carts: WritableDraft<CartItem>[]) => {
   return carts.reduce((acc, cart) => Math.max(acc, cart.id), 0);
 };
 

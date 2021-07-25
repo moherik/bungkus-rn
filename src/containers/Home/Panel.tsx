@@ -1,14 +1,12 @@
 import React from 'react';
-import {HStack, Icon, Input, Text, VStack} from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import {VStack} from 'native-base';
 import {SearchLoader} from './Loader';
 import {Category} from './Category';
-import {MenuCategoryType} from 'models/menuType';
-import {TouchableOpacity} from 'react-native';
+import {MenuCategory} from 'models/menu.model';
 
 type Props = {
   loading: boolean;
-  categories: MenuCategoryType[];
+  categories: MenuCategory[];
 };
 
 export const Panel: React.FC<Props> = ({loading, categories}) => {

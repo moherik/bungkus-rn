@@ -3,12 +3,12 @@ export type MerchantOpenType = {
   time: string;
 };
 
-export type MerchantCategoryType = {
+export type MerchantCategory = {
   id: number;
   name: string;
 };
 
-export type MerchantType = {
+export type Merchant = {
   id: number;
   name: string;
   description?: string;
@@ -20,12 +20,12 @@ export type MerchantType = {
     review: number;
   };
   open: MerchantOpenType[];
-  categories: MerchantCategoryType[];
+  categories: MerchantCategory[];
   profileImage: string;
   bannerImage?: string;
 };
 
-export type CartItemType = {
+export type CartItem = {
   id: number;
   merchantId: number;
   menuId: number;
@@ -34,15 +34,15 @@ export type CartItemType = {
   price: number;
   discount: number;
   note: string;
-  extras: ExtrasType[];
+  extras: Extras[];
 };
 
-export type ExtrasType = {
+export type Extras = {
   groupId: number | string;
-  items: ExtrasItemType[];
+  items: ExtrasItem[];
 };
 
-export type ExtrasItemType = {
+export type ExtrasItem = {
   itemId: number | string;
   itemName: string;
   price: number | string;

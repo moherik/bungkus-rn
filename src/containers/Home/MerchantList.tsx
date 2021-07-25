@@ -12,16 +12,16 @@ import {
 } from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-import {MerchantType} from 'models/merchantType';
+import {Merchant} from 'models/merchant.model';
 import {HomeScreenNavigationProps} from 'navigation/types';
 import {Rating} from 'components';
-import {selectMerchant} from 'stores/merchant';
+import {selectMerchant} from 'stores/merchant.store';
 import {useAppDispatch} from 'hooks';
 
 import {MenuItemLoader} from './Loader';
 
 type Props = {
-  data: MerchantType[];
+  data: Merchant[];
   label?: string;
   loading: boolean;
   navigation: HomeScreenNavigationProps;
@@ -45,7 +45,7 @@ export const MerchantList: React.FC<Props> = ({
     navigation.navigate('Detail', {merchantId: id});
   };
 
-  const renderItem = (item: MerchantType) => {
+  const renderItem = (item: Merchant) => {
     return (
       <Box flex={1} flexDirection="column" mx={2} mb={4}>
         <TouchableOpacity

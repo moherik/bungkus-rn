@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "221318909189",
+    "project_id": "bungkus-320802",
+    "storage_bucket": "bungkus-320802.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:221318909189:android:42efbe23ebfffb43127b6c",
+        "android_client_info": {
+          "package_name": "com.bungkus"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "221318909189-c6smr3m7l0geihllr4mfi76rdb9m0bqe.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.bungkus",
+            "certificate_hash": "c336b429f369d1cb10de4c669e114a9e539f53a6"
+          }
+        },
+        {
+          "client_id": "221318909189-6so8dq97chhgnk6q2id2l74dlmrl47hd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBi17wBj6WAgDTFLAHQe6TsYEi-IA4QPYs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "221318909189-6so8dq97chhgnk6q2id2l74dlmrl47hd.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

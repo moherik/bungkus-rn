@@ -1,14 +1,14 @@
 import React, {useState} from 'react';
-import {MenuVariantType} from 'models/menuType';
+import {MenuVariant} from 'models/menu.model';
 import {Box, Checkbox, Heading, HStack, Radio, Text, VStack} from 'native-base';
 import {currencyFormat} from 'utils';
-import {CartItemType, ExtrasItemType, ExtrasType} from 'models/merchantType';
+import {CartItem, ExtrasItem, Extras} from 'models/merchant.model';
 
 type OptionProps = {
-  extras?: ExtrasType[];
-  setExtras: React.Dispatch<React.SetStateAction<ExtrasType[]>>;
-  variant: MenuVariantType;
-  cart?: CartItemType;
+  extras?: Extras[];
+  setExtras: React.Dispatch<React.SetStateAction<Extras[]>>;
+  variant: MenuVariant;
+  cart?: CartItem;
 };
 
 const SingleOption = ({extras, setExtras, variant, cart}: OptionProps) => {
@@ -95,7 +95,7 @@ const MultipleOption = ({cart, extras, setExtras, variant}: OptionProps) => {
         itemId,
         itemName,
         price,
-      } as ExtrasItemType;
+      } as ExtrasItem;
     });
 
     if (groupId !== '') {
@@ -162,10 +162,10 @@ const MultipleOption = ({cart, extras, setExtras, variant}: OptionProps) => {
 };
 
 type Props = {
-  variants: MenuVariantType[];
-  cart?: CartItemType;
-  extras?: ExtrasType[];
-  setExtras: React.Dispatch<React.SetStateAction<ExtrasType[]>>;
+  variants: MenuVariant[];
+  cart?: CartItem;
+  extras?: Extras[];
+  setExtras: React.Dispatch<React.SetStateAction<Extras[]>>;
 };
 
 export const Variant = ({cart, extras, variants, setExtras}: Props) => {
