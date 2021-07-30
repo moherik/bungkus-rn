@@ -20,11 +20,8 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 import {Button} from 'components';
 import {APPBAR_TITLE} from 'utils/constants';
-import {useAppDispatch} from 'hooks';
-import {login} from 'stores/auth.store';
 
 export const LoginContainer = () => {
-  const dispatch = useAppDispatch();
   const [phone, setPhone] = useState<string>('');
   const [formatedPhone, setFormatedPhone] = useState<string>('');
   const [code, setCode] = useState<string>('');
@@ -78,7 +75,7 @@ export const LoginContainer = () => {
       ?.confirm(code)
       .then(async result => {
         const token = await result?.user.getIdToken();
-        dispatch(login(token));
+        console.log(token);
       })
       .catch(() =>
         showToast('Terjadi Kesalahan, pastikan kode konfirmasi benar.'),
