@@ -4,3 +4,5 @@ export {default as DetailScreen} from './Detail';
 export {default as AddToCartScreen} from './AddToCart';
 export {default as CartScreen} from './Cart';
 export {default as HomeScreen} from './Home';
+export {default as LoginScreen} from './Login';
+export {default as CompleteUserScreen} from './CompleteUser';

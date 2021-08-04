@@ -2,9 +2,19 @@ import {createApi, fetchBaseQuery} from '@reduxjs/toolkit/query/react';
 import {User} from 'models/user.model';
 import {BASE_API_URL} from 'utils/constants';
 
-interface LoginPayload {
+interface SignInPayload {
   phone: string;
-  token: string;
+  name?: string | null | undefined;
+  token?: string | undefined;
+}
+
+interface SignInResponse {
+  code: number;
+  data: {
+    userId: number;
+    name?: string | undefined;
+    jwtToken: string;
+  };
 }
 
 export const userApi = createApi({
@@ -16,7 +26,7 @@ export const userApi = createApi({
       query: () => 'users/me',
     }),
 
-    signIn: builder.mutation<User, LoginPayload>({
+    signIn: builder.mutation<SignInResponse, SignInPayload>({
       query: body => ({
         url: 'auth/signin',
         method: 'POST',

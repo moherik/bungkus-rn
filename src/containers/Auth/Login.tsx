@@ -20,8 +20,14 @@ import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
 import {Button} from 'components';
 import {APPBAR_TITLE} from 'utils/constants';
+import {useSignInMutation} from 'services/user.service';
+import {LoginScreenProps} from 'navigation/types';
+import {storeData} from 'utils';
+import {LOGIN_KEY} from 'utils/asyncStorage';
 
-export const LoginContainer = () => {
+type Props = {} & LoginScreenProps;
+
+const LoginContainer: React.FC<Props> = ({navigation}) => {
   const [phone, setPhone] = useState<string>('');
   const [formatedPhone, setFormatedPhone] = useState<string>('');
   const [code, setCode] = useState<string>('');
@@ -31,6 +37,8 @@ export const LoginContainer = () => {
   const [loadingModalVisible, setLoadingModalVisible] =
     useState<boolean>(false);
   const toast = useToast();
+
+  const [signIn] = useSignInMutation();
 
   useEffect(() => {
     BackHandler.addEventListener('hardwareBackPress', handleBackAction);
@@ -74,8 +82,20 @@ export const LoginContainer = () => {
     await confirm
       ?.confirm(code)
       .then(async result => {
+        const name = result?.user.displayName;
         const token = await result?.user.getIdToken();
-        console.log(token);
+        signIn({phone, name, token})
+          .unwrap()
+          .then(fulfilled => {
+            const {jwtToken, name: resultName} = fulfilled.data;
+            console.log(fulfilled);
+            if (resultName === null) {
+              navigation.navigate('Complete', {phone, jwtToken});
+            } else {
+              storeData({key: LOGIN_KEY, value: jwtToken});
+            }
+          })
+          .catch(rejected => console.log(rejected));
       })
       .catch(() =>
         showToast('Terjadi Kesalahan, pastikan kode konfirmasi benar.'),
@@ -216,3 +236,5 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
 });
+
+export default LoginContainer;

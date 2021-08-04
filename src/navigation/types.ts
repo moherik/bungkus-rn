@@ -58,5 +58,14 @@ export type ProfileScreenProps = BottomTabScreenProps<
 
 export type AuthStackParamList = {
   Login: undefined;
-  Code: undefined;
+  Complete: {
+    phone: string;
+    jwtToken: string;
+  };
 };
+
+export type LoginScreenProps = StackScreenProps<AuthStackParamList, 'Login'>;
+export type CompleteScreenProps = StackScreenProps<
+  AuthStackParamList,
+  'Complete'
+>;
