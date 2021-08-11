@@ -1,43 +1,24 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {NativeBaseProvider} from 'native-base';
 import {NavigationContainer} from '@react-navigation/native';
 import {Provider} from 'react-redux';
-import auth from '@react-native-firebase/auth';
+import {PersistGate} from 'redux-persist/integration/react';
 
-import {stores} from 'stores';
-
-import RootStackNavigator from 'navigation/RootStackNavigator';
-import AuthStackNavigator from 'navigation/AuthNavigation';
-import {useCheckUserQuery} from 'services/user.service';
+import {persistor, stores} from 'stores';
+import {Navigation} from 'navigation';
 
 const App = () => {
   return (
     <Provider store={stores}>
-      <NativeBaseProvider>
-        <NavigationContainer>
-          <Navigation />
-        </NavigationContainer>
-      </NativeBaseProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <NativeBaseProvider>
+          <NavigationContainer>
+            <Navigation />
+          </NavigationContainer>
+        </NativeBaseProvider>
+      </PersistGate>
     </Provider>
   );
-};
-
-const Navigation = () => {
-  const [token, setToken] = useState<string>();
-
-  useEffect(() => {
-    const getToken = async () => {
-      const _token = await auth().currentUser?.getIdToken();
-      setToken(_token);
-    };
-
-    getToken();
-
-    return () => {};
-  });
-
-  const {data: user} = useCheckUserQuery(token || '');
-  return user ? <RootStackNavigator /> : <AuthStackNavigator />;
 };
 
 export default App;

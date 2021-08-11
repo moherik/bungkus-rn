@@ -1,15 +1,6 @@
 import React from 'react';
-import {Dimensions, TouchableOpacity} from 'react-native';
-import {
-  Box,
-  FlatList,
-  Heading,
-  HStack,
-  Icon,
-  Image,
-  Text,
-  VStack,
-} from 'native-base';
+import {TouchableOpacity} from 'react-native';
+import {Box, Heading, HStack, Icon, Image, Text, VStack} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {Merchant} from 'models/merchant.model';
@@ -23,6 +14,7 @@ import {MenuItemLoader} from './Loader';
 type Props = {
   data: Merchant[];
   label?: string;
+  labelColor?: string;
   loading: boolean;
   navigation: HomeScreenNavigationProps;
 };
@@ -30,14 +22,14 @@ type Props = {
 export const MerchantList: React.FC<Props> = ({
   data,
   label,
+  labelColor = 'red.600',
   loading,
   navigation,
 }) => {
   const dispatch = useAppDispatch();
 
-  const deviceWidth = Dimensions.get('window').width;
-  const imageWidth = (deviceWidth / 100) * 45;
-  const imageHeight = imageWidth - 50;
+  const imageWidth = 120;
+  const imageHeight = 120;
 
   const handleOpenMerchant = (id: number) => {
     dispatch(selectMerchant(id));
@@ -45,13 +37,13 @@ export const MerchantList: React.FC<Props> = ({
     navigation.navigate('Detail', {merchantId: id});
   };
 
-  const renderItem = (item: Merchant) => {
+  const renderItem = ({item, key}: {item: Merchant; key: number}) => {
     return (
-      <Box flex={1} flexDirection="column" mx={2} mb={4}>
+      <Box flex={1} flexDirection="column" key={key}>
         <TouchableOpacity
           key={item.id}
           onPress={() => handleOpenMerchant(item.id)}>
-          <VStack space={2}>
+          <HStack space={4}>
             <Image
               borderRadius={6}
               width={imageWidth}
@@ -59,8 +51,8 @@ export const MerchantList: React.FC<Props> = ({
               source={{uri: item.profileImage}}
               alt={item.name}
             />
-            <VStack flex={1} space={1}>
-              <Heading size="sm" isTruncated>
+            <VStack flex={1} space={2}>
+              <Heading size="sm" mt={1} isTruncated>
                 {item.name}
               </Heading>
               <HStack space={2} mb={2}>
@@ -78,7 +70,7 @@ export const MerchantList: React.FC<Props> = ({
                 />
               </HStack>
             </VStack>
-          </VStack>
+          </HStack>
         </TouchableOpacity>
       </Box>
     );
@@ -100,18 +92,14 @@ export const MerchantList: React.FC<Props> = ({
     <VStack space={5} pb={4}>
       {label && (
         <HStack alignItems="center" mx={4}>
-          <Heading size="md">{label}</Heading>
+          <Heading size="md" color={labelColor}>
+            {label}
+          </Heading>
         </HStack>
       )}
-      <Box mx={2}>
-        <FlatList
-          scrollEnabled={false}
-          data={data}
-          renderItem={({item}) => renderItem(item)}
-          numColumns={2}
-          keyExtractor={(item, index) => index.toString()}
-        />
-      </Box>
+      <VStack space={5} mx={4}>
+        {data.map((item, key) => renderItem({item, key}))}
+      </VStack>
     </VStack>
   );
 };

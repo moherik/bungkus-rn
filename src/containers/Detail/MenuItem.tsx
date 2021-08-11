@@ -62,7 +62,12 @@ export const MenuItem: React.FC<MenuItemProps> = ({
     navigation.navigate('AddToCart', {menu, merchant});
   };
 
-  const handleDeleteById = (id: number) => dispatch(deleteCart(id));
+  const handleDeleteById = (id: number) => {
+    dispatch(deleteCart(id));
+    if (getCarts.length <= 1) {
+      onClose();
+    }
+  };
 
   const handleEditById = (id: number) => {
     onClose();
@@ -131,7 +136,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
-          <VStack width={'100%'} space={4} px={2}>
+          <VStack width={'100%'} space={2} px={2}>
             {getCarts.map((cart, index) => {
               let listName: string[][] = [];
 
@@ -143,41 +148,50 @@ export const MenuItem: React.FC<MenuItemProps> = ({
               const listNames = listName.join().split(',');
 
               return (
-                <HStack
-                  justifyContent="space-between"
+                <TouchableOpacity
                   key={index}
-                  pb={4}
-                  borderBottomWidth={1}
-                  borderBottomColor="gray.100">
-                  <HStack space={5}>
-                    <Heading size="sm">{cart.qty}x</Heading>
-                    <VStack>
-                      <Heading size="sm">{cart.menuName}</Heading>
-                      {cart.extras.length > 0 && (
-                        <Box mb={1}>
-                          {listNames.map((name, _index) => (
-                            <Text key={_index} fontSize="sm">
-                              {name}
+                  onPress={() => handleEditById(cart.id)}>
+                  <HStack
+                    justifyContent="space-between"
+                    pb={4}
+                    borderBottomWidth={1}
+                    borderBottomColor="gray.100">
+                    <HStack space={5}>
+                      <Heading size="sm">{cart.qty}x</Heading>
+                      <VStack>
+                        <Heading size="sm">{cart.menuName}</Heading>
+                        {cart.extras.length > 0 && (
+                          <Box mb={1}>
+                            {listNames.map((name, _index) => (
+                              <Text key={_index} fontSize="sm">
+                                {name}
+                              </Text>
+                            ))}
+                          </Box>
+                        )}
+                        <HStack space={3} mt={1}>
+                          <Pressable onPress={() => handleEditById(cart.id)}>
+                            <Text
+                              fontSize="sm"
+                              color="blue.600"
+                              fontWeight={700}>
+                              Edit
                             </Text>
-                          ))}
-                        </Box>
-                      )}
-                      <HStack space={2}>
-                        <Pressable onPress={() => handleEditById(cart.id)}>
-                          <Text fontSize="sm" color="blue.600" fontWeight={700}>
-                            Edit
-                          </Text>
-                        </Pressable>
-                        <Pressable onPress={() => handleDeleteById(cart.id)}>
-                          <Text fontSize="sm" color="red.600" fontWeight={700}>
-                            Hapus
-                          </Text>
-                        </Pressable>
-                      </HStack>
-                    </VStack>
+                          </Pressable>
+                          <Pressable onPress={() => handleDeleteById(cart.id)}>
+                            <Text
+                              fontSize="sm"
+                              color="red.600"
+                              fontWeight={700}>
+                              Hapus
+                            </Text>
+                          </Pressable>
+                        </HStack>
+                      </VStack>
+                    </HStack>
+                    <Text>{currencyFormat(cart.price)}</Text>
                   </HStack>
-                  <Text>{currencyFormat(cart.price)}</Text>
-                </HStack>
+                </TouchableOpacity>
               );
             })}
             {getCarts.length > 1 && (
@@ -187,7 +201,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
               </HStack>
             )}
 
-            <Button p={4} my={4} borderRadius="md" onPress={handleAddNew}>
+            <Button p={4} my={2} borderRadius="md" onPress={handleAddNew}>
               Tambah Satu Lagi
             </Button>
           </VStack>

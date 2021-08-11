@@ -17,6 +17,7 @@ const Button: React.FC<Props> = ({
   disabledBg = 'red.400',
   color = 'white',
   textTransform = 'uppercase',
+  fontWeight = 'bold',
   onPress,
   children,
   borderRadius,
@@ -28,7 +29,10 @@ const Button: React.FC<Props> = ({
         bg={!disabled ? bg : disabledBg}
         {...rest}
         borderRadius={borderRadius}>
-        <Text color={color} fontWeight={700} textTransform={textTransform}>
+        <Text
+          color={color}
+          fontWeight={fontWeight}
+          textTransform={textTransform}>
           {children}
         </Text>
       </Center>

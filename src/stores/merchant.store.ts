@@ -60,23 +60,23 @@ const merchantSlice = createSlice({
         data: CartItem;
       }>,
     ) => {
-      const {cartIndex, selectedIndex} = getIndexById({
+      const {cartIndex, selectedCartIndex} = getIndexById({
         state,
         id: action.payload.id,
       });
 
       state.carts.splice(cartIndex, 1, action.payload.data);
-      state.selectedCarts.splice(selectedIndex, 1, action.payload.data);
+      state.selectedCarts.splice(selectedCartIndex, 1, action.payload.data);
     },
 
     deleteCart: (state, action: PayloadAction<number>) => {
-      const {cartIndex, selectedIndex} = getIndexById({
+      const {cartIndex, selectedCartIndex} = getIndexById({
         state,
         id: action.payload,
       });
 
       state.carts.splice(cartIndex, 1);
-      state.selectedCarts.splice(selectedIndex, 1);
+      state.selectedCarts.splice(selectedCartIndex, 1);
     },
   },
 });
@@ -89,16 +89,16 @@ const getIndexById = ({
   id: number;
 }) => {
   const cartIndex = state.carts.findIndex(cart => cart.id === id);
-  const selectedIndex = state.selectedCarts.findIndex(cart => cart.id === id);
+  const selectedCartIndex = state.selectedCarts.findIndex(
+    cart => cart.id === id,
+  );
 
-  return {cartIndex, selectedIndex};
+  return {cartIndex, selectedCartIndex};
 };
 
 const getLastId = (carts: WritableDraft<CartItem>[]) => {
   return carts.reduce((acc, cart) => Math.max(acc, cart.id), 0);
 };
-
-const {reducer, actions} = merchantSlice;
 
 export const {
   selectMerchant,
@@ -107,6 +107,6 @@ export const {
   addToCart,
   updateCart,
   deleteCart,
-} = actions;
+} = merchantSlice.actions;
 
-export default reducer;
+export default merchantSlice.reducer;

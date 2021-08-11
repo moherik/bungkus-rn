@@ -3,29 +3,42 @@ import {User} from 'models/user.model';
 
 interface AuthState {
   user?: User;
+  token?: string;
 }
 
 const initialState = {
   user: undefined,
+  token: undefined,
 } as AuthState;
 
 const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    login: (state, action: PayloadAction<string | undefined>) => {
-      const token = action.payload;
-      if (token) {
-        state.user = {
-          name: 'Erik Maulana',
-        };
-      }
+    setToken: (state, action: PayloadAction<string | undefined>) => {
+      state.token = action.payload;
+    },
+
+    clearToken: state => {
+      state.token = undefined;
+    },
+
+    setUser: (state, action: PayloadAction<User | undefined>) => {
+      state.user = action.payload;
+    },
+
+    clearUser: state => {
+      state.user = undefined;
+    },
+
+    signOut: state => {
+      state.user = undefined;
+      state.token = undefined;
     },
   },
 });
 
-const {reducer, actions} = authSlice;
+export const {setToken, clearToken, setUser, clearUser, signOut} =
+  authSlice.actions;
 
-export const {login} = actions;
-
-export default reducer;
+export default authSlice.reducer;

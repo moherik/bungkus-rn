@@ -24,6 +24,7 @@ const ITEM_HEIGHT = 200;
 type Props = {
   data: Merchant[];
   label?: string;
+  labelColor?: string;
   loading: boolean;
   itemWidth?: number;
   itemHeight?: number;
@@ -32,6 +33,7 @@ type Props = {
 export const Recommendations: React.FC<Props> = ({
   data,
   label,
+  labelColor = 'red.600',
   loading,
   itemWidth,
   itemHeight,
@@ -96,7 +98,9 @@ export const Recommendations: React.FC<Props> = ({
         <>
           {label && (
             <HStack alignItems="center" mt={4} mx={4}>
-              <Heading size="md">{label}</Heading>
+              <Heading size="md" color={labelColor}>
+                {label}
+              </Heading>
             </HStack>
           )}
           <FlatList

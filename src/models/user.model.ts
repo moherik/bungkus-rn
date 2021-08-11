@@ -1,6 +1,6 @@
 export type User = {
   name: string;
-  image: string;
+  phone: string;
+  avatarUrl: string;
   address: string;
-  latLong: string;
 };

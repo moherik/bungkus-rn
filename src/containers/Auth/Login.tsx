@@ -1,13 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {
   Box,
-  Center,
   Heading,
   HStack,
   Icon,
   Image,
-  Modal,
-  Spinner,
   Text,
   useToast,
   VStack,
@@ -18,24 +15,25 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import auth, {FirebaseAuthTypes} from '@react-native-firebase/auth';
 import {GoogleSignin} from '@react-native-google-signin/google-signin';
 
-import {Button} from 'components';
+import {Button, LoadingModal} from 'components';
 import {APPBAR_TITLE} from 'utils/constants';
 import {useSignInMutation} from 'services/user.service';
 import {LoginScreenProps} from 'navigation/types';
-import {storeData} from 'utils';
-import {LOGIN_KEY} from 'utils/asyncStorage';
+import {useAppDispatch} from 'hooks';
+import {setToken} from 'stores/auth.store';
 
 type Props = {} & LoginScreenProps;
 
 const LoginContainer: React.FC<Props> = ({navigation}) => {
+  const dispatch = useAppDispatch();
+
   const [phone, setPhone] = useState<string>('');
   const [formatedPhone, setFormatedPhone] = useState<string>('');
   const [code, setCode] = useState<string>('');
   const [formatedCode, setFormatedCode] = useState<string>('');
   const [confirm, setConfirm] =
     useState<FirebaseAuthTypes.ConfirmationResult | null>();
-  const [loadingModalVisible, setLoadingModalVisible] =
-    useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
   const toast = useToast();
 
   const [signIn] = useSignInMutation();
@@ -67,18 +65,18 @@ const LoginContainer: React.FC<Props> = ({navigation}) => {
   };
 
   const signInWithPhoneNumber = async () => {
-    setLoadingModalVisible(true);
+    setLoading(true);
     await auth()
       .signInWithPhoneNumber(`+62${phone}`)
       .then(value => setConfirm(value))
       .catch(() =>
         showToast('Terjadi Kesalahan, pastikan format nomor telepon benar.'),
       )
-      .finally(() => setLoadingModalVisible(false));
+      .finally(() => setLoading(false));
   };
 
   const confirmCode = async () => {
-    setLoadingModalVisible(true);
+    setLoading(true);
     await confirm
       ?.confirm(code)
       .then(async result => {
@@ -88,11 +86,10 @@ const LoginContainer: React.FC<Props> = ({navigation}) => {
           .unwrap()
           .then(fulfilled => {
             const {jwtToken, name: resultName} = fulfilled.data;
-            console.log(fulfilled);
             if (resultName === null) {
               navigation.navigate('Complete', {phone, jwtToken});
             } else {
-              storeData({key: LOGIN_KEY, value: jwtToken});
+              dispatch(setToken(jwtToken));
             }
           })
           .catch(rejected => console.log(rejected));
@@ -100,7 +97,7 @@ const LoginContainer: React.FC<Props> = ({navigation}) => {
       .catch(() =>
         showToast('Terjadi Kesalahan, pastikan kode konfirmasi benar.'),
       )
-      .finally(() => setLoadingModalVisible(false));
+      .finally(() => setLoading(false));
   };
 
   const showToast = (label: string) =>
@@ -204,15 +201,7 @@ const LoginContainer: React.FC<Props> = ({navigation}) => {
           </VStack>
         )}
       </Box>
-      <Modal
-        closeOnOverlayClick={false}
-        isOpen={loadingModalVisible}
-        onClose={setLoadingModalVisible}
-        size="sm">
-        <Center bg="white" borderRadius="md" p={2}>
-          <Spinner color="red.600" />
-        </Center>
-      </Modal>
+      <LoadingModal loading={loading} />
     </>
   );
 };

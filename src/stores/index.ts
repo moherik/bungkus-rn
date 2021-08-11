@@ -1,17 +1,51 @@
-import {configureStore} from '@reduxjs/toolkit';
+import {
+  configureStore,
+  combineReducers,
+  getDefaultMiddleware,
+} from '@reduxjs/toolkit';
+import {
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
 import {userApi} from 'services/user.service';
 
 import merchantSlice from './merchant.store';
+import authSlice from './auth.store';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import persistStore from 'redux-persist/es/persistStore';
+
+const reducers = combineReducers({
+  auth: authSlice,
+  merchant: merchantSlice,
+  [userApi.reducerPath]: userApi.reducer,
+});
+
+const persistedReducers = persistReducer(
+  {
+    key: 'root',
+    storage: AsyncStorage,
+    whitelist: ['auth'],
+  },
+  reducers,
+);
 
 export const stores = configureStore({
-  reducer: {
-    merchant: merchantSlice,
-    [userApi.reducerPath]: userApi.reducer,
-  },
-  middleware: getDefaultMiddleware =>
-    getDefaultMiddleware().concat(userApi.middleware),
+  reducer: persistedReducers,
+  middleware: getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
+    },
+  }).concat(userApi.middleware),
 });
 
 export type RootState = ReturnType<typeof stores.getState>;
 
 export type AppDispatch = typeof stores.dispatch;
+
+const persistor = persistStore(stores);
+export {persistor};

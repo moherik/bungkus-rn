@@ -1,6 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
-import {Center, Heading, HStack, Icon, Text, VStack} from 'native-base';
+import {
+  Center,
+  Heading,
+  HStack,
+  Icon,
+  Text,
+  VStack,
+  AlertDialog,
+} from 'native-base';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {currencyFormat} from 'utils';
@@ -33,6 +41,8 @@ export const Footer = ({
   note,
 }: Props) => {
   const dispatch = useAppDispatch();
+  const [isOpen, setIsOpen] = React.useState(false);
+  const cancelRef = React.useRef();
   const [qty, setQty] = useState<number>(cart?.qty || 1);
   const [totalPrice, setTotalPrice] = useState<{
     price: number;
@@ -79,9 +89,17 @@ export const Footer = ({
     };
   }, [extras, cart, menu.discount, menu.price, qty]);
 
+  const onCloseAlert = () => setIsOpen(false);
+
   const handleAddQty = () => setQty(qty + 1);
 
-  const handleMinQty = () => qty !== 1 && setQty(qty - 1);
+  const handleMinQty = () => {
+    if (qty !== 1) {
+      setQty(qty - 1);
+    } else if (cart) {
+      handleConfirmDelete();
+    }
+  };
 
   const handleAddToCart = () => {
     const data: CartItem = {
@@ -105,8 +123,10 @@ export const Footer = ({
     navigation.goBack();
   };
 
-  const handleDeleteCart = (id: number) => {
-    dispatch(deleteCart(id));
+  const handleConfirmDelete = () => setIsOpen(true);
+
+  const handleDeleteCart = () => {
+    dispatch(deleteCart(cart?.id!!));
 
     navigation.goBack();
   };
@@ -154,13 +174,53 @@ export const Footer = ({
             {!cart ? 'Tambah ke Keranjang' : 'Perbaruhi Keranjang'}
           </Button>
           {cart && (
-            <TouchableOpacity
-              onPress={() => handleDeleteCart(Number(menu?.id!!))}>
+            <TouchableOpacity onPress={handleConfirmDelete}>
               <Icon as={<Ionicons name="trash-outline" />} size={6} />
             </TouchableOpacity>
           )}
         </HStack>
       </HStack>
+
+      <AlertDialog
+        leastDestructiveRef={cancelRef}
+        isOpen={isOpen}
+        onClose={onCloseAlert}>
+        <AlertDialog.Content p={0}>
+          <AlertDialog.Header px={4} mt={4}>
+            Hapus item ini?
+          </AlertDialog.Header>
+          <AlertDialog.Body px={4}>
+            Hapus item ini dari keranjang kamu.
+          </AlertDialog.Body>
+          <AlertDialog.Footer
+            p={4}
+            mx={0}
+            borderTopWidth={1}
+            borderTopColor="gray.100">
+            <Button
+              px={4}
+              py={2}
+              bgColor="white"
+              borderRadius="lg"
+              color="black"
+              fontWeight="600"
+              textTransform="none"
+              onPress={onCloseAlert}>
+              Batal
+            </Button>
+            <Button
+              bgColor="red.600"
+              px={4}
+              py={2}
+              textTransform="none"
+              borderRadius="lg"
+              onPress={handleDeleteCart}
+              ml={3}>
+              Hapus
+            </Button>
+          </AlertDialog.Footer>
+        </AlertDialog.Content>
+      </AlertDialog>
     </VStack>
   );
 };

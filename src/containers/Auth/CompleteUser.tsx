@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Icon,
   ScrollView,
@@ -10,17 +10,38 @@ import {
 } from 'native-base';
 import {CompleteScreenProps} from 'navigation/types';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useUpdateNameMutation} from 'services/user.service';
 
-import {Button} from 'components';
+import {Button, LoadingModal} from 'components';
+import {useAppDispatch} from 'hooks';
+import {setToken} from 'stores/auth.store';
 
 type Props = {} & CompleteScreenProps;
 
 const CompleteUserContainer: React.FC<Props> = ({navigation, route}) => {
+  const dispatch = useAppDispatch();
+
+  const {phone, jwtToken: token} = route.params;
+  const [name, setName] = useState<string>('');
+  const [loading, setLoading] = useState<boolean>(false);
+  const [updateName] = useUpdateNameMutation();
+
   const handleGoBack = () => {
     navigation.goBack();
   };
 
-  const handleCompleteData = () => {};
+  const handleChangeName = (value: string) => setName(value);
+
+  const handleCompleteData = () => {
+    setLoading(true);
+    updateName({name, token})
+      .unwrap()
+      .then(_fulfilled => {
+        dispatch(setToken(token));
+      })
+      .catch(rejected => console.log(rejected))
+      .finally(() => setLoading(false));
+  };
 
   return (
     <>
@@ -46,17 +67,24 @@ const CompleteUserContainer: React.FC<Props> = ({navigation, route}) => {
           </Text>
           <HStack alignItems="center" justifyContent="space-between">
             <Heading size="sm">No. Telepon</Heading>
-            <Text>{`+62${route.params.phone}`}</Text>
+            <Text>{`+62${phone}`}</Text>
           </HStack>
           <VStack space={2}>
             <Text color="muted.500">Masukan nama lengkap kamu</Text>
-            <Input placeholder="Nama Kamu" size="lg" variant="filled" />
+            <Input
+              placeholder="Nama Kamu"
+              size="lg"
+              variant="filled"
+              value={name}
+              onChangeText={handleChangeName}
+            />
           </VStack>
-          <Button onPress={handleCompleteData} py={4} borderRadius="md">
-            Simpan
+          <Button onPress={handleCompleteData} py={4} borderRadius="lg">
+            Perbaruhi
           </Button>
         </VStack>
       </ScrollView>
+      <LoadingModal loading={loading} />
     </>
   );
 };

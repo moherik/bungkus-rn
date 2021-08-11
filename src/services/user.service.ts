@@ -17,13 +17,29 @@ interface SignInResponse {
   };
 }
 
+interface UpdateNamePayload {
+  name: string;
+  token: string;
+}
+
+interface UserResponse {
+  code: number;
+  data: User;
+}
+
 export const userApi = createApi({
   reducerPath: 'userApi',
   tagTypes: ['User'],
   baseQuery: fetchBaseQuery({baseUrl: BASE_API_URL}),
   endpoints: builder => ({
-    checkUser: builder.query<User, null>({
-      query: () => 'users/me',
+    checkUser: builder.query<UserResponse, string>({
+      query: token => ({
+        url: 'users/me',
+        method: 'GET',
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }),
     }),
 
     signIn: builder.mutation<SignInResponse, SignInPayload>({
@@ -33,7 +49,19 @@ export const userApi = createApi({
         body,
       }),
     }),
+
+    updateName: builder.mutation<UserResponse, UpdateNamePayload>({
+      query: ({name, token}) => ({
+        url: 'users/update-name',
+        method: 'PATCH',
+        body: {name},
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
   }),
 });
 
-export const {useCheckUserQuery, useSignInMutation} = userApi;
+export const {useCheckUserQuery, useSignInMutation, useUpdateNameMutation} =
+  userApi;

@@ -18,7 +18,7 @@ export const Header = ({merchant}: Props) => {
         width={'100%'}
         height={IMAGE_HEIGHT}
       />
-      <VStack space={2} px={4} pt={2}>
+      <VStack space={2} px={4} pt={2} mt={2}>
         <Heading size="lg">{merchant.name}</Heading>
         <VStack space={1}>
           <Text fontSize="sm" color="gray.600">
@@ -53,7 +53,7 @@ export const Header = ({merchant}: Props) => {
           ))}
         </VStack>
       </VStack>
-      <Separator height={4} bg="gray.100" my={4} />
+      <Separator height={3} bg="gray.100" my={4} />
     </VStack>
   );
 };

@@ -1,2 +1,2 @@
 export {default as currencyFormat} from './currencyFormat';
-export {storeData} from './asyncStorage';
+export {storeLocalData, getLocalData, LOGIN_TOKEN} from './asyncStorage';

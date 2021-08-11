@@ -114,7 +114,7 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
             alignItems="center"
             justifyContent="space-between">
             <Heading size="md" color="white">
-              Pesan Sekarang
+              Lihat Keranjang
             </Heading>
             <HStack space={4}>
               <Heading size="md" color="white">
