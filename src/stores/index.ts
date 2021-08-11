@@ -12,6 +12,7 @@ import {
   PURGE,
   REGISTER,
 } from 'redux-persist';
+import {createFilter} from 'redux-persist-transform-filter';
 import {userApi} from 'services/user.service';
 
 import merchantSlice from './merchant.store';
@@ -25,11 +26,14 @@ const reducers = combineReducers({
   [userApi.reducerPath]: userApi.reducer,
 });
 
+const merchantFilter = createFilter('merchant', ['carts', 'selectedCarts']);
+
 const persistedReducers = persistReducer(
   {
     key: 'root',
     storage: AsyncStorage,
-    whitelist: ['auth'],
+    whitelist: ['auth', 'merchant'],
+    transforms: [merchantFilter],
   },
   reducers,
 );

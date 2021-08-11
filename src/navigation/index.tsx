@@ -1,8 +1,10 @@
 import React from 'react';
+import {Center, Heading, Icon, Text} from 'native-base';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+
 import {useAppDispatch, useAppSelector} from 'hooks';
 import {useCheckUserQuery} from 'services/user.service';
 import {setUser} from 'stores/auth.store';
-import {Text} from 'native-base';
 import RootStackNavigator from './RootStackNavigator';
 import AuthStackNavigator from './AuthNavigation';
 
@@ -13,7 +15,15 @@ export const Navigation = () => {
   const {data: res, isLoading, isSuccess} = useCheckUserQuery(token || '');
 
   if (isLoading) {
-    return <Text>Loading....</Text>;
+    return (
+      <Center flex={1}>
+        <Icon as={<Ionicons name="fast-food-outline" />} size={16} />
+        <Heading my={2}>Bungkus</Heading>
+        <Text fontSize="sm" color="muted.500">
+          Jelajahi menu favorit di sekitarmu
+        </Text>
+      </Center>
+    );
   }
 
   if (isSuccess) {
