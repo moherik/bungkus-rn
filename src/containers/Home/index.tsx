@@ -1,5 +1,4 @@
-/* eslint-disable react-native/no-inline-styles */
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Animated, StyleSheet} from 'react-native';
 import {Heading, HStack, Icon, Text, View, VStack} from 'native-base';
 import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -24,12 +23,12 @@ const Home: React.FC<Props> = ({navigation}) => {
 
   // const [categories, setCategories] = useState<MenuCategory[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [scrollAnim] = useState(new Animated.Value(0));
-  const [offsetAnim] = useState(new Animated.Value(0));
+  const scrollAnim = useRef(new Animated.Value(0)).current;
+  const offsetAnim = useRef(new Animated.Value(0)).current;
 
-  let previousScrollvalue: number;
-  let currentScrollValue: number;
-  let scrollEndTimer: NodeJS.Timeout;
+  const previousScrollvalue = useRef<number>();
+  const currentScrollValue = useRef<number>();
+  const scrollEndTimer = useRef<NodeJS.Timeout>();
 
   useEffect(() => {
     const fetchData = () => {
@@ -43,25 +42,24 @@ const Home: React.FC<Props> = ({navigation}) => {
     return () => {
       scrollAnim.removeAllListeners();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, scrollAnim]);
 
   const handleScroll = ({value}: {value: number}) => {
-    previousScrollvalue = currentScrollValue;
-    currentScrollValue = value;
+    previousScrollvalue.current = currentScrollValue.current;
+    currentScrollValue.current = value;
   };
 
   const handleScrollEndDrag = () => {
-    scrollEndTimer = setTimeout(handleMomentumScrollEnd, 250);
+    scrollEndTimer.current = setTimeout(handleMomentumScrollEnd, 250);
   };
 
   const handleMomentumScrollBegin = () => {
-    clearTimeout(scrollEndTimer);
+    clearTimeout(scrollEndTimer.current!!);
   };
 
   const handleMomentumScrollEnd = () => {
-    const previous = previousScrollvalue;
-    const current = currentScrollValue;
+    const previous = previousScrollvalue.current!!;
+    const current = currentScrollValue.current!!;
 
     if (previous > current || current < 50) {
       Animated.spring(offsetAnim, {
@@ -85,7 +83,7 @@ const Home: React.FC<Props> = ({navigation}) => {
     extrapolate: 'clamp',
   });
 
-  const translateY = Animated.add(scrollAnim, offsetAnim).interpolate({
+  const translateYFooter = Animated.add(scrollAnim, offsetAnim).interpolate({
     inputRange: [0, 50],
     outputRange: [0, 100],
     extrapolate: 'clamp',
@@ -95,12 +93,8 @@ const Home: React.FC<Props> = ({navigation}) => {
     <View flex={1}>
       <Animated.View
         style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 999,
           transform: [{translateY: translateYHeader}],
+          ...styles.header,
         }}>
         <VStack bg="red.600" space={2} px={4} py={2}>
           <HStack alignItems="center" justifyContent="space-between">
@@ -164,11 +158,8 @@ const Home: React.FC<Props> = ({navigation}) => {
 
       <Animated.View
         style={{
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          transform: [{translateY}],
+          transform: [{translateY: translateYFooter}],
+          ...styles.footer,
         }}>
         <HStack
           bg="red.600"
@@ -196,6 +187,20 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'white',
     paddingTop: 95,
+  },
+  header: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    zIndex: 999,
+  },
+  footer: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    zIndex: 999,
   },
 });
 

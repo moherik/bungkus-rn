@@ -30,19 +30,19 @@ const BottomTabNavigator = () => {
         activeTintColor: colors.red['600'],
       }}>
       <Tab.Screen
-        name="Feed"
-        component={FeedScreen}
-        options={{
-          tabBarLabel: 'Feed',
-          tabBarIcon: prop => tabBarIcon({name: 'cards-outline', ...prop}),
-        }}
-      />
-      <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
           tabBarLabel: 'Jelajahi',
           tabBarIcon: prop => tabBarIcon({name: 'compass-outline', ...prop}),
+        }}
+      />
+      <Tab.Screen
+        name="Feed"
+        component={FeedScreen}
+        options={{
+          tabBarLabel: 'Feed',
+          tabBarIcon: prop => tabBarIcon({name: 'cards-outline', ...prop}),
         }}
       />
       <Tab.Screen
