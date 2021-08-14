@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {TouchableOpacity, StyleSheet, Animated} from 'react-native';
+import {StyleSheet, Animated} from 'react-native';
 import {Box, Heading, HStack, Icon} from 'native-base';
 import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -10,7 +10,7 @@ import {DetailScreenProps} from 'navigation/types';
 import {Loader} from './Loader';
 import {MenuItem} from './MenuItem';
 import {Header} from './Header';
-import {Separator} from 'components';
+import {Button, Ripple} from 'components';
 
 type Props = {} & DetailScreenProps;
 
@@ -107,24 +107,27 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
           bg="white"
           alignItems="center"
           justifyContent="space-between"
-          px={4}
-          py={3}
           shadow={2}
           space={2}>
-          <Icon
-            as={<MIcons name="arrow-left" />}
-            size={6}
-            onPress={() => navigation.goBack()}
-          />
+          <Ripple onPress={() => navigation.goBack()}>
+            <Box p={3}>
+              <Icon as={<MIcons name="arrow-left" />} size={6} />
+            </Box>
+          </Ripple>
           {!loading && (
-            <HStack reversed alignItems="center" space={3}>
-              <TouchableOpacity onPress={handleFavorite}>
-                <Icon
-                  as={<MIcons name={!favorite ? 'heart-outline' : 'heart'} />}
-                  size={6}
-                  color={favorite ? 'red.600' : 'black'}
-                />
-              </TouchableOpacity>
+            <HStack reversed alignItems="center" space={2}>
+              <Ripple
+                mr={2}
+                borderRadius={100}
+                onPress={() => handleFavorite()}>
+                <Box p={2}>
+                  <Icon
+                    as={<MIcons name={!favorite ? 'heart-outline' : 'heart'} />}
+                    size={6}
+                    color={favorite ? 'red.600' : 'black'}
+                  />
+                </Box>
+              </Ripple>
               <Heading
                 color="white"
                 bg="green.600"
@@ -145,7 +148,6 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
           sections={menus}
           keyExtractor={(item, index) => item.id.toString() + index}
           ListHeaderComponent={<Header merchant={merchant!!} />}
-          ListFooterComponent={<Separator height={20} />}
           stickySectionHeadersEnabled={true}
           renderItem={({item: menu}) => (
             <MenuItem
@@ -186,27 +188,15 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
             transform: [{translateY: translateYFooter}],
             ...styles.footer,
           }}>
-          <TouchableOpacity onPress={handleCheckout}>
-            <HStack
-              bg="red.600"
-              py={4}
-              px={6}
-              borderRadius="lg"
-              alignItems="center"
-              justifyContent="space-between">
-              <Heading size="sm" color="white">
-                Lihat Keranjang
-              </Heading>
-              <HStack space={4}>
-                <Heading size="sm" color="white">
-                  X{qty}
-                </Heading>
-                <Heading size="sm" color="white">
-                  {`${currencyFormat(price)}`}
-                </Heading>
-              </HStack>
-            </HStack>
-          </TouchableOpacity>
+          <Button
+            py={4}
+            borderRadius="lg"
+            onPress={handleCheckout}
+            textTransform="none">
+            <Heading size="sm" color="white">
+              Lihat Keranjang (X{qty}) {`${currencyFormat(price)}`}
+            </Heading>
+          </Button>
         </Animated.View>
       )}
     </Box>

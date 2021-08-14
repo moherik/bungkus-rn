@@ -161,6 +161,7 @@ const LoginContainer: React.FC<Props> = ({navigation}) => {
                 bg="white"
                 color="black"
                 borderRadius="lg"
+                rippleBg="#ccc"
                 onPress={signInWithGoogle}>
                 <HStack alignItems="center" space={4}>
                   <Icon as={<Ionicons name="logo-google" />} size={6} />

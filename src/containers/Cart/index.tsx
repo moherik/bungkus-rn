@@ -239,7 +239,7 @@ const CartContainer: React.FC<Props> = ({navigation, route}) => {
               <Heading size="md">{currencyFormat(price)}</Heading>
             </HStack>
 
-            <Button p={4} m={4} borderRadius="md" onPress={() => {}}>
+            <Button p={4} mx={4} mb={4} borderRadius="lg" onPress={() => {}}>
               Pesan Sekarang
             </Button>
           </VStack>

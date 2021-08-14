@@ -1,5 +1,4 @@
 import React, {useState} from 'react';
-import {TouchableOpacity} from 'react-native';
 import {
   Center,
   Heading,
@@ -14,7 +13,7 @@ import {
 } from 'native-base';
 import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {Separator} from 'components';
+import {Ripple, Separator} from 'components';
 import {Extras} from 'models/merchant.model';
 import {AddToCartScreenProps} from 'navigation/types';
 import {currencyFormat} from 'utils';
@@ -46,11 +45,14 @@ const AddToCart: React.FC<Props> = ({navigation, route}) => {
               height={250}
             />
             <HStack justifyContent="flex-end" width={'100%'} p={4}>
-              <TouchableOpacity onPress={() => navigation.goBack()}>
-                <Center borderRadius={100} bg="white" p={2}>
-                  <Icon as={<MIcons name="close" />} size={6} />
+              <Ripple
+                borderRadius={100}
+                bg="#ffffff3b"
+                onPress={() => navigation.goBack()}>
+                <Center p={2}>
+                  <Icon as={<MIcons name="close" />} size={6} color="white" />
                 </Center>
-              </TouchableOpacity>
+              </Ripple>
             </HStack>
           </ZStack>
           <VStack space={1} mx={4} my={4}>

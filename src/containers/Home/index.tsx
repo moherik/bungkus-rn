@@ -1,10 +1,10 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {Animated, StyleSheet} from 'react-native';
-import {Heading, HStack, Icon, Text, View, VStack} from 'native-base';
+import {Box, Heading, HStack, Icon, Text, View, VStack} from 'native-base';
 import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {Separator} from 'components';
-import {merchants as mockMerchants} from 'mocks';
+import {Ripple, Separator} from 'components';
+import {merchants as mockMerchants, categories as mockCategories} from 'mocks';
 
 import {useAppDispatch, useAppSelector} from 'hooks';
 import {fetchMerchants} from 'stores/merchant.store';
@@ -12,6 +12,8 @@ import {HomeScreenNavigationProps} from 'navigation/types';
 
 import {MerchantList} from './MerchantList';
 import {Recommendations} from './Recommendations';
+import {Category} from './Category';
+import {MerchantCategory} from 'models/merchant.model';
 
 type Props = {
   navigation: HomeScreenNavigationProps;
@@ -21,7 +23,7 @@ const Home: React.FC<Props> = ({navigation}) => {
   const merchants = useAppSelector(state => state.merchant.merchants);
   const dispatch = useAppDispatch();
 
-  // const [categories, setCategories] = useState<MenuCategory[]>([]);
+  const [categories, setCategories] = useState<MerchantCategory[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const scrollAnim = useRef(new Animated.Value(0)).current;
   const offsetAnim = useRef(new Animated.Value(0)).current;
@@ -33,7 +35,7 @@ const Home: React.FC<Props> = ({navigation}) => {
   useEffect(() => {
     const fetchData = () => {
       dispatch(fetchMerchants(mockMerchants));
-      // setCategories(mockCategories);
+      setCategories(mockCategories);
     };
     fetchData();
     setTimeout(() => setLoading(false), 2000);
@@ -79,13 +81,19 @@ const Home: React.FC<Props> = ({navigation}) => {
 
   const translateYHeader = Animated.add(scrollAnim, offsetAnim).interpolate({
     inputRange: [0, 50],
-    outputRange: [0, -100],
+    outputRange: [0, -110],
     extrapolate: 'clamp',
   });
 
   const translateYFooter = Animated.add(scrollAnim, offsetAnim).interpolate({
     inputRange: [0, 50],
     outputRange: [0, 100],
+    extrapolate: 'clamp',
+  });
+
+  const translateXCart = Animated.add(scrollAnim, offsetAnim).interpolate({
+    inputRange: [0, 50],
+    outputRange: [0, -100],
     extrapolate: 'clamp',
   });
 
@@ -101,19 +109,25 @@ const Home: React.FC<Props> = ({navigation}) => {
             <Heading size="lg" color="white">
               Bungkus
             </Heading>
-            <HStack space={3}>
-              <Icon
-                onPress={() => {}}
-                as={<MIcons name="bell-outline" />}
-                color="white"
-                size={6}
-              />
-              <Icon
-                onPress={() => {}}
-                as={<MIcons name="shopping-outline" />}
-                color="white"
-                size={6}
-              />
+            <HStack>
+              <Ripple onPress={() => {}} borderRadius={40}>
+                <Box p={2}>
+                  <Icon
+                    as={<MIcons name="bell-outline" />}
+                    color="white"
+                    size={6}
+                  />
+                </Box>
+              </Ripple>
+              <Ripple onPress={() => {}} borderRadius={40}>
+                <Box p={2}>
+                  <Icon
+                    as={<MIcons name="shopping-outline" />}
+                    color="white"
+                    size={6}
+                  />
+                </Box>
+              </Ripple>
             </HStack>
           </HStack>
           <HStack
@@ -141,19 +155,21 @@ const Home: React.FC<Props> = ({navigation}) => {
         onMomentumScrollBegin={handleMomentumScrollBegin}
         onMomentumScrollEnd={handleMomentumScrollEnd}
         onScrollEndDrag={handleScrollEndDrag}>
+        <Separator height={20} mt={4} />
         <Recommendations
           label="Rekomendasi di Sekitarmu"
           loading={loading}
           data={merchants}
         />
-        <Separator height={4} />
+        <Separator height={3} />
+        <Category data={categories} />
+        <Separator bg="muted.100" height={3} mb={4} />
         <MerchantList
           navigation={navigation}
           loading={loading}
           label="Temukan Menu Favoritmu"
           data={merchants}
         />
-        <Separator height={500} />
       </Animated.ScrollView>
 
       <Animated.View
@@ -161,22 +177,39 @@ const Home: React.FC<Props> = ({navigation}) => {
           transform: [{translateY: translateYFooter}],
           ...styles.footer,
         }}>
-        <HStack
-          bg="red.600"
-          px={4}
-          py={2}
-          m={2}
+        <Ripple bg="red.600" borderRadius="lg" onPress={() => {}}>
+          <HStack
+            px={4}
+            py={2}
+            justifyContent="space-between"
+            alignItems="center">
+            <VStack>
+              <Text color="white">Semua menu di sekitar</Text>
+              <Heading size="sm" color="white">
+                Jl. Gajah Mada No.3 (1km)
+              </Heading>
+            </VStack>
+            <Icon as={<MIcons name="chevron-right" />} color="white" size={6} />
+          </HStack>
+        </Ripple>
+      </Animated.View>
+
+      <Animated.View
+        style={{
+          transform: [{translateX: translateXCart}],
+          ...styles.cart,
+        }}>
+        <Ripple
+          bg="white"
+          borderWidth={1}
+          borderColor="muted.200"
           borderRadius="lg"
-          justifyContent="space-between"
-          alignItems="center">
-          <VStack>
-            <Text color="white">Lokasi anda</Text>
-            <Heading size="sm" color="white">
-              Jl. Gajah Mada No.3
-            </Heading>
-          </VStack>
-          <Icon as={<MIcons name="chevron-right" />} color="white" size={6} />
-        </HStack>
+          onPress={() => {}}
+          shadow={2}>
+          <Box p={2}>
+            <Icon as={<MIcons name="shopping-outline" />} size={8} />
+          </Box>
+        </Ripple>
       </Animated.View>
     </View>
   );
@@ -186,7 +219,6 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
-    paddingTop: 95,
   },
   header: {
     position: 'absolute',
@@ -200,6 +232,14 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    margin: 10,
+    zIndex: 999,
+  },
+  cart: {
+    position: 'absolute',
+    bottom: 0,
+    right: -100,
+    margin: 12,
     zIndex: 999,
   },
 });

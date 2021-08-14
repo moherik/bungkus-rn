@@ -1,46 +1,39 @@
-import React, {useState} from 'react';
-import {Badge, Text} from 'native-base';
-import {FlatList, ListRenderItem, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {Dimensions, StyleSheet} from 'react-native';
+import {Text, VStack, HStack, Avatar} from 'native-base';
 
-import {MenuCategory} from 'models/menu.model';
+import {MerchantCategory} from 'models/merchant.model';
+import {Ripple} from 'components';
 
 type Props = {
-  data: MenuCategory[];
+  data: MerchantCategory[];
 };
+
+const width = Dimensions.get('window').width;
 
 export const Category: React.FC<Props> = ({data}) => {
-  const [selectedId, setSelectedId] = useState(0);
-
-  const handleOnClick = (id: number | string) => setSelectedId(+id);
-
-  const renderItem: ListRenderItem<MenuCategory> = ({item, index}) => {
-    return (
-      <TouchableOpacity onPress={() => handleOnClick(item.id)}>
-        <Badge
-          bg={item.id === selectedId ? 'red.600' : 'gray.200'}
-          borderRadius={100}
-          ml={index === 0 ? 4 : 0}
-          mr={index === data.length - 1 ? 4 : 0}
-          py={2}
-          px={4}>
-          <Text
-            fontSize="xs"
-            fontWeight={item.id === selectedId ? '700' : '500'}
-            color={item.id === selectedId ? 'white' : 'gray.500'}>
-            {item.name}
-          </Text>
-        </Badge>
-      </TouchableOpacity>
-    );
-  };
-
   return (
-    <FlatList
-      horizontal={true}
-      data={data}
-      renderItem={item => renderItem(item)}
-      keyExtractor={item => item.id.toString()}
-      showsHorizontalScrollIndicator={false}
-    />
+    <HStack px={4} py={2} flexWrap="wrap">
+      {data.map((item, index) => (
+        <Ripple onPress={() => {}} borderRadius="lg" key={index}>
+          <VStack
+            alignItems="center"
+            justifyContent="center"
+            style={styles.box}
+            py={3}>
+            <Avatar source={{uri: item.image}} bgColor="red.600" />
+            <Text fontSize="xs" textAlign="center" mt={1}>
+              {item.name}
+            </Text>
+          </VStack>
+        </Ripple>
+      ))}
+    </HStack>
   );
 };
+
+const styles = StyleSheet.create({
+  box: {
+    width: width / 4 - 8,
+  },
+});

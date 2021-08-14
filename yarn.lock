@@ -6588,11 +6588,6 @@ react-native-screens@^3.4.0:
   dependencies:
     warn-once "^0.1.0"
 
-react-native-shared-element@^0.8.0:
-  version "0.8.0"
-  resolved "https://registry.yarnpkg.com/react-native-shared-element/-/react-native-shared-element-0.8.0.tgz#b234a2f16a844608a653a800141bcd90ec538546"
-  integrity sha512-5hKx9jpLxyyIOYfuByeQKcu+pTSlH5sjq5W56126KF0WBrz42iGxElwzi8FcxQfl65IPR68TDR79qRzRPpGGQA==
-
 react-native-svg@^12.1.1:
   version "12.1.1"
   resolved "https://registry.yarnpkg.com/react-native-svg/-/react-native-svg-12.1.1.tgz#5f292410b8bcc07bbc52b2da7ceb22caf5bcaaee"

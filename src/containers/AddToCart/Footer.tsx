@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity} from 'react-native';
 import {
   Center,
   Heading,
@@ -12,7 +11,7 @@ import {
 import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {currencyFormat} from 'utils';
-import {Separator, Button} from 'components';
+import {Separator, Button, Ripple} from 'components';
 import {useAppDispatch} from 'hooks';
 import {addToCart, deleteCart, updateCart} from 'stores/merchant.store';
 import {CartItem, Extras} from 'models/merchant.model';
@@ -142,29 +141,27 @@ export const Footer = ({
       <Separator height={1} my={2} bg="gray.100" />
       <HStack justifyContent="space-between" alignItems="center" px={4}>
         <HStack flex={1} space={3} alignItems="center">
-          <TouchableOpacity onPress={handleMinQty}>
-            <Center
-              px={1}
-              py={2}
-              borderWidth={1}
-              borderColor="gray.300"
-              borderRadius="lg">
+          <Ripple
+            onPress={handleMinQty}
+            borderRadius="lg"
+            borderWidth={1}
+            borderColor="gray.300">
+            <Center px={1} py={2}>
               <Icon as={<MIcons name="minus" />} size={6} />
             </Center>
-          </TouchableOpacity>
+          </Ripple>
           <Heading size="md">{qty}</Heading>
-          <TouchableOpacity onPress={handleAddQty}>
-            <Center
-              px={1}
-              py={2}
-              borderWidth={1}
-              borderColor="gray.300"
-              borderRadius="lg">
+          <Ripple
+            onPress={handleAddQty}
+            borderRadius="lg"
+            borderWidth={1}
+            borderColor="gray.300">
+            <Center px={1} py={2}>
               <Icon as={<MIcons name="plus" />} size={6} />
             </Center>
-          </TouchableOpacity>
+          </Ripple>
         </HStack>
-        <HStack reversed space={4} alignItems="center">
+        <HStack reversed space={2} alignItems="center">
           <Button
             px={4}
             py={3}
@@ -174,9 +171,11 @@ export const Footer = ({
             {!cart ? 'Tambah ke Keranjang' : 'Perbaruhi Keranjang'}
           </Button>
           {cart && (
-            <TouchableOpacity onPress={handleConfirmDelete}>
-              <Icon as={<MIcons name="trash-can-outline" />} size={6} />
-            </TouchableOpacity>
+            <Ripple borderRadius={100} onPress={handleConfirmDelete}>
+              <Center p={2}>
+                <Icon as={<MIcons name="trash-can-outline" />} size={6} />
+              </Center>
+            </Ripple>
           )}
         </HStack>
       </HStack>

@@ -12,7 +12,7 @@ import {
   Pressable,
 } from 'native-base';
 
-import {Button} from 'components';
+import {Button, Ripple} from 'components';
 import {MenuItem as Model} from 'models/menu.model';
 import {CartItem, Merchant} from 'models/merchant.model';
 import {DetailScreenProps} from 'navigation/types';
@@ -77,10 +77,10 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 
   return (
     <>
-      <TouchableOpacity onPress={handleAddToCart} key={menu.id}>
+      <Ripple onPress={handleAddToCart} key={menu.id}>
         <HStack pr={4} space={3} my={3}>
           <Box
-            bg={getCarts.length > 0 ? 'red.600' : 'white'}
+            bg={getCarts.length > 0 ? 'red.600' : 'transparent'}
             pr={1}
             borderTopRightRadius="lg"
             borderBottomRightRadius="lg"
@@ -88,8 +88,8 @@ export const MenuItem: React.FC<MenuItemProps> = ({
           <Image
             source={{uri: menu.image}}
             alt={menu.name}
-            width={100}
-            height={100}
+            width={70}
+            height={70}
             borderRadius="lg"
           />
           <VStack space={1} flex={1}>
@@ -132,7 +132,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
             )}
           </VStack>
         </HStack>
-      </TouchableOpacity>
+      </Ripple>
 
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
@@ -201,7 +201,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
               </HStack>
             )}
 
-            <Button p={4} my={2} borderRadius="md" onPress={handleAddNew}>
+            <Button p={4} mb={2} borderRadius="lg" onPress={handleAddNew}>
               Tambah Satu Lagi
             </Button>
           </VStack>

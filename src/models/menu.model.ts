@@ -1,5 +1,7 @@
 export type MenuCategory = {
   id: number | string;
+  icon: string;
+  image?: string;
   name: string;
 };
 

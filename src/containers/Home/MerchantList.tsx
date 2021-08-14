@@ -1,11 +1,10 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
 import {Box, Heading, HStack, Icon, Image, Text, VStack} from 'native-base';
 import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Merchant} from 'models/merchant.model';
 import {HomeScreenNavigationProps} from 'navigation/types';
-import {Rating} from 'components';
+import {Rating, Ripple} from 'components';
 import {selectMerchant} from 'stores/merchant.store';
 import {useAppDispatch} from 'hooks';
 
@@ -39,11 +38,9 @@ export const MerchantList: React.FC<Props> = ({
 
   const renderItem = ({item, key}: {item: Merchant; key: number}) => {
     return (
-      <Box flex={1} flexDirection="column" key={key} px={4}>
-        <TouchableOpacity
-          key={item.id}
-          onPress={() => handleOpenMerchant(item.id)}>
-          <HStack space={4}>
+      <Box flex={1} flexDirection="column" key={key}>
+        <Ripple key={item.id} onPress={() => handleOpenMerchant(item.id)}>
+          <HStack space={4} px={4} py={2}>
             <Image
               borderRadius={6}
               width={imageWidth}
@@ -71,7 +68,7 @@ export const MerchantList: React.FC<Props> = ({
               </HStack>
             </VStack>
           </HStack>
-        </TouchableOpacity>
+        </Ripple>
       </Box>
     );
   };
@@ -89,7 +86,7 @@ export const MerchantList: React.FC<Props> = ({
   }
 
   return (
-    <VStack space={5} pb={4}>
+    <VStack space={2} pb={4}>
       {label && (
         <HStack alignItems="center" mx={4}>
           <Heading size="md" color={labelColor}>
@@ -97,9 +94,7 @@ export const MerchantList: React.FC<Props> = ({
           </Heading>
         </HStack>
       )}
-      <VStack space={4}>
-        {data.map((item, key) => renderItem({item, key}))}
-      </VStack>
+      <VStack>{data.map((item, key) => renderItem({item, key}))}</VStack>
     </VStack>
   );
 };
