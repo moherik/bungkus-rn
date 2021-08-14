@@ -1,6 +1,6 @@
 import React from 'react';
 import {useTheme, Icon} from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import {FeedScreen, HomeScreen, ProfileScreen} from './screens';
@@ -17,11 +17,10 @@ const tabBarIcon = ({
   size?: number;
   focused: boolean;
   color: string;
-}) => <Icon as={<Ionicons name={name} />} size={size} color={color} />;
+}) => <Icon as={<MIcons name={name} />} size={size} color={color} />;
 
 const BottomTabNavigator = () => {
   const {colors} = useTheme();
-
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -31,24 +30,28 @@ const BottomTabNavigator = () => {
         activeTintColor: colors.red['600'],
       }}>
       <Tab.Screen
-        name="Home"
-        component={HomeScreen}
-        options={{
-          tabBarIcon: prop => tabBarIcon({name: 'home-outline', ...prop}),
-        }}
-      />
-      <Tab.Screen
         name="Feed"
         component={FeedScreen}
         options={{
-          tabBarIcon: prop => tabBarIcon({name: 'fast-food-outline', ...prop}),
+          tabBarLabel: 'Feed',
+          tabBarIcon: prop => tabBarIcon({name: 'cards-outline', ...prop}),
+        }}
+      />
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarLabel: 'Jelajahi',
+          tabBarIcon: prop => tabBarIcon({name: 'compass-outline', ...prop}),
         }}
       />
       <Tab.Screen
         name="Profile"
         component={ProfileScreen}
         options={{
-          tabBarIcon: prop => tabBarIcon({name: 'person-outline', ...prop}),
+          tabBarLabel: 'Akun',
+          tabBarIcon: prop =>
+            tabBarIcon({name: 'account-circle-outline', ...prop}),
         }}
       />
     </Tab.Navigator>

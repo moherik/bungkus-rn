@@ -1,6 +1,6 @@
 import React from 'react';
 import {VStack, Heading, HStack, Image, Text, Icon} from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Rating, Separator} from 'components';
 import {Merchant} from 'models/merchant.model';
@@ -26,7 +26,7 @@ export const Header = ({merchant}: Props) => {
           </Text>
           <HStack space={2}>
             <HStack space={1} alignItems="center">
-              <Icon as={<Ionicons name="bicycle-outline" />} size={4} />
+              <Icon as={<MIcons name="walk" />} size={4} />
               <Text fontSize="sm">{merchant.distance} km</Text>
             </HStack>
             <Rating

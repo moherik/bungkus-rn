@@ -9,7 +9,7 @@ import {
   VStack,
   AlertDialog,
 } from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {currencyFormat} from 'utils';
 import {Separator, Button} from 'components';
@@ -149,7 +149,7 @@ export const Footer = ({
               borderWidth={1}
               borderColor="gray.300"
               borderRadius="lg">
-              <Icon as={<Ionicons name="remove" />} size={6} />
+              <Icon as={<MIcons name="minus" />} size={6} />
             </Center>
           </TouchableOpacity>
           <Heading size="md">{qty}</Heading>
@@ -160,7 +160,7 @@ export const Footer = ({
               borderWidth={1}
               borderColor="gray.300"
               borderRadius="lg">
-              <Icon as={<Ionicons name="add" />} size={6} />
+              <Icon as={<MIcons name="plus" />} size={6} />
             </Center>
           </TouchableOpacity>
         </HStack>
@@ -175,7 +175,7 @@ export const Footer = ({
           </Button>
           {cart && (
             <TouchableOpacity onPress={handleConfirmDelete}>
-              <Icon as={<Ionicons name="trash-outline" />} size={6} />
+              <Icon as={<MIcons name="trash-can-outline" />} size={6} />
             </TouchableOpacity>
           )}
         </HStack>

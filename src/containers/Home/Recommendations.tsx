@@ -18,8 +18,8 @@ import {Rating} from 'components';
 
 import {HorizontalSectionLoader} from './Loader';
 
-const ITEM_WIDTH = 200;
-const ITEM_HEIGHT = 200;
+const ITEM_WIDTH = 160;
+const ITEM_HEIGHT = 160;
 
 type Props = {
   data: Merchant[];

@@ -12,7 +12,7 @@ import {
   VStack,
   ZStack,
 } from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Separator} from 'components';
 import {Extras} from 'models/merchant.model';
@@ -48,7 +48,7 @@ const AddToCart: React.FC<Props> = ({navigation, route}) => {
             <HStack justifyContent="flex-end" width={'100%'} p={4}>
               <TouchableOpacity onPress={() => navigation.goBack()}>
                 <Center borderRadius={100} bg="white" p={2}>
-                  <Icon as={<Ionicons name="close" />} size={6} />
+                  <Icon as={<MIcons name="close" />} size={6} />
                 </Center>
               </TouchableOpacity>
             </HStack>

@@ -1,5 +1,8 @@
 import React from 'react';
-import {VStack} from 'native-base';
+import {TouchableOpacity} from 'react-native';
+import {HStack, Icon, Input, Text, VStack} from 'native-base';
+import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
 import {SearchLoader} from './Loader';
 import {Category} from './Category';
 import {MenuCategory} from 'models/menu.model';
@@ -22,14 +25,14 @@ export const Panel: React.FC<Props> = ({loading, categories}) => {
       borderTopWidth={1}
       borderBottomWidth={1}
       borderColor="gray.100">
-      {/* <HStack mx={4} space={1}>
+      <HStack mx={4} space={1}>
         <Input
           flex={1}
           variant="filled"
           placeholder="Cari makan apa hari ini?"
           InputLeftElement={
             <Icon
-              as={<Ionicons name="search" />}
+              as={<MIcons name="magnify" />}
               size={4}
               color="gray.400"
               ml={4}
@@ -48,7 +51,7 @@ export const Panel: React.FC<Props> = ({loading, categories}) => {
             height={44}
             space={1}>
             <Icon
-              as={<Ionicons name="filter-outline" />}
+              as={<MIcons name="filter-menu-outline" />}
               size={4}
               color="gray.500"
             />
@@ -57,7 +60,7 @@ export const Panel: React.FC<Props> = ({loading, categories}) => {
             </Text>
           </HStack>
         </TouchableOpacity>
-      </HStack> */}
+      </HStack>
       <Category data={categories} />
     </VStack>
   );

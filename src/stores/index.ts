@@ -15,10 +15,15 @@ import {
 import {createFilter} from 'redux-persist-transform-filter';
 import {userApi} from 'services/user.service';
 
-import merchantSlice from './merchant.store';
-import authSlice from './auth.store';
+import merchantSlice, {MerchantState} from './merchant.store';
+import authSlice, {AuthState} from './auth.store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import persistStore from 'redux-persist/es/persistStore';
+
+interface AppState {
+  auth: AuthState;
+  merchant: MerchantState;
+}
 
 const reducers = combineReducers({
   auth: authSlice,
@@ -47,9 +52,8 @@ export const stores = configureStore({
   }).concat(userApi.middleware),
 });
 
-export type RootState = ReturnType<typeof stores.getState>;
+export type RootState = AppState;
 
 export type AppDispatch = typeof stores.dispatch;
 
-const persistor = persistStore(stores);
-export {persistor};
+export const persistor = persistStore(stores);

@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react';
 import {Text, Icon, HStack} from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const MAX_GRADE = 5;
 
@@ -16,12 +16,12 @@ const getStars = ({stars, iconColor, iconSize}: StarProps): Array<Object> => {
   const starsFromGrade = [];
 
   const FullStar = (
-    <Icon as={<Ionicons name="star" />} size={iconSize} color={iconColor} />
+    <Icon as={<MIcons name="star" />} size={iconSize} color={iconColor} />
   );
 
   const HalfStar = (
     <Icon
-      as={<Ionicons name="star-half" />}
+      as={<MIcons name="star-half-full" />}
       size={iconSize}
       color={iconColor}
     />
@@ -29,7 +29,7 @@ const getStars = ({stars, iconColor, iconSize}: StarProps): Array<Object> => {
 
   const EmptyStar = (
     <Icon
-      as={<Ionicons name="star-outline" />}
+      as={<MIcons name="star-outline" />}
       size={iconSize}
       color={iconColor}
     />
@@ -71,7 +71,7 @@ const renderStars = ({
 
   if (isSingleStar) {
     return (
-      <Icon as={<Ionicons name="star" />} size={iconSize} color={iconColor} />
+      <Icon as={<MIcons name="star" />} size={iconSize} color={iconColor} />
     );
   }
 
@@ -114,7 +114,11 @@ const Rating = ({
     <HStack flexGrow={1} alignItems="center" space={isSingleStar ? 1 : 2}>
       {renderStars({stars, iconColor, iconSize: _iconSize, isSingleStar})}
       {shouldShowReviewsText && !!reviews && (
-        <Text isTruncated flex={1} fontSize={_textSize} color={textColor}>
+        <Text
+          isTruncated
+          flex={1}
+          fontSize={_textSize as any}
+          color={textColor}>
           {isSingleStar ? `${stars} (${reviews})` : `${reviews}`}
         </Text>
       )}

@@ -1,7 +1,7 @@
 import React from 'react';
 import {TouchableOpacity} from 'react-native';
 import {Box, Heading, HStack, Icon, Image, Text, VStack} from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Merchant} from 'models/merchant.model';
 import {HomeScreenNavigationProps} from 'navigation/types';
@@ -28,8 +28,8 @@ export const MerchantList: React.FC<Props> = ({
 }) => {
   const dispatch = useAppDispatch();
 
-  const imageWidth = 120;
-  const imageHeight = 120;
+  const imageWidth = 75;
+  const imageHeight = 75;
 
   const handleOpenMerchant = (id: number) => {
     dispatch(selectMerchant(id));
@@ -39,7 +39,7 @@ export const MerchantList: React.FC<Props> = ({
 
   const renderItem = ({item, key}: {item: Merchant; key: number}) => {
     return (
-      <Box flex={1} flexDirection="column" key={key}>
+      <Box flex={1} flexDirection="column" key={key} px={4}>
         <TouchableOpacity
           key={item.id}
           onPress={() => handleOpenMerchant(item.id)}>
@@ -57,7 +57,7 @@ export const MerchantList: React.FC<Props> = ({
               </Heading>
               <HStack space={2} mb={2}>
                 <HStack space={1} alignItems="center">
-                  <Icon as={<Ionicons name="bicycle-outline" />} size={4} />
+                  <Icon as={<MIcons name="walk" />} size={4} />
                   <Text fontSize="xs">{item.distance} km</Text>
                 </HStack>
                 <Rating
@@ -97,7 +97,7 @@ export const MerchantList: React.FC<Props> = ({
           </Heading>
         </HStack>
       )}
-      <VStack space={5} mx={4}>
+      <VStack space={4}>
         {data.map((item, key) => renderItem({item, key}))}
       </VStack>
     </VStack>

@@ -1,23 +1,9 @@
 import React from 'react';
-import {Box, Text} from 'native-base';
-import {useAppDispatch, useAppSelector} from 'hooks';
-import {Button} from 'components';
-import {signOut} from 'stores/auth.store';
+import {ProfileContainer} from 'containers';
+import {ProfileScreenProps} from 'navigation/types';
 
-const ProfileScreen = () => {
-  const dispatch = useAppDispatch();
-  const user = useAppSelector(state => state.auth.user);
-
-  const handleLogout = () => {
-    dispatch(signOut());
-  };
-
-  return (
-    <Box>
-      <Text>{user?.name}</Text>
-      <Button onPress={handleLogout}>Logout</Button>
-    </Box>
-  );
-};
+const ProfileScreen = ({navigation, route}: ProfileScreenProps) => (
+  <ProfileContainer navigation={navigation} route={route} />
+);
 
 export default ProfileScreen;

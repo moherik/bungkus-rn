@@ -5,3 +5,4 @@ export {default as CartContainer} from './Cart';
 export {default as FeedContainer} from './Feed';
 export {default as LoginContainer} from './Auth/Login';
 export {default as CompleteUserContainer} from './Auth/CompleteUser';
+export {default as ProfileContainer} from './Profile';

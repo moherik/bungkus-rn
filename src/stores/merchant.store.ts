@@ -4,7 +4,7 @@ import {menus as groups} from 'mocks/menus';
 import {MenuGroup} from 'models/menu.model';
 import {CartItem, Merchant} from 'models/merchant.model';
 
-interface MerchantState {
+export interface MerchantState {
   merchants: Merchant[];
   selectedMerchant?: Merchant;
   menus: MenuGroup[];

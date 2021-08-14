@@ -11,7 +11,7 @@ import {
   TextArea,
   VStack,
 } from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Button} from 'components';
 import {StyleSheet} from 'react-native';
@@ -36,7 +36,7 @@ const Separator: React.FC<SeparatorProps> = ({label, icon, rightComponent}) => (
     p={4}
     bg="muted.100">
     <HStack space={4} alignItems="center">
-      {icon && <Icon as={<Ionicons name={icon} />} size={6} />}
+      {icon && <Icon as={<MIcons name={icon} />} size={6} />}
       <Heading size="sm">{label}</Heading>
     </HStack>
     {rightComponent}
@@ -72,7 +72,7 @@ const CartContainer: React.FC<Props> = ({navigation, route}) => {
     <Box bg="white" flex={1}>
       <HStack bg="white" alignItems="center" px={4} py={3} shadow={2} space={4}>
         <Icon
-          as={<Ionicons name="close-outline" />}
+          as={<MIcons name="close" />}
           size={7}
           onPress={() => navigation.goBack()}
         />
@@ -96,7 +96,7 @@ const CartContainer: React.FC<Props> = ({navigation, route}) => {
 
               <Separator
                 label="Daftar Pesanan"
-                icon="fast-food-outline"
+                icon="food-fork-drink"
                 rightComponent={
                   <Pressable onPress={handleAddNew}>
                     <Text fontSize="sm" fontWeight={700} color="blue.600">
@@ -156,7 +156,7 @@ const CartContainer: React.FC<Props> = ({navigation, route}) => {
                 })}
               </Box>
 
-              <Separator label="Cara Pemesanan" icon="bicycle-outline" />
+              <Separator label="Cara Pemesanan" icon="package-variant-closed" />
               <Radio.Group
                 ml={5}
                 px={4}
@@ -188,7 +188,7 @@ const CartContainer: React.FC<Props> = ({navigation, route}) => {
                 </Radio>
               </Radio.Group>
 
-              <Separator label="Waktu Pengambilan" icon="time-outline" />
+              <Separator label="Waktu Pengambilan" icon="clock-outline" />
               <Radio.Group
                 ml={5}
                 px={4}
@@ -211,7 +211,7 @@ const CartContainer: React.FC<Props> = ({navigation, route}) => {
                 </Radio>
               </Radio.Group>
 
-              <Separator label="Catatan Pemesanan" icon="create-outline" />
+              <Separator label="Catatan Pemesanan" icon="note-text-outline" />
               <TextArea
                 bg="gray.100"
                 m={4}
@@ -224,6 +224,7 @@ const CartContainer: React.FC<Props> = ({navigation, route}) => {
               />
             </VStack>
           </ScrollView>
+
           <VStack space={2} bg="white">
             <HStack
               alignItems="center"

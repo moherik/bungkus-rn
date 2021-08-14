@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {TouchableOpacity, SectionList} from 'react-native';
+import {TouchableOpacity, SectionList, StyleSheet} from 'react-native';
 import {Box, Heading, HStack, Icon} from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {useAppSelector} from 'hooks';
 import {currencyFormat} from 'utils';
@@ -10,6 +10,7 @@ import {DetailScreenProps} from 'navigation/types';
 import {Loader} from './Loader';
 import {MenuItem} from './MenuItem';
 import {Header} from './Header';
+import {Separator} from 'components';
 
 type Props = {} & DetailScreenProps;
 
@@ -50,7 +51,7 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
         shadow={2}
         space={2}>
         <Icon
-          as={<Ionicons name="arrow-back-outline" />}
+          as={<MIcons name="arrow-left" />}
           size={6}
           onPress={() => navigation.goBack()}
         />
@@ -58,7 +59,7 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
           <HStack reversed alignItems="center" space={3}>
             <TouchableOpacity onPress={handleFavorite}>
               <Icon
-                as={<Ionicons name={!favorite ? 'heart-outline' : 'heart'} />}
+                as={<MIcons name={!favorite ? 'heart-outline' : 'heart'} />}
                 size={6}
                 color={favorite ? 'red.600' : 'black'}
               />
@@ -76,11 +77,13 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
           </HStack>
         )}
       </HStack>
+
       {!loading && menus ? (
         <SectionList
           sections={menus}
           keyExtractor={(item, index) => item.id.toString() + index}
           ListHeaderComponent={<Header merchant={merchant!!} />}
+          ListFooterComponent={<Separator height={20} />}
           stickySectionHeadersEnabled={true}
           renderItem={({item: menu}) => (
             <MenuItem
@@ -107,20 +110,22 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
         <Loader />
       )}
       {!loading && qty > 0 && (
-        <TouchableOpacity onPress={handleCheckout}>
+        <TouchableOpacity style={styles.footerButton} onPress={handleCheckout}>
           <HStack
             bg="red.600"
-            p={4}
+            py={4}
+            px={6}
+            borderRadius="lg"
             alignItems="center"
             justifyContent="space-between">
-            <Heading size="md" color="white">
+            <Heading size="sm" color="white">
               Lihat Keranjang
             </Heading>
             <HStack space={4}>
-              <Heading size="md" color="white">
+              <Heading size="sm" color="white">
                 X{qty}
               </Heading>
-              <Heading size="md" color="white">
+              <Heading size="sm" color="white">
                 {`${currencyFormat(price)}`}
               </Heading>
             </HStack>
@@ -130,5 +135,15 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
     </Box>
   );
 };
+
+const styles = StyleSheet.create({
+  footerButton: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    margin: 8,
+  },
+});
 
 export default Detail;
