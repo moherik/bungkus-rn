@@ -3,14 +3,10 @@ import {FlatList, Heading, HStack, Icon, Text, VStack} from 'native-base';
 
 import {ProfileScreenProps} from 'navigation/types';
 import {IProfileMenu, menuItems} from './Menu';
-import {
-  ListRenderItem,
-  ListRenderItemInfo,
-  TouchableOpacity,
-} from 'react-native';
+import {ListRenderItem, ListRenderItemInfo} from 'react-native';
 import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {Separator} from 'components';
+import {Ripple, Separator} from 'components';
 import {Header} from './Header';
 
 type Props = {} & ProfileScreenProps;
@@ -19,7 +15,7 @@ const Profile: React.FC<Props> = ({}) => {
   const renderItem: ListRenderItem<IProfileMenu> = ({item}) => {
     if (item.type === 'item') {
       return (
-        <TouchableOpacity onPress={item.onPress}>
+        <Ripple onPress={item.onPress!!}>
           <HStack
             alignItems="center"
             space={4}
@@ -44,7 +40,7 @@ const Profile: React.FC<Props> = ({}) => {
               )}
             </HStack>
           </HStack>
-        </TouchableOpacity>
+        </Ripple>
       );
     } else if (item.type === 'separator') {
       return (

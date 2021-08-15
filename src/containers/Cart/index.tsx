@@ -13,7 +13,7 @@ import {
 } from 'native-base';
 import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {Button} from 'components';
+import {Button, Ripple} from 'components';
 import {StyleSheet} from 'react-native';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps';
 
@@ -70,12 +70,12 @@ const CartContainer: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <Box bg="white" flex={1}>
-      <HStack bg="white" alignItems="center" px={4} py={3} shadow={2} space={4}>
-        <Icon
-          as={<MIcons name="close" />}
-          size={7}
-          onPress={() => navigation.goBack()}
-        />
+      <HStack bg="white" alignItems="center" shadow={2}>
+        <Ripple onPress={() => navigation.goBack()}>
+          <Box p={3}>
+            <Icon as={<MIcons name="close" />} size={7} />
+          </Box>
+        </Ripple>
         <Heading size="md">{merchant.name}</Heading>
       </HStack>
 
@@ -96,7 +96,7 @@ const CartContainer: React.FC<Props> = ({navigation, route}) => {
 
               <Separator
                 label="Daftar Pesanan"
-                icon="food-fork-drink"
+                icon="shopping-outline"
                 rightComponent={
                   <Pressable onPress={handleAddNew}>
                     <Text fontSize="sm" fontWeight={700} color="blue.600">

@@ -155,7 +155,7 @@ const Home: React.FC<Props> = ({navigation}) => {
         onMomentumScrollBegin={handleMomentumScrollBegin}
         onMomentumScrollEnd={handleMomentumScrollEnd}
         onScrollEndDrag={handleScrollEndDrag}>
-        <Separator height={20} mt={4} />
+        <Separator height={20} mt={5} />
         <Recommendations
           label="Rekomendasi di Sekitarmu"
           loading={loading}
@@ -239,7 +239,7 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 0,
     right: -100,
-    margin: 12,
+    margin: 10,
     zIndex: 999,
   },
 });

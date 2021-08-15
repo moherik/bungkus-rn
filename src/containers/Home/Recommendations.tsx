@@ -11,7 +11,7 @@ import {
   VStack,
   HStack,
 } from 'native-base';
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import {Merchant} from 'models/merchant.model';
 import {Rating, Ripple} from 'components';
@@ -58,27 +58,30 @@ export const Recommendations: React.FC<Props> = ({
               bg="#18191a61"
               width={width}
               height={height}>
-              <VStack px={3} pb={2}>
+              <VStack space={1} px={3} pb={2}>
                 <Heading isTruncated color="white" size="sm">
                   {item.name}
                 </Heading>
-                <Rating
-                  isSmall
-                  iconColor="yellow.500"
-                  textColor="white"
-                  stars={item.rating.stars}
-                  reviews={item.rating.review}
-                  shouldShowReviewsText={true}
-                />
-                <HStack space={1} mt={2} alignItems="center">
-                  <Icon
-                    as={<Ionicons name="bicycle" />}
-                    size={4}
-                    color="white"
+                <HStack alignItems="center" space={2}>
+                  <HStack space={1} alignItems="center">
+                    <Icon
+                      as={<MIcons name="map-marker" />}
+                      size={4}
+                      color="white"
+                    />
+                    <Text fontSize="xs" color="white" isTruncated>
+                      {item.distance}km
+                    </Text>
+                  </HStack>
+                  <Rating
+                    isSmall
+                    iconColor="yellow.500"
+                    textColor="white"
+                    stars={item.rating.stars}
+                    reviews={item.rating.review}
+                    shouldShowReviewsText={true}
+                    isSingleStar
                   />
-                  <Text fontSize="sm" color="white" fontWeight="700">
-                    {item.distance} km dari anda
-                  </Text>
                 </HStack>
               </VStack>
             </VStack>

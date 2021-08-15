@@ -1,5 +1,4 @@
 import React from 'react';
-import {TouchableOpacity} from 'react-native';
 import {
   Actionsheet,
   Box,
@@ -9,10 +8,9 @@ import {
   Text,
   useDisclose,
   VStack,
-  Pressable,
 } from 'native-base';
 
-import {Button, Ripple} from 'components';
+import {Button, Ripple, Separator} from 'components';
 import {MenuItem as Model} from 'models/menu.model';
 import {CartItem, Merchant} from 'models/merchant.model';
 import {DetailScreenProps} from 'navigation/types';
@@ -136,7 +134,7 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 
       <Actionsheet isOpen={isOpen} onClose={onClose}>
         <Actionsheet.Content>
-          <VStack width={'100%'} space={2} px={2}>
+          <VStack width={'100%'} space={2}>
             {getCarts.map((cart, index) => {
               let listName: string[][] = [];
 
@@ -148,12 +146,10 @@ export const MenuItem: React.FC<MenuItemProps> = ({
               const listNames = listName.join().split(',');
 
               return (
-                <TouchableOpacity
-                  key={index}
-                  onPress={() => handleEditById(cart.id)}>
+                <Ripple key={index} onPress={() => handleEditById(cart.id)}>
                   <HStack
+                    p={2}
                     justifyContent="space-between"
-                    pb={4}
                     borderBottomWidth={1}
                     borderBottomColor="gray.100">
                     <HStack space={5}>
@@ -170,38 +166,44 @@ export const MenuItem: React.FC<MenuItemProps> = ({
                           </Box>
                         )}
                         <HStack space={3} mt={1}>
-                          <Pressable onPress={() => handleEditById(cart.id)}>
-                            <Text
-                              fontSize="sm"
-                              color="blue.600"
-                              fontWeight={700}>
+                          <Ripple onPress={() => handleEditById(cart.id)}>
+                            <Heading size="xs" color="blue.600">
                               Edit
-                            </Text>
-                          </Pressable>
-                          <Pressable onPress={() => handleDeleteById(cart.id)}>
-                            <Text
-                              fontSize="sm"
-                              color="red.600"
-                              fontWeight={700}>
+                            </Heading>
+                          </Ripple>
+                          <Ripple onPress={() => handleDeleteById(cart.id)}>
+                            <Heading size="xs" color="red.600">
                               Hapus
-                            </Text>
-                          </Pressable>
+                            </Heading>
+                          </Ripple>
                         </HStack>
                       </VStack>
                     </HStack>
                     <Text>{currencyFormat(cart.price)}</Text>
                   </HStack>
-                </TouchableOpacity>
+                </Ripple>
               );
             })}
+
+            <Separator height={2} />
+
             {getCarts.length > 1 && (
-              <HStack pb={2} justifyContent="space-between" alignItems="center">
+              <HStack
+                pb={2}
+                mx={2}
+                justifyContent="space-between"
+                alignItems="center">
                 <Text>Total</Text>
                 <Heading size="sm">{currencyFormat(totalPrice)}</Heading>
               </HStack>
             )}
 
-            <Button p={4} mb={2} borderRadius="lg" onPress={handleAddNew}>
+            <Button
+              p={4}
+              mx={2}
+              mb={2}
+              borderRadius="lg"
+              onPress={handleAddNew}>
               Tambah Satu Lagi
             </Button>
           </VStack>

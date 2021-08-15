@@ -11,7 +11,7 @@ type Props = {merchant: Merchant};
 
 export const Header = ({merchant}: Props) => {
   return (
-    <VStack mt={8}>
+    <VStack>
       <Image
         source={{uri: merchant.profileImage}}
         alt={merchant.name}

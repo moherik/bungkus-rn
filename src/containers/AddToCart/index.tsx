@@ -9,7 +9,6 @@ import {
   Text,
   TextArea,
   VStack,
-  ZStack,
 } from 'native-base';
 import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -35,26 +34,28 @@ const AddToCart: React.FC<Props> = ({navigation, route}) => {
 
   return (
     <>
+      <HStack position="absolute" top={4} left={4} zIndex={999} width={'100%'}>
+        <Ripple
+          borderRadius={100}
+          bg="white"
+          shadow={2}
+          borderColor="muted.100"
+          borderWidth={1}
+          onPress={() => navigation.goBack()}>
+          <Center p={2}>
+            <Icon as={<MIcons name="close" />} size={6} />
+          </Center>
+        </Ripple>
+      </HStack>
+
       <ScrollView bg="white">
         <VStack space={1}>
-          <ZStack height={250} width={'100%'}>
-            <Image
-              source={{uri: menu.image}}
-              alt={menu.name}
-              width={'100%'}
-              height={250}
-            />
-            <HStack justifyContent="flex-end" width={'100%'} p={4}>
-              <Ripple
-                borderRadius={100}
-                bg="#ffffff3b"
-                onPress={() => navigation.goBack()}>
-                <Center p={2}>
-                  <Icon as={<MIcons name="close" />} size={6} color="white" />
-                </Center>
-              </Ripple>
-            </HStack>
-          </ZStack>
+          <Image
+            source={{uri: menu.image}}
+            alt={menu.name}
+            width={'100%'}
+            height={250}
+          />
           <VStack space={1} mx={4} my={4}>
             <Heading size="lg">{menu.name}</Heading>
             <HStack space={2} alignItems="center">

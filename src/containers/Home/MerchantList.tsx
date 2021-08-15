@@ -40,7 +40,7 @@ export const MerchantList: React.FC<Props> = ({
     return (
       <Box flex={1} flexDirection="column" key={key}>
         <Ripple key={item.id} onPress={() => handleOpenMerchant(item.id)}>
-          <HStack space={4} px={4} py={2}>
+          <HStack space={3} px={4} py={2}>
             <Image
               borderRadius={6}
               width={imageWidth}
@@ -48,13 +48,13 @@ export const MerchantList: React.FC<Props> = ({
               source={{uri: item.profileImage}}
               alt={item.name}
             />
-            <VStack flex={1} space={2}>
-              <Heading size="sm" mt={1} isTruncated>
+            <VStack flex={1} space={1}>
+              <Heading size="sm" isTruncated>
                 {item.name}
               </Heading>
               <HStack space={2} mb={2}>
                 <HStack space={1} alignItems="center">
-                  <Icon as={<MIcons name="walk" />} size={4} />
+                  <Icon as={<MIcons name="map-marker" />} size={4} />
                   <Text fontSize="xs">{item.distance} km</Text>
                 </HStack>
                 <Rating

@@ -31,22 +31,22 @@ const categories: MerchantCategory[] = [
     image: 'https://www.resepistimewa.com/wp-content/uploads/mie-ayam.jpg',
   },
   {
-    id: 8,
+    id: 6,
     name: 'Gorengan',
     image:
       'https://c-fa.cdn.smule.com/rs-s39/arr/5d/b3/2eb2fc5d-1a35-4601-8bfa-0b0abfabe0ea.jpg',
   },
   {
-    id: 6,
+    id: 7,
     name: 'Burger',
     image:
       'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=602&q=80',
   },
   {
-    id: 7,
-    name: 'Lihat Semua',
+    id: 8,
+    name: 'Makan Malam',
     image:
-      'https://cdn0-production-images-kly.akamaized.net/kutsJcqqYV0-9pDI3l6YEl2v7xQ=/640x360/smart/filters:quality(75):strip_icc():format(jpeg)/kly-media-production/medias/1367799/original/048059200_1475843806-Masakan_Indonesia.jpg',
+      'https://sweetrip.id/wp-content/uploads/2021/05/sambal-pecel-lele.jpg',
   },
 ];
 
