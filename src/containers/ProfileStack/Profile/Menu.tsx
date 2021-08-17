@@ -34,6 +34,7 @@ export const menuItems: IProfileMenu[] = [
         style={styles.icon}
       />
     ),
+    route: 'MyOrder',
   },
   {
     type: 'item',
@@ -46,6 +47,7 @@ export const menuItems: IProfileMenu[] = [
         style={styles.icon}
       />
     ),
+    route: 'Favorite',
   },
   {
     type: 'item',
@@ -58,6 +60,7 @@ export const menuItems: IProfileMenu[] = [
         style={styles.icon}
       />
     ),
+    route: 'Cart',
   },
   {
     type: 'item',
@@ -82,6 +85,7 @@ export const menuItems: IProfileMenu[] = [
         style={styles.icon}
       />
     ),
+    route: 'Setting',
   },
   {
     type: 'separator',
@@ -98,6 +102,7 @@ export const menuItems: IProfileMenu[] = [
         style={styles.icon}
       />
     ),
+    route: 'Help',
   },
   {
     type: 'item',

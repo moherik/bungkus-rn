@@ -21,7 +21,7 @@ import {currencyFormat} from 'utils';
 import {useAppDispatch, useAppSelector} from 'hooks';
 import {deleteCart} from 'stores/merchant.store';
 import {Loader} from './Loader';
-import {CartScreenProps} from 'navigation/HomeStack';
+import {CheckoutScreenProps} from 'navigation/HomeStack';
 
 type SeparatorProps = {
   label: string;
@@ -43,9 +43,9 @@ const Separator: React.FC<SeparatorProps> = ({label, icon, rightComponent}) => (
   </HStack>
 );
 
-type Props = {} & CartScreenProps;
+type Props = {} & CheckoutScreenProps;
 
-const CartContainer: React.FC<Props> = ({navigation, route}) => {
+const Checkout: React.FC<Props> = ({navigation, route}) => {
   const {merchant} = route.params;
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -257,4 +257,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CartContainer;
+export default Checkout;

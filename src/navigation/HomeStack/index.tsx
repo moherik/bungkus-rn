@@ -6,7 +6,7 @@ import {MenuItem} from 'models/menu.model';
 import {CartItem, Merchant, MerchantCategory} from 'models/merchant.model';
 
 import AddToCartScreen from './AddToCartScreen';
-import CartScreen from './CartScreen';
+import CheckoutScreen from './CheckoutScreen';
 import CategoryScreen from './CategoryScreen';
 import DetailScreen from './DetailScreen';
 import SearchScreen from './SearchScreen';
@@ -20,7 +20,7 @@ type HomeStackList = {
     menu: MenuItem;
     cart?: CartItem;
   };
-  Cart: {
+  Checkout: {
     merchant: Merchant;
   };
   Search: {
@@ -34,7 +34,7 @@ type HomeStackList = {
 export type HomeScreenProps = StackScreenProps<HomeStackList, 'Home'>;
 export type DetailScreenProps = StackScreenProps<HomeStackList, 'Detail'>;
 export type AddToCartScreenProps = StackScreenProps<HomeStackList, 'AddToCart'>;
-export type CartScreenProps = StackScreenProps<HomeStackList, 'Cart'>;
+export type CheckoutScreenProps = StackScreenProps<HomeStackList, 'Checkout'>;
 export type SearchScreenProps = StackScreenProps<HomeStackList, 'Search'>;
 export type CategoryScreenProps = StackScreenProps<HomeStackList, 'Category'>;
 
@@ -54,7 +54,7 @@ export const Home = () => {
         component={AddToCartScreen}
         options={{...TransitionPresets.ModalSlideFromBottomIOS}}
       />
-      <HomeStack.Screen name="Cart" component={CartScreen} />
+      <HomeStack.Screen name="Checkout" component={CheckoutScreen} />
       <HomeStack.Screen name="Search" component={SearchScreen} />
       <HomeStack.Screen
         name="Category"

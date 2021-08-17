@@ -55,7 +55,7 @@ export const Category: React.FC<Props> = ({data, navigation}) => {
             borderRadius={100}
           />
         </SharedElement>
-        <Text fontSize="xs" textAlign="center" mt={1}>
+        <Text fontSize="xs" textAlign="center" color="muted.500" mt={1}>
           {item.name}
         </Text>
       </VStack>

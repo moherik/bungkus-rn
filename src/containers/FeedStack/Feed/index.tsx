@@ -1,11 +1,11 @@
 import React from 'react';
-import {Text} from 'native-base';
+import {AppBar} from 'components';
 import {FeedScreenProps} from 'navigation/FeedStack';
 
 type Props = {} & FeedScreenProps;
 
 const Feed: React.FC<Props> = ({}) => {
-  return <Text>Hello Feed</Text>;
+  return <AppBar title="Feed" showBack={false} />;
 };
 
 export default Feed;

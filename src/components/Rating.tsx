@@ -108,7 +108,7 @@ const Rating = ({
   stars,
 }: RatingProps) => {
   const _iconSize = iconSize ? iconSize : isSmall ? 4 : 5;
-  const _textSize = textSize ? textSize : isSmall ? 'xs' : 'sm';
+  const _textSize = textSize ? textSize : isSmall ? 'sm' : 'md';
 
   return (
     <HStack flexGrow={1} alignItems="center" space={isSingleStar ? 1 : 2}>

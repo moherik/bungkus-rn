@@ -69,7 +69,7 @@ export const Recommendations: React.FC<Props> = ({
                       size={4}
                       color="white"
                     />
-                    <Text fontSize="xs" color="white" isTruncated>
+                    <Text fontSize="sm" color="white" isTruncated>
                       {item.distance}km
                     </Text>
                   </HStack>

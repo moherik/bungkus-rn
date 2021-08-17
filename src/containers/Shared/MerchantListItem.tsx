@@ -42,13 +42,16 @@ export const MerchantListItem: React.FC<Props> = ({item, key}) => {
             <HStack space={2} mb={2}>
               <HStack space={1} alignItems="center">
                 <Icon as={<MIcons name="map-marker" />} size={4} />
-                <Text fontSize="xs">{item.distance} km</Text>
+                <Text fontSize="sm" textAlign="center" color="muted.500">
+                  {item.distance} km
+                </Text>
               </HStack>
               <Rating
                 stars={item.rating.stars}
                 reviews={item.rating.review}
                 shouldShowReviewsText={true}
                 iconColor="yellow.500"
+                textColor="muted.500"
                 isSmall
                 isSingleStar
               />

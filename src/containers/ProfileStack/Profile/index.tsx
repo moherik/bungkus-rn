@@ -5,7 +5,7 @@ import {IProfileMenu, menuItems} from './Menu';
 import {ListRenderItem, ListRenderItemInfo} from 'react-native';
 import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
-import {Ripple, Separator} from 'components';
+import {AppBar, Ripple, Separator} from 'components';
 import {Header} from './Header';
 import {ProfileScreenProps} from 'navigation/ProfileStack';
 
@@ -64,12 +64,26 @@ const Profile: React.FC<Props> = ({navigation}) => {
 
   return (
     <>
-      <Header />
+      <AppBar
+        title="Akun"
+        showBack={false}
+        rightComp={
+          <HStack mr={3} space={1}>
+            <Ripple borderRadius={100} onPress={() => {}}>
+              <Icon m={1} as={<MIcons name="cog-outline" />} size={6} />
+            </Ripple>
+            <Ripple borderRadius={100} onPress={() => {}}>
+              <Icon m={1} as={<MIcons name="help-circle-outline" />} size={6} />
+            </Ripple>
+          </HStack>
+        }
+      />
       <FlatList
         data={menuItems}
         renderItem={(item: ListRenderItemInfo<IProfileMenu>) =>
           renderItem(item)
         }
+        ListHeaderComponent={Header}
         keyExtractor={(_item, index) => index.toString()}
         bg="white"
         flex={1}

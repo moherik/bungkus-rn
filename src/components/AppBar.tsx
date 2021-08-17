@@ -6,11 +6,20 @@ import MIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {Ripple} from 'components';
 
 type Props = {
+  height?: number;
   title?: string;
-  rightComp?: JSX.Element | null;
+  showBack?: boolean;
+  rightComp?: React.ReactNode | null;
 } & IBoxProps;
 
-const AppBar: React.FC<Props> = ({title, rightComp, children, ...rest}) => {
+const AppBar: React.FC<Props> = ({
+  height = 45,
+  title,
+  showBack = true,
+  rightComp,
+  children,
+  ...rest
+}) => {
   const navigation = useNavigation();
 
   return (
@@ -20,14 +29,18 @@ const AppBar: React.FC<Props> = ({title, rightComp, children, ...rest}) => {
       justifyContent="space-between"
       shadow={2}
       space={2}
+      height={height}
+      pl={showBack ? 0 : 4}
       overflow="hidden"
       {...rest}>
       <HStack alignItems="center">
-        <Ripple onPress={() => navigation.goBack()}>
-          <Box p={3}>
-            <Icon as={<MIcons name="arrow-left" />} size={6} />
-          </Box>
-        </Ripple>
+        {showBack && (
+          <Ripple onPress={() => navigation.goBack()}>
+            <Box p={3}>
+              <Icon as={<MIcons name="arrow-left" />} size={6} />
+            </Box>
+          </Ripple>
+        )}
         {children ? (
           children
         ) : (

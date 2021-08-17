@@ -41,7 +41,7 @@ const Detail: React.FC<Props> = ({navigation, route}) => {
   };
 
   const handleCheckout = () => {
-    navigation.navigate('Cart', {merchant: merchant!!});
+    navigation.navigate('Checkout', {merchant: merchant!!});
   };
 
   const handleOnScroll = (e: NativeSyntheticEvent<NativeScrollEvent>) => {
