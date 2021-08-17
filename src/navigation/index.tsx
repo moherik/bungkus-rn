@@ -7,8 +7,8 @@ import {useCheckUserQuery} from 'services/user.service';
 import {setUser} from 'stores/auth.store';
 import {Button, Ripple} from 'components';
 
-import RootStackNavigator from './RootStackNavigator';
-import AuthStackNavigator from './AuthNavigation';
+import Auth from './AuthStack';
+import BottomTab from './BottomTab';
 
 export const Navigation = () => {
   const dispatch = useAppDispatch();
@@ -35,7 +35,7 @@ export const Navigation = () => {
     );
   }
 
-  if (isError) {
+  if (token && isError) {
     return (
       <Center flex={1}>
         <Icon as={<Ionicons name="alert-circle-outline" />} size={16} />
@@ -59,13 +59,9 @@ export const Navigation = () => {
     );
   }
 
-  if (isSuccess) {
+  if (token && isSuccess) {
     dispatch(setUser(res?.data));
   }
 
-  return token && res?.data.name ? (
-    <RootStackNavigator />
-  ) : (
-    <AuthStackNavigator />
-  );
+  return token && res?.data.name ? <BottomTab /> : <Auth />;
 };

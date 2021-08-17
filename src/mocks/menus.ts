@@ -142,10 +142,42 @@ const krabbyMinuman: MenuItem[] = [
   },
 ];
 
+const krabbyX: MenuItem[] = [
+  {
+    id: 11,
+    name: 'StarBug',
+    price: 35000,
+    image:
+      'https://images.unsplash.com/photo-1589476993333-f55b84301219?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=282&q=80',
+    variants: [
+      {
+        id: 1,
+        menuId: 1,
+        name: 'Ukuran',
+        isSingle: true,
+        isRequired: false,
+        item: [
+          {id: 1, name: 'Mini', price: 2000},
+          {id: 2, name: 'Sedang', price: 10000},
+          {id: 3, name: 'Besar', price: 20000},
+        ],
+      },
+    ],
+  },
+  {
+    id: 12,
+    name: 'Milkshake',
+    price: 15000,
+    image:
+      'https://images.unsplash.com/photo-1553787499-6f9133860278?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=334&q=80',
+  },
+];
+
 export const rawMenu: MenuItem[] = [
   ...mieAyam,
   ...krabbyMakanan,
   ...krabbyMinuman,
+  ...krabbyX,
 ];
 
 export const menus: MenuGroup[] = [
@@ -166,5 +198,11 @@ export const menus: MenuGroup[] = [
     merchantId: 2,
     title: 'Minuman',
     data: krabbyMinuman,
+  },
+  {
+    id: 4,
+    merchantId: 2,
+    title: 'Krabby Patty X Mobile Legends',
+    data: krabbyX,
   },
 ];
