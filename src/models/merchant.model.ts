@@ -6,6 +6,10 @@ export type MerchantOpenType = {
 export type MerchantCategory = {
   id: number;
   name: string;
+  icon?: string;
+  image?: string;
+  color?: string;
+  bgColor?: string;
 };
 
 export type Merchant = {

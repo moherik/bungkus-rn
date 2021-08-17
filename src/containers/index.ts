@@ -1,8 +1,14 @@
-export {default as HomeContainer} from './Home';
-export {default as DetailContainer} from './Detail';
-export {default as AddToCartContainer} from './AddToCart';
-export {default as CartContainer} from './Cart';
-export {default as FeedContainer} from './Feed';
-export {default as LoginContainer} from './Auth/Login';
-export {default as CompleteUserContainer} from './Auth/CompleteUser';
-export {default as ProfileContainer} from './Profile';
+export {default as LoginContainer} from './AuthStack/Login';
+export {default as CompleteUserContainer} from './AuthStack/CompleteUser';
+
+export {default as HomeContainer} from './HomeStack/Home';
+export {default as DetailContainer} from './HomeStack/Detail';
+export {default as AddToCartContainer} from './HomeStack/AddToCart';
+export {default as CartContainer} from './HomeStack/Cart';
+export {default as SearchContainer} from './HomeStack/Search';
+export {default as CategoryContainer} from './HomeStack/Category';
+
+export {default as FeedContainer} from './FeedStack/Feed';
+
+export {default as ProfileContainer} from './ProfileStack/Profile';
+export {default as StoreContaienr} from './ProfileStack/Store';
