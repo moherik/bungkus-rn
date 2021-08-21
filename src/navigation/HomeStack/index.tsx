@@ -2,30 +2,15 @@ import React from 'react';
 import {StackScreenProps, TransitionPresets} from '@react-navigation/stack';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 
-import {MenuItem} from 'models/menu.model';
-import {CartItem, Merchant, MerchantCategory} from 'models/merchant.model';
+import {MerchantCategory} from 'models/merchant.model';
 
-import AddToCartScreen from './AddToCartScreen';
-import CheckoutScreen from './CheckoutScreen';
 import CategoryScreen from './CategoryScreen';
 import DetailScreen from './DetailScreen';
-import SearchScreen from './SearchScreen';
 import HomeScreen from './HomeScreen';
 
 type HomeStackList = {
   Home: undefined;
   Detail: {merchantId: number};
-  AddToCart: {
-    merchant: Merchant;
-    menu: MenuItem;
-    cart?: CartItem;
-  };
-  Checkout: {
-    merchant: Merchant;
-  };
-  Search: {
-    categories: MerchantCategory[];
-  };
   Category: {
     category: MerchantCategory;
   };
@@ -33,9 +18,6 @@ type HomeStackList = {
 
 export type HomeScreenProps = StackScreenProps<HomeStackList, 'Home'>;
 export type DetailScreenProps = StackScreenProps<HomeStackList, 'Detail'>;
-export type AddToCartScreenProps = StackScreenProps<HomeStackList, 'AddToCart'>;
-export type CheckoutScreenProps = StackScreenProps<HomeStackList, 'Checkout'>;
-export type SearchScreenProps = StackScreenProps<HomeStackList, 'Search'>;
 export type CategoryScreenProps = StackScreenProps<HomeStackList, 'Category'>;
 
 const HomeStack = createSharedElementStackNavigator<HomeStackList>();
@@ -49,13 +31,6 @@ export const Home = () => {
         component={DetailScreen}
         options={{...TransitionPresets.SlideFromRightIOS}}
       />
-      <HomeStack.Screen
-        name="AddToCart"
-        component={AddToCartScreen}
-        options={{...TransitionPresets.ModalSlideFromBottomIOS}}
-      />
-      <HomeStack.Screen name="Checkout" component={CheckoutScreen} />
-      <HomeStack.Screen name="Search" component={SearchScreen} />
       <HomeStack.Screen
         name="Category"
         component={CategoryScreen}

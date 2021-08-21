@@ -7,8 +7,8 @@ import {useCheckUserQuery} from 'services/user.service';
 import {setUser} from 'stores/auth.store';
 import {Button, Ripple} from 'components';
 
-import Auth from './AuthStack';
-import BottomTab from './BottomTab';
+import {Auth} from './AuthStack';
+import {RootStack} from './RootStack';
 
 export const Navigation = () => {
   const dispatch = useAppDispatch();
@@ -63,5 +63,5 @@ export const Navigation = () => {
     dispatch(setUser(res?.data));
   }
 
-  return token && res?.data.name ? <BottomTab /> : <Auth />;
+  return token && res?.data.name ? <RootStack /> : <Auth />;
 };

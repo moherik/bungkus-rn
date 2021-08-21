@@ -7,7 +7,6 @@ import {MyOrderScreen} from './MyOrderScreen';
 import {StoreScreen} from './StoreScreen';
 import {FavoriteScreen} from './FavoriteScreen';
 import {SettingScreen} from './SettingScreen';
-import {CartScreen} from './CartScreen';
 import {HelpScreen} from './HelpScreen';
 import {UserContainer} from 'containers';
 
@@ -18,7 +17,6 @@ type ProfileStackList = {
   MyOrder: undefined;
   Favorite: undefined;
   Setting: undefined;
-  Cart: undefined;
   Help: undefined;
 };
 
@@ -31,7 +29,6 @@ export type FavoriteScreenProps = StackScreenProps<
   'Favorite'
 >;
 export type SettingScreenProps = StackScreenProps<ProfileStackList, 'Setting'>;
-export type CartScreenProps = StackScreenProps<ProfileStackList, 'Cart'>;
 export type HelpScreenProps = StackScreenProps<ProfileStackList, 'Help'>;
 
 const ProfileStack = createSharedElementStackNavigator<ProfileStackList>();
@@ -46,7 +43,6 @@ export const Profile = () => {
       <ProfileStack.Screen name="User" component={UserContainer} />
       <ProfileStack.Screen name="MyOrder" component={MyOrderScreen} />
       <ProfileStack.Screen name="Favorite" component={FavoriteScreen} />
-      <ProfileStack.Screen name="Cart" component={CartScreen} />
       <ProfileStack.Screen name="Store" component={StoreScreen} />
       <ProfileStack.Screen name="Setting" component={SettingScreen} />
       <ProfileStack.Screen name="Help" component={HelpScreen} />
