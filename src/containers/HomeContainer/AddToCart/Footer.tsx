@@ -35,7 +35,6 @@ export const Footer = ({merchantId, cart, menu, extras, note}: Props) => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
   const [isOpen, setIsOpen] = React.useState<boolean>(false);
-  const [loading, setLoading] = React.useState<boolean>(true);
   const cancelRef = React.useRef();
 
   const [qty, setQty] = useState<number>(cart?.qty || 1);
@@ -74,8 +73,6 @@ export const Footer = ({merchantId, cart, menu, extras, note}: Props) => {
       discount: discountPrice || 0,
       extras: totalExtraPrice || 0,
     });
-
-    setTimeout(() => setLoading(false), 1000);
 
     return () => {
       setTotalPrice({
@@ -161,7 +158,6 @@ export const Footer = ({merchantId, cart, menu, extras, note}: Props) => {
         </HStack>
         <HStack reversed space={2} alignItems="center">
           <Button
-            disabled={loading}
             px={4}
             py={3}
             borderRadius="lg"

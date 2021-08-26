@@ -6,7 +6,6 @@ import {
   Icon,
   Image,
   ScrollView,
-  Spinner,
   Text,
   TextArea,
   VStack,
@@ -36,7 +35,6 @@ const AddToCart: React.FC<Props> = ({}) => {
 
   const [note, setNote] = useState<string>(cart?.note || '');
   const [extras, setExtras] = useState<Extras[]>(cart?.extras || []);
-  const [showVariants, setShowVariants] = useState<boolean>(false);
   const discountPrice = useRef<number>(0);
 
   const handleNoteChange = (value: string) => setNote(value);
@@ -45,7 +43,6 @@ const AddToCart: React.FC<Props> = ({}) => {
     discountPrice.current = menu.discount
       ? (menu.price / 100) * menu.discount
       : 0;
-    setTimeout(() => setShowVariants(true), 1000);
   }, [menu]);
 
   return (
@@ -96,20 +93,16 @@ const AddToCart: React.FC<Props> = ({}) => {
             )}
           </VStack>
           <Separator height={3} bg="gray.100" />
-          {showVariants ? (
-            menu.variants && (
-              <>
-                <Variant
-                  cart={cart}
-                  variants={menu.variants}
-                  extras={extras}
-                  setExtras={setExtras}
-                />
-                <Separator height={3} bg="gray.100" />
-              </>
-            )
-          ) : (
-            <Spinner mt={5} />
+          {menu.variants && (
+            <>
+              <Variant
+                cart={cart}
+                variants={menu.variants}
+                extras={extras}
+                setExtras={setExtras}
+              />
+              <Separator height={3} bg="gray.100" />
+            </>
           )}
           <TextArea
             m={4}

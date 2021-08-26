@@ -39,7 +39,7 @@ export const Header: React.FC<Props> = ({}) => {
         </HStack>
         <Button
           mt={4}
-          py={3}
+          py={2}
           borderColor="muted.200"
           borderWidth={1}
           bg="transparent"

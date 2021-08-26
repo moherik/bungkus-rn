@@ -106,7 +106,7 @@ const Home: React.FC<Props> = ({}) => {
   });
 
   const handleSearch = () => {
-    navigation.navigate('Screen');
+    navigation.navigate('Search', {categories});
   };
 
   return (

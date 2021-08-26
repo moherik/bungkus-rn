@@ -18,8 +18,8 @@ import {Rating, Ripple} from 'components';
 
 import {HorizontalSectionLoader} from './Loader';
 
-const ITEM_WIDTH = 160;
-const ITEM_HEIGHT = 160;
+const ITEM_WIDTH = 200;
+const ITEM_HEIGHT = 200;
 
 type Props = {
   data: Merchant[];

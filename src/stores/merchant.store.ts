@@ -10,6 +10,7 @@ export interface MerchantState {
   menus: MenuGroup[];
   carts: CartItem[];
   selectedCarts: CartItem[];
+  onBoarding: boolean;
 }
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   menus: [],
   carts: [],
   selectedCarts: [],
+  onBoarding: true,
 } as MerchantState;
 
 const merchantSlice = createSlice({
@@ -42,6 +44,10 @@ const merchantSlice = createSlice({
       state.selectedMerchant = undefined;
       state.selectedCarts = [];
       state.menus = [];
+    },
+
+    setStoreOnBoarding: (state, action: PayloadAction<boolean>) => {
+      state.onBoarding = action.payload;
     },
 
     addToCart: (state, action: PayloadAction<CartItem>) => {
@@ -107,6 +113,7 @@ export const {
   addToCart,
   updateCart,
   deleteCart,
+  setStoreOnBoarding,
 } = merchantSlice.actions;
 
 export default merchantSlice.reducer;

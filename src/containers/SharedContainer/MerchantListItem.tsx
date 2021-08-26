@@ -9,9 +9,9 @@ import {useAppDispatch} from 'hooks';
 import {Merchant} from 'models/merchant.model';
 import {selectMerchant} from 'stores/merchant.store';
 
-type Props = {item: Merchant; key: number};
+type Props = {item: Merchant};
 
-export const MerchantListItem: React.FC<Props> = ({item, key}) => {
+export const MerchantListItem: React.FC<Props> = ({item}) => {
   const dispatch = useAppDispatch();
   const navigation = useNavigation() as any;
 
@@ -25,7 +25,7 @@ export const MerchantListItem: React.FC<Props> = ({item, key}) => {
   };
 
   return (
-    <Box flex={1} flexDirection="column" key={key}>
+    <Box flex={1} flexDirection="column">
       <Ripple key={item.id} onPress={() => handleOpenMerchant(item.id)}>
         <HStack space={3} px={4} py={2}>
           <Image

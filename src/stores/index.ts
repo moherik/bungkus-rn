@@ -31,7 +31,11 @@ const reducers = combineReducers({
   [userApi.reducerPath]: userApi.reducer,
 });
 
-const merchantFilter = createFilter('merchant', ['carts', 'selectedCarts']);
+const merchantFilter = createFilter('merchant', [
+  'carts',
+  'selectedCarts',
+  'onBoarding',
+]);
 
 const persistedReducers = persistReducer(
   {

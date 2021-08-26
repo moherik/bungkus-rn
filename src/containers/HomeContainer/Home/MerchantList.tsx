@@ -41,8 +41,8 @@ export const MerchantList: React.FC<Props> = ({
         </HStack>
       )}
       <VStack>
-        {data.map((item, key) => (
-          <MerchantListItem item={item} key={key} />
+        {data.map((item, index) => (
+          <MerchantListItem item={item} key={index} />
         ))}
       </VStack>
     </VStack>

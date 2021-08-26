@@ -14,6 +14,7 @@ import CheckoutScreen from './CheckoutScreen';
 import SearchScreen from './SearchScreen';
 import {CartScreen} from './CartScreen';
 import NotificationScreen from './NotificationScreen';
+import AddStoreScreen from './AddStoreScreen';
 
 export type RootStackParamList = {
   Tab: undefined;
@@ -30,6 +31,7 @@ export type RootStackParamList = {
     categories: MerchantCategory[];
   };
   Notification: undefined;
+  AddStore: undefined;
 };
 
 export type TabScreenProps = StackScreenProps<RootStackParamList, 'Tab'>;
@@ -47,6 +49,10 @@ export type NotificationScreenProps = StackScreenProps<
   RootStackParamList,
   'Notification'
 >;
+export type AddStoreScreenProps = StackScreenProps<
+  RootStackParamList,
+  'AddStore'
+>;
 
 const Root = createStackNavigator<RootStackParamList>();
 
@@ -63,6 +69,7 @@ export const RootStack = () => {
       <Root.Screen name="Checkout" component={CheckoutScreen} />
       <Root.Screen name="Search" component={SearchScreen} />
       <Root.Screen name="Notification" component={NotificationScreen} />
+      <Root.Screen name="AddStore" component={AddStoreScreen} />
     </Root.Navigator>
   );
 };
