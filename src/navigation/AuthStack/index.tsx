@@ -18,7 +18,7 @@ export type CompleteScreenProps = StackScreenProps<
 >;
 const AuthStack = createStackNavigator<AuthStackParamList>();
 
-const Auth = () => {
+export const Auth = () => {
   return (
     <AuthStack.Navigator
       initialRouteName="Login"
@@ -29,5 +29,3 @@ const Auth = () => {
     </AuthStack.Navigator>
   );
 };
-
-export default Auth;

@@ -26,7 +26,7 @@ const tabBarIcon = ({
   color: string;
 }) => <Icon as={<MIcons name={name} />} size={size} color={color} />;
 
-const BottomTab = () => {
+export const BottomTab = () => {
   const {colors} = useTheme();
 
   return (
@@ -65,5 +65,3 @@ const BottomTab = () => {
     </Tab.Navigator>
   );
 };
-
-export default BottomTab;

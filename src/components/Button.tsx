@@ -20,6 +20,8 @@ const Button: React.FC<Props> = ({
   textTransform = 'none',
   fontWeight = 'bold',
   borderRadius,
+  borderColor,
+  borderWidth,
   onPress,
   children,
   m,
@@ -33,7 +35,11 @@ const Button: React.FC<Props> = ({
 }) => {
   return (
     <View m={m} mt={mt} mx={mx} my={my} mb={mb} mr={mr} ml={ml}>
-      <View borderRadius={borderRadius} overflow="hidden">
+      <View
+        borderColor={borderColor}
+        borderWidth={borderWidth}
+        borderRadius={borderRadius}
+        overflow="hidden">
         <Pressable
           bg={disabled ? disabledBg : bg}
           android_ripple={{color: rippleBg, borderless: false}}
