@@ -12,7 +12,6 @@ import {
 
 import {MerchantCategory} from 'models/merchant.model';
 import {Ripple} from 'components';
-import {SharedElement} from 'react-navigation-shared-element';
 import {useNavigation} from '@react-navigation/native';
 
 type Props = {
@@ -47,15 +46,13 @@ export const Category: React.FC<Props> = ({data}) => {
         justifyContent="center"
         style={styles.box}
         py={3}>
-        <SharedElement id={`item.${item.id}.image`}>
-          <Image
-            source={{uri: item.image}}
-            alt={item.name}
-            width={50}
-            height={50}
-            borderRadius={100}
-          />
-        </SharedElement>
+        <Image
+          source={{uri: item.image}}
+          alt={item.name}
+          width={50}
+          height={50}
+          borderRadius={100}
+        />
         <Text fontSize="xs" textAlign="center" color="muted.500" mt={1}>
           {item.name}
         </Text>

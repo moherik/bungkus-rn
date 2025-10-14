@@ -1,6 +1,5 @@
 import {StackScreenProps} from '@react-navigation/stack';
 import React from 'react';
-import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
 
 import {ProfileScreen} from './ProfileScreen';
 import {MyOrderScreen} from './MyOrderScreen';
@@ -9,6 +8,7 @@ import {FavoriteScreen} from './FavoriteScreen';
 import {SettingScreen} from './SettingScreen';
 import {HelpScreen} from './HelpScreen';
 import {UserContainer} from 'containers';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 type ProfileStackList = {
   Profile: undefined;
@@ -31,14 +31,13 @@ export type FavoriteScreenProps = StackScreenProps<
 export type SettingScreenProps = StackScreenProps<ProfileStackList, 'Setting'>;
 export type HelpScreenProps = StackScreenProps<ProfileStackList, 'Help'>;
 
-const ProfileStack = createSharedElementStackNavigator<ProfileStackList>();
+const ProfileStack = createNativeStackNavigator<ProfileStackList>();
 
 export const Profile = () => {
   return (
     <ProfileStack.Navigator
       initialRouteName="Profile"
-      headerMode="none"
-      mode="modal">
+      screenOptions={{headerShown: false}}>
       <ProfileStack.Screen name="Profile" component={ProfileScreen} />
       <ProfileStack.Screen name="User" component={UserContainer} />
       <ProfileStack.Screen name="MyOrder" component={MyOrderScreen} />

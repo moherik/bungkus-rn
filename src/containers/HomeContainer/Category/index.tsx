@@ -1,7 +1,6 @@
 import React from 'react';
 import {Dimensions} from 'react-native';
 import {Image} from 'native-base';
-import {SharedElement} from 'react-navigation-shared-element';
 import {useRoute} from '@react-navigation/native';
 
 type Props = {};
@@ -13,14 +12,12 @@ const Category: React.FC<Props> = () => {
   const {category} = route.params;
 
   return (
-    <SharedElement id={`item.${category.id}.image`}>
-      <Image
-        source={{uri: category.image}}
-        alt={category.name}
-        width={IMAGE_WIDTH}
-        height={200}
-      />
-    </SharedElement>
+    <Image
+      source={{uri: category.image}}
+      alt={category.name}
+      width={IMAGE_WIDTH}
+      height={200}
+    />
   );
 };
 

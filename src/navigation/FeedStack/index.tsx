@@ -1,6 +1,6 @@
 import React from 'react';
 import {StackScreenProps} from '@react-navigation/stack';
-import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 
 import FeedScreen from './FeedScreen';
 
@@ -10,11 +10,11 @@ type FeedStackList = {
 
 export type FeedScreenProps = StackScreenProps<FeedStackList, 'Feed'>;
 
-const FeedStack = createSharedElementStackNavigator<FeedStackList>();
+const FeedStack = createNativeStackNavigator<FeedStackList>();
 
 export const Feed = () => {
   return (
-    <FeedStack.Navigator initialRouteName="Feed" headerMode="none" mode="modal">
+    <FeedStack.Navigator initialRouteName="Feed" screenOptions={{ headerShown: false }}>
       <FeedStack.Screen name="Feed" component={FeedScreen} />
     </FeedStack.Navigator>
   );

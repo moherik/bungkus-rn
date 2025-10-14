@@ -1,5 +1,9 @@
 import React from 'react';
-import {createStackNavigator, StackScreenProps} from '@react-navigation/stack';
+import {
+  createNativeStackNavigator,
+  NativeStackScreenProps,
+} from '@react-navigation/native-stack';
+
 import LoginScreen from './Login';
 import CompleteUserScreen from './CompleteUser';
 
@@ -11,19 +15,19 @@ export type AuthStackParamList = {
   };
 };
 
-export type LoginScreenProps = StackScreenProps<AuthStackParamList, 'Login'>;
-export type CompleteScreenProps = StackScreenProps<
+export type LoginScreenProps = NativeStackScreenProps<
+  AuthStackParamList,
+  'Login'
+>;
+export type CompleteScreenProps = NativeStackScreenProps<
   AuthStackParamList,
   'Complete'
 >;
-const AuthStack = createStackNavigator<AuthStackParamList>();
+const AuthStack = createNativeStackNavigator<AuthStackParamList>();
 
 export const Auth = () => {
   return (
-    <AuthStack.Navigator
-      initialRouteName="Login"
-      mode="modal"
-      headerMode="none">
+    <AuthStack.Navigator initialRouteName="Login">
       <AuthStack.Screen name="Login" component={LoginScreen} />
       <AuthStack.Screen name="Complete" component={CompleteUserScreen} />
     </AuthStack.Navigator>
